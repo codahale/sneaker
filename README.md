@@ -2,10 +2,10 @@
 
 ![ha ha the 90s](http://i.imgur.com/3HvHOnm.gif)
 
-# kms-secrets
+# secman
 
-`kms-secrets` is a utility for storing sensitive information on AWS
-using S3 and the Key Management Service (KMS) to provide durability,
+`secman` is a utility for storing sensitive information on AWS using S3
+and the Key Management Service (KMS) to provide durability,
 confidentiality, and integrity.
 
 Secrets are stored on S3, encrypted with AES-GCM and single-use,
@@ -14,18 +14,18 @@ KMS-generated data keys.
 ## Installing
 
 ```shell
-go get -d -u github.com/stripe/kms-secrets
-cd $GOPATH/src/github.com/stripe/kms-secrets
+go get -d -u github.com/stripe/secman
+cd $GOPATH/src/github.com/stripe/secman
 make install
-kms-secrets version
+secman version
 ```
 
 ## Using
 
 ### Configuring Access to AWS
 
-`kms-secrets` requires access to AWS APIs, which means it needs a set of
-AWS credentials. It will look for the `AWS_ACCESS_KEY_ID` and
+`secman` requires access to AWS APIs, which means it needs a set of AWS
+credentials. It will look for the `AWS_ACCESS_KEY_ID` and
 `AWS_SECRET_ACCESS_KEY` environment variables, the default credentials
 profile (e.g. `~/.aws/credentials`), and finally any instance profile
 credentials for systems running on EC2 instances.
@@ -33,12 +33,12 @@ credentials for systems running on EC2 instances.
 You should also specify which region you'll be operating in via the
 `AWS_DEFAULT_REGION` environment variable.
 
-In general, if the `aws` command works, `kms-secrets` should work as well.
+In general, if the `aws` command works, `secman` should work as well.
 
 ### Setting Up The Environment
 
-`kms-secrets` needs two things: the ID of a KMS key and the S3 path
-where secrets will be stored.
+`secman` needs two things: the ID of a KMS key and the S3 path where
+secrets will be stored.
 
 You can create a KMS key via the AWS Console or using a recent version
 of `aws`. When you've created the key, store its ID (a UUID) in the
@@ -49,8 +49,7 @@ the `aws` command. You can either use a dedicated bucket or use a
 directory in a common bucket, but we recommend you do two things:
 
 1. Use a `Private` ACL. In addition to the cryptographic controls of
-   `kms-secrets`, access control is critical in preventing security
-   breaches.
+   `secman`, access control is critical in preventing security breaches.
 
 2. Enable access logging, ideally to a tightly-controlled, secure
    bucket. While Amazon's CloudTrail provides audit logging for the vast
@@ -63,10 +62,10 @@ where secrets should be stored (e.g. `s3://bucket1/secrets/`).
 
 #### Basic Operations
 
-Once you've got `kms-secrets` configured, try listing all the secrets:
+Once you've got `secman` configured, try listing all the secrets:
 
 ```shell
-kms-secrets ls
+secman ls
 ```
 
 This will print out a table of all uploaded secrets. If you haven't
@@ -76,22 +75,21 @@ Let's create an example secret file and upload it:
 
 ```shell
 echo "This is a secret!" > secret.txt
-kms-secrets upload secret.txt /example/secret.txt
+secman upload secret.txt /example/secret.txt
 ```
 
 This will use KMS to generate a random, 256-bit data key, encrypt the
 secret with AES-GCM, and upload the encrypted secret and an encrypted
-copy of the data key to S3. Running `kms-secrets ls` should display a
-table with the file in it.
+copy of the data key to S3. Running `secman ls` should display a table
+with the file in it.
 
 If your file is so sensitive it shouldn't be stored on disk, using `-`
-instead of a filename will make `kms-secrets` read the data from
-`STDIN`.
+instead of a filename will make `secman` read the data from `STDIN`.
 
 Finally, you can delete the file:
 
 ```shell
-kms-secrets rm /example/secret.txt
+secman rm /example/secret.txt
 ```
 
 #### Packing And Unpacking
@@ -99,7 +97,7 @@ kms-secrets rm /example/secret.txt
 To install a secret on a machine, you'll need to first create a package:
 
 ```shell
-kms-secrets pack /example/* example.enc.tar
+secman pack /example/* example.enc.tar
 ```
 
 This will perform the following steps:
@@ -116,7 +114,7 @@ This will perform the following steps:
    `TAR` file and write it to `example-secrets.tar`.
 
 (To simplify things, if you specify `-` as the output path,
-`kms-secrets` will write the data to STDOUT.)
+`secman` will write the data to STDOUT.)
 
 The result is safe to store and transmit -- only those with access to
 the `Decrypt` operation of the KMS key being used will be able to
@@ -125,7 +123,7 @@ decrypt the data.
 To unpackage the secrets, run the following:
 
 ```shell
-kms-secrets unpack example.enc.tar example.sec.tar
+secman unpack example.enc.tar example.sec.tar
 ```
 
 This will perform the following steps:
@@ -138,16 +136,15 @@ This will perform the following steps:
 
 4. Decrypt the `TAR` file and write the result to `example.sec.tar`.
 
-(To simplify things, if you specify `-` as the output path,
-`kms-secrets` will write the data to STDOUT, allowing you to pipe the
-output directly to `tar`.)
+(To simplify things, if you specify `-` as the output path, `secman`
+will write the data to STDOUT, allowing you to pipe the output directly
+to `tar`.)
 
 ### Maintenance Operations
 
 A common maintenance task is key rotate. To rotate the data keys used to
-encrypt the secrets, run `kms-secrets rotate`. It will download and
-decrypt each secret, generate a new data key, and upload a re-encrypted
-copy.
+encrypt the secrets, run `secman rotate`. It will download and decrypt
+each secret, generate a new data key, and upload a re-encrypted copy.
 
 To rotate the KMS key used for each secret, simply specify a different
-`KMS_KEY_ID` and run `kms-secrets rotate`.
+`KMS_KEY_ID` and run `secman rotate`.
