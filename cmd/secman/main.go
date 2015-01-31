@@ -2,9 +2,17 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"text/tabwriter"
 
+	"net/url"
+
+	"github.com/awslabs/aws-sdk-go/aws"
+	"github.com/awslabs/aws-sdk-go/gen/kms"
+	"github.com/awslabs/aws-sdk-go/gen/s3"
 	"github.com/docopt/docopt-go"
+	"github.com/stripe/secman"
 )
 
 const usage = `secman manages secrets.
@@ -29,8 +37,7 @@ Environment Variables:
 func main() {
 	args, err := docopt.Parse(usage, nil, true, version, false)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(-1)
+		log.Fatal(err)
 	}
 
 	if args["version"] == true {
@@ -41,13 +48,35 @@ func main() {
 		return
 	}
 
+	manager := loadManager()
+
 	if args["ls"] == true {
+		// secman ls
+		// secman ls *.txt,*.key
+
 		var pattern string
 		if s, ok := args["<pattern>"].(string); ok {
 			pattern = s
 		}
 
-		fmt.Printf("ls %q\n", pattern)
+		files, err := manager.List(pattern)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		table := new(tabwriter.Writer)
+		table.Init(os.Stdout, 2, 0, 2, ' ', 0)
+		fmt.Fprintln(table, "key\tmodified\tsize\tetag")
+		for _, f := range files {
+			fmt.Fprintf(table, "%s\t%s\t%v\t%s\n",
+				f.Path,
+				f.LastModified.Format(conciseTime),
+				f.Size,
+				f.ETag,
+			)
+		}
+		_ = table.Flush()
+
 	} else if args["upload"] == true {
 		file := args["<file>"].(string)
 		path := args["<path>"].(string)
@@ -79,8 +108,35 @@ func main() {
 	}
 }
 
+func loadManager() *secman.Manager {
+	region := os.Getenv("AWS_DEFAULT_REGION")
+	if region == "" {
+		region = "us-west-2"
+		log.Printf("no region specified, defaulting to %s", region)
+	}
+
+	u, err := url.Parse(os.Getenv("S3_PATH"))
+	if err != nil {
+		log.Fatalf("bad S3_PATH: %s", err)
+	}
+
+	creds := aws.DetectCreds("", "", "")
+
+	return &secman.Manager{
+		Objects: s3.New(creds, region, nil),
+		Keys:    kms.New(creds, region, nil),
+		KeyID:   os.Getenv("KMS_KEY_ID"),
+		Bucket:  u.Host,
+		Prefix:  u.Path,
+	}
+}
+
 var (
 	version   = "unknown" // version of secman
 	goVersion = "unknown" // version of go we build with
 	buildTime = "unknown" // time of build
+)
+
+const (
+	conciseTime = "2006-01-02T15:04"
 )
