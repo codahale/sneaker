@@ -1,3 +1,5 @@
+// secman is a command-line tool for securely managing secrets using Amazon Web
+// Service's Key Management Service and S3.
 package main
 
 import (
