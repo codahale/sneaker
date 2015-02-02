@@ -81,6 +81,8 @@ func main() {
 		file := args["<file>"].(string)
 		path := args["<path>"].(string)
 
+		// BUG(coda): implement upload
+
 		fmt.Printf("upload %q %q\n", file, path)
 	} else if args["rm"] == true {
 		path := args["<path>"].(string)
@@ -92,10 +94,14 @@ func main() {
 		pattern := args["<pattern>"].(string)
 		file := args["<file>"].(string)
 
+		// BUG(coda): implement pack
+
 		fmt.Printf("pack %q %q\n", pattern, file)
 	} else if args["unpack"] == true {
 		file := args["<file>"].(string)
 		path := args["<path>"].(string)
+
+		// BUG(coda): implement unpack
 
 		fmt.Printf("unpack %q %q\n", path, file)
 	} else if args["rotate"] == true {
@@ -103,6 +109,8 @@ func main() {
 		if s, ok := args["<pattern>"].(string); ok {
 			pattern = s
 		}
+
+		// BUG(coda): implement rotate
 
 		fmt.Printf("rotate %q\n", pattern)
 	} else {
