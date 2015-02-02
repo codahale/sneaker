@@ -12,6 +12,7 @@ import (
 // ObjectStorage is a sub-set of the capabilities of the S3 client.
 type ObjectStorage interface {
 	ListObjects(*s3.ListObjectsRequest) (*s3.ListObjectsOutput, error)
+	DeleteObject(*s3.DeleteObjectRequest) (*s3.DeleteObjectOutput, error)
 }
 
 // KeyManagement is a sub-set of the capabilities of the KMS client.
