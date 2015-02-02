@@ -85,7 +85,9 @@ func main() {
 	} else if args["rm"] == true {
 		path := args["<path>"].(string)
 
-		fmt.Printf("rm %q\n", path)
+		if err := manager.Rm(path); err != nil {
+			log.Fatal(err)
+		}
 	} else if args["pack"] == true {
 		pattern := args["<pattern>"].(string)
 		file := args["<file>"].(string)
