@@ -15,6 +15,7 @@ type ObjectStorage interface {
 	ListObjects(*s3.ListObjectsRequest) (*s3.ListObjectsOutput, error)
 	DeleteObject(*s3.DeleteObjectRequest) (*s3.DeleteObjectOutput, error)
 	PutObject(*s3.PutObjectRequest) (*s3.PutObjectOutput, error)
+	GetObject(*s3.GetObjectRequest) (*s3.GetObjectOutput, error)
 }
 
 // KeyManagement is a sub-set of the capabilities of the KMS client.

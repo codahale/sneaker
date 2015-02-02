@@ -11,6 +11,9 @@ type FakeS3 struct {
 
 	PutRequests  []s3.PutObjectRequest
 	PutResponses []s3.PutObjectOutput
+
+	GetRequests  []s3.GetObjectRequest
+	GetResponses []s3.GetObjectOutput
 }
 
 func (f *FakeS3) ListObjects(req *s3.ListObjectsRequest) (*s3.ListObjectsOutput, error) {
@@ -31,5 +34,12 @@ func (f *FakeS3) PutObject(req *s3.PutObjectRequest) (*s3.PutObjectOutput, error
 	f.PutRequests = append(f.PutRequests, *req)
 	resp := f.PutResponses[0]
 	f.PutResponses = f.PutResponses[1:]
+	return &resp, nil
+}
+
+func (f *FakeS3) GetObject(req *s3.GetObjectRequest) (*s3.GetObjectOutput, error) {
+	f.GetRequests = append(f.GetRequests, *req)
+	resp := f.GetResponses[0]
+	f.GetResponses = f.GetResponses[1:]
 	return &resp, nil
 }
