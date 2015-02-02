@@ -107,6 +107,6 @@ func TestUpload(t *testing.T) {
 	}
 
 	if v, want := string(secret), "this is a test"; v != want {
-		t.Errorf("Decrypted key was %q, but expected %q", v, want)
+		t.Errorf("Decrypted secret was %q, but expected %q", v, want)
 	}
 }
