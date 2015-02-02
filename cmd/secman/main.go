@@ -116,9 +116,11 @@ func main() {
 			pattern = s
 		}
 
-		// BUG(coda): implement rotate
-
-		fmt.Printf("rotate %q\n", pattern)
+		if err := manager.Rotate(pattern, func(s string) {
+			log.Printf("rotating %s", s)
+		}); err != nil {
+			log.Fatal(err)
+		}
 	} else {
 		fmt.Fprintf(os.Stderr, "Unknown command: %v\n", os.Args)
 	}
