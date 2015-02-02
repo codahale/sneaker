@@ -8,6 +8,9 @@ type FakeS3 struct {
 
 	DeleteRequests  []s3.DeleteObjectRequest
 	DeleteResponses []s3.DeleteObjectOutput
+
+	PutRequests  []s3.PutObjectRequest
+	PutResponses []s3.PutObjectOutput
 }
 
 func (f *FakeS3) ListObjects(req *s3.ListObjectsRequest) (*s3.ListObjectsOutput, error) {
@@ -21,5 +24,12 @@ func (f *FakeS3) DeleteObject(req *s3.DeleteObjectRequest) (*s3.DeleteObjectOutp
 	f.DeleteRequests = append(f.DeleteRequests, *req)
 	resp := f.DeleteResponses[0]
 	f.DeleteResponses = f.DeleteResponses[1:]
+	return &resp, nil
+}
+
+func (f *FakeS3) PutObject(req *s3.PutObjectRequest) (*s3.PutObjectOutput, error) {
+	f.PutRequests = append(f.PutRequests, *req)
+	resp := f.PutResponses[0]
+	f.PutResponses = f.PutResponses[1:]
 	return &resp, nil
 }
