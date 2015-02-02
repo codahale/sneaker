@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"text/tabwriter"
@@ -100,16 +101,78 @@ func main() {
 		pattern := args["<pattern>"].(string)
 		file := args["<file>"].(string)
 
-		// BUG(coda): implement pack
+		// list files
+		files, err := manager.List(pattern)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-		fmt.Printf("pack %q %q\n", pattern, file)
+		paths := make([]string, 0, len(files))
+		for _, f := range files {
+			paths = append(paths, f.Path)
+		}
+
+		// download secrets
+		secrets, err := manager.Download(paths)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var w io.Writer
+		if file == "-" {
+			// write to STDOUT if file is -
+			w = os.Stdout
+		} else {
+			f, err := os.Create(file)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer f.Close()
+			w = f
+		}
+
+		// pack secrets
+		if err := manager.Pack(secrets, w); err != nil {
+			log.Fatal(err)
+		}
 	} else if args["unpack"] == true {
 		file := args["<file>"].(string)
 		path := args["<path>"].(string)
 
-		// BUG(coda): implement unpack
+		var r io.Reader
+		if file == "-" {
+			// read from STDIN if file is -
+			r = os.Stdin
+		} else {
+			f, err := os.Open(file)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer f.Close()
+			r = f
+		}
 
-		fmt.Printf("unpack %q %q\n", path, file)
+		var w io.Writer
+		if path == "-" {
+			// write to STDOUT if path is -
+			w = os.Stdout
+		} else {
+			f, err := os.Create(path)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer f.Close()
+			w = f
+		}
+
+		r, err := manager.Unpack(r)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if _, err := io.Copy(w, r); err != nil {
+			log.Fatal(err)
+		}
 	} else if args["rotate"] == true {
 		var pattern string
 		if s, ok := args["<pattern>"].(string); ok {
