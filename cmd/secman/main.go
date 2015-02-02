@@ -81,9 +81,15 @@ func main() {
 		file := args["<file>"].(string)
 		path := args["<path>"].(string)
 
-		// BUG(coda): implement upload
+		f, err := os.Open(file)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
 
-		fmt.Printf("upload %q %q\n", file, path)
+		if err := manager.Upload(path, f); err != nil {
+			log.Fatal(err)
+		}
 	} else if args["rm"] == true {
 		path := args["<path>"].(string)
 
