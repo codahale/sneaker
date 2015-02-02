@@ -21,6 +21,7 @@ type ObjectStorage interface {
 // KeyManagement is a sub-set of the capabilities of the KMS client.
 type KeyManagement interface {
 	GenerateDataKey(*kms.GenerateDataKeyRequest) (*kms.GenerateDataKeyResponse, error)
+	Decrypt(*kms.DecryptRequest) (*kms.DecryptResponse, error)
 }
 
 // A File is an encrypted secret, stored in S3.
