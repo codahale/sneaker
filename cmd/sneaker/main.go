@@ -85,6 +85,8 @@ func main() {
 		file := args["<file>"].(string)
 		path := args["<path>"].(string)
 
+		log.Printf("uploading %s", file)
+
 		f, err := os.Open(file)
 		if err != nil {
 			log.Fatal(err)
@@ -96,6 +98,8 @@ func main() {
 		}
 	} else if args["rm"] == true {
 		path := args["<path>"].(string)
+
+		log.Printf("deleting %s", path)
 
 		if err := manager.Rm(path); err != nil {
 			log.Fatal(err)
@@ -122,6 +126,8 @@ func main() {
 		for _, f := range files {
 			paths = append(paths, f.Path)
 		}
+
+		log.Printf("packing %v", paths)
 
 		// download secrets
 		secrets, err := manager.Download(paths)
