@@ -1,4 +1,4 @@
-// secman is a command-line tool for securely managing secrets using Amazon Web
+// sneaker is a command-line tool for securely managing secrets using Amazon Web
 // Service's Key Management Service and S3.
 package main
 
@@ -14,27 +14,27 @@ import (
 	"github.com/awslabs/aws-sdk-go/gen/kms"
 	"github.com/awslabs/aws-sdk-go/gen/s3"
 	"github.com/docopt/docopt-go"
-	"github.com/stripe/secman"
+	"github.com/stripe/sneaker"
 )
 
-const usage = `secman manages secrets.
+const usage = `sneaker manages secrets.
 
 Usage:
-  secman ls [<pattern>]
-  secman upload <file> <path>
-  secman rm <path>
-  secman pack <pattern> <file>
-  secman unpack <file> <path>
-  secman rotate [<pattern>]
-  secman version
+  sneaker ls [<pattern>]
+  sneaker upload <file> <path>
+  sneaker rm <path>
+  sneaker pack <pattern> <file>
+  sneaker unpack <file> <path>
+  sneaker rotate [<pattern>]
+  sneaker version
 
 Options:
   -h --help  Show this help information.
 
 Environment Variables:
-  SECMAN_REGION   The AWS region where the key and bucket are located.
-  SECMAN_KEY_ID   The KMS key to use when encrypting secrets.
-  SECMAN_S3_PATH  Where secrets will be stored (e.g. s3://bucket/path).
+  SNEAKER_REGION   The AWS region where the key and bucket are located.
+  SNEAKER_KEY_ID   The KMS key to use when encrypting secrets.
+  SNEAKER_S3_PATH  Where secrets will be stored (e.g. s3://bucket/path).
 `
 
 func main() {
@@ -54,8 +54,8 @@ func main() {
 	manager := loadManager()
 
 	if args["ls"] == true {
-		// secman ls
-		// secman ls *.txt,*.key
+		// sneaker ls
+		// sneaker ls *.txt,*.key
 
 		var pattern string
 		if s, ok := args["<pattern>"].(string); ok {
@@ -191,30 +191,30 @@ func main() {
 	}
 }
 
-func loadManager() *secman.Manager {
-	region := os.Getenv("SECMAN_REGION")
+func loadManager() *sneaker.Manager {
+	region := os.Getenv("SNEAKER_REGION")
 	if region == "" {
-		log.Fatal("missing SECMAN_REGION")
+		log.Fatal("missing SNEAKER_REGION")
 	}
 
-	u, err := url.Parse(os.Getenv("SECMAN_S3_PATH"))
+	u, err := url.Parse(os.Getenv("SNEAKER_S3_PATH"))
 	if err != nil {
-		log.Fatalf("bad SECMAN_S3_PATH: %s", err)
+		log.Fatalf("bad SNEAKER_S3_PATH: %s", err)
 	}
 
 	creds := aws.DetectCreds("", "", "")
 
-	return &secman.Manager{
+	return &sneaker.Manager{
 		Objects: s3.New(creds, region, nil),
 		Keys:    kms.New(creds, region, nil),
-		KeyID:   os.Getenv("SECMAN_KEY_ID"),
+		KeyID:   os.Getenv("SNEAKER_KEY_ID"),
 		Bucket:  u.Host,
 		Prefix:  u.Path,
 	}
 }
 
 var (
-	version   = "unknown" // version of secman
+	version   = "unknown" // version of sneaker
 	goVersion = "unknown" // version of go we build with
 	buildTime = "unknown" // time of build
 )

@@ -1,4 +1,4 @@
-package secman
+package sneaker
 
 import "bytes"
 

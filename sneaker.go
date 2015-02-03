@@ -1,7 +1,7 @@
-// Package secman provides an integrated system for securely storing sensitive
+// Package sneaker provides an integrated system for securely storing sensitive
 // information using Amazon's Simple Storage Service (S3) and Key Management
 // Service (KMS).
-package secman
+package sneaker
 
 import (
 	"time"

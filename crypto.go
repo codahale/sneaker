@@ -1,6 +1,6 @@
-package secman
+package sneaker
 
-// The encryption format used by secman is intentionally simple, with no
+// The encryption format used by sneaker is intentionally simple, with no
 // versioning or algorithm agility. It uses AES-GCM with a randomly-generated
 // 96-bit nonce. The nonce is prepended to the ciphertext.
 //

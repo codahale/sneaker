@@ -1,4 +1,4 @@
-package secman
+package sneaker
 
 import "github.com/awslabs/aws-sdk-go/gen/s3"
 
