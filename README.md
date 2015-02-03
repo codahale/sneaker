@@ -140,6 +140,25 @@ will write the data to STDOUT, allowing you to pipe the output directly
 to `tar`. Using `-` as the input path will also cause `sneaker` to use
 STDIN as the input.)
 
+#### Encryption Contexts
+
+KMS supports the notion of an **Encryption Context**: semi-structured
+data used in the encryption of data which is then required for resulting
+decryption operations to be successful.
+
+For example, let's pack some secrets like this:
+
+```shell
+sneaker pack /example/* secrets.tar --context="hostname=web1.example.com,version=20"
+```
+
+That same context (`hostname=web1.example.com,version=20`) **must** be
+used to unpack those secrets:
+
+```shell
+sneaker unpack secrets.tar decrypted.tar --context="hostname=web1.example.com,version=20"
+```
+
 ### Maintenance Operations
 
 A common maintenance task is key rotate. To rotate the data keys used to

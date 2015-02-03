@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"strings"
 	"text/tabwriter"
 
 	"github.com/awslabs/aws-sdk-go/aws"
@@ -23,8 +24,8 @@ Usage:
   sneaker ls [<pattern>]
   sneaker upload <file> <path>
   sneaker rm <path>
-  sneaker pack <pattern> <file>
-  sneaker unpack <file> <path>
+  sneaker pack <pattern> <file> [--context=<context>]
+  sneaker unpack <file> <path> [--context=<context>]
   sneaker rotate [<pattern>]
   sneaker version
 
@@ -102,6 +103,14 @@ func main() {
 	} else if args["pack"] == true {
 		pattern := args["<pattern>"].(string)
 		file := args["<file>"].(string)
+		var context map[string]string
+		if s, ok := args["<context>"].(string); ok {
+			c, err := parseContext(s)
+			if err != nil {
+				log.Fatal(err)
+			}
+			context = c
+		}
 
 		// list files
 		files, err := manager.List(pattern)
@@ -134,12 +143,20 @@ func main() {
 		}
 
 		// pack secrets
-		if err := manager.Pack(secrets, w); err != nil {
+		if err := manager.Pack(secrets, context, w); err != nil {
 			log.Fatal(err)
 		}
 	} else if args["unpack"] == true {
 		file := args["<file>"].(string)
 		path := args["<path>"].(string)
+		var context map[string]string
+		if s, ok := args["<context>"].(string); ok {
+			c, err := parseContext(s)
+			if err != nil {
+				log.Fatal(err)
+			}
+			context = c
+		}
 
 		var r io.Reader
 		if file == "-" {
@@ -167,7 +184,7 @@ func main() {
 			w = f
 		}
 
-		r, err := manager.Unpack(r)
+		r, err := manager.Unpack(context, r)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -211,6 +228,22 @@ func loadManager() *sneaker.Manager {
 		Bucket:  u.Host,
 		Prefix:  u.Path,
 	}
+}
+
+func parseContext(s string) (map[string]string, error) {
+	if s == "" {
+		return nil, nil
+	}
+
+	context := map[string]string{}
+	for _, v := range strings.Split(s, ",") {
+		parts := strings.SplitN(v, "=", 2)
+		if len(parts) != 2 {
+			return nil, fmt.Errorf("unable to parse context: %q", v)
+		}
+		context[parts[0]] = parts[1]
+	}
+	return context, nil
 }
 
 var (

@@ -11,13 +11,14 @@ import (
 	"github.com/awslabs/aws-sdk-go/gen/kms"
 )
 
-// Pack encrypts the given secrets with a new data key from KMS, and writes a
-// TAR archive containing both the encrypted data key and the encrypted TAR file
-// to the given io.Writer.
-func (m *Manager) Pack(secrets map[string][]byte, w io.Writer) error {
+// Pack encrypts the given secrets with a new data key from KMS with the given
+// context, and writes a TAR archive containing both the encrypted data key and
+// the encrypted TAR file to the given io.Writer.
+func (m *Manager) Pack(secrets map[string][]byte, ctxt map[string]string, w io.Writer) error {
 	key, err := m.Keys.GenerateDataKey(&kms.GenerateDataKeyRequest{
-		KeyID:         &m.KeyID,
-		NumberOfBytes: aws.Integer(32),
+		EncryptionContext: ctxt,
+		KeyID:             &m.KeyID,
+		NumberOfBytes:     aws.Integer(32),
 	})
 	if err != nil {
 		return err

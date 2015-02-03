@@ -10,9 +10,9 @@ import (
 )
 
 // Unpack reads the packed secrets from the reader, decrypts the data key using
-// KMS, decrypts the secrets, and returns an io.Reader containing a TAR file
-// with all the secrets.
-func (m *Manager) Unpack(r io.Reader) (io.Reader, error) {
+// KMS and the given context, decrypts the secrets, and returns an io.Reader
+// containing a TAR file with all the secrets.
+func (m *Manager) Unpack(ctxt map[string]string, r io.Reader) (io.Reader, error) {
 	var encKey, encTar []byte
 
 	tr := tar.NewReader(r)
@@ -40,7 +40,8 @@ func (m *Manager) Unpack(r io.Reader) (io.Reader, error) {
 	}
 
 	key, err := m.Keys.Decrypt(&kms.DecryptRequest{
-		CiphertextBlob: encKey,
+		CiphertextBlob:    encKey,
+		EncryptionContext: ctxt,
 	})
 	if err != nil {
 		return nil, err

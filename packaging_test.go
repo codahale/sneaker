@@ -35,12 +35,16 @@ func TestPackagingRoundTrip(t *testing.T) {
 		"example.txt": []byte("hello world"),
 	}
 
+	context := map[string]string{
+		"hostname": "example.com",
+	}
+
 	buf := bytes.NewBuffer(nil)
-	if err := man.Pack(input, buf); err != nil {
+	if err := man.Pack(input, context, buf); err != nil {
 		t.Fatal(err)
 	}
 
-	r, err := man.Unpack(bytes.NewReader(buf.Bytes()))
+	r, err := man.Unpack(context, bytes.NewReader(buf.Bytes()))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -65,5 +69,27 @@ func TestPackagingRoundTrip(t *testing.T) {
 
 	if !reflect.DeepEqual(input, output) {
 		t.Errorf("Input was %#v, but output was %#v", input, output)
+	}
+
+	genReq := fakeKMS.GenerateRequests[0]
+	if v, want := *genReq.KeyID, "key1"; v != want {
+		t.Errorf("Key ID was %q, but expected %q", v, want)
+	}
+
+	if v, want := *genReq.NumberOfBytes, 32; v != want {
+		t.Errorf("Key size was %v, but expected %v", v, want)
+	}
+
+	if v, want := genReq.EncryptionContext, context; !reflect.DeepEqual(v, want) {
+		t.Errorf("Encryption context was %#v, but expected %#v", v, want)
+	}
+
+	decReq := fakeKMS.DecryptRequests[0]
+	if v, want := decReq.CiphertextBlob, []byte("encrypted key"); !bytes.Equal(v, want) {
+		t.Errorf("Ciphertext Blob was %v, but expected %v", v, want)
+	}
+
+	if v, want := decReq.EncryptionContext, context; !reflect.DeepEqual(v, want) {
+		t.Errorf("Encryption context was %#v, but expected %#v", v, want)
 	}
 }
