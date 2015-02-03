@@ -6,10 +6,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net/url"
 	"os"
 	"text/tabwriter"
-
-	"net/url"
 
 	"github.com/awslabs/aws-sdk-go/aws"
 	"github.com/awslabs/aws-sdk-go/gen/kms"
