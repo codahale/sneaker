@@ -1,7 +1,3 @@
-# This project is not ready to use. Please come back later.
-
-![ha ha the 90s](http://i.imgur.com/3HvHOnm.gif)
-
 # secman
 
 `secman` is a utility for storing sensitive information on AWS using S3
