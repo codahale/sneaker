@@ -104,7 +104,7 @@ func main() {
 		pattern := args["<pattern>"].(string)
 		file := args["<file>"].(string)
 		var context map[string]string
-		if s, ok := args["<context>"].(string); ok {
+		if s, ok := args["--context"].(string); ok {
 			c, err := parseContext(s)
 			if err != nil {
 				log.Fatal(err)
@@ -150,7 +150,7 @@ func main() {
 		file := args["<file>"].(string)
 		path := args["<path>"].(string)
 		var context map[string]string
-		if s, ok := args["<context>"].(string); ok {
+		if s, ok := args["--context"].(string); ok {
 			c, err := parseContext(s)
 			if err != nil {
 				log.Fatal(err)
