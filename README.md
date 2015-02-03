@@ -142,9 +142,10 @@ STDIN as the input.)
 
 #### Encryption Contexts
 
-KMS supports the notion of an **Encryption Context**: semi-structured
-data used in the encryption of data which is then required for resulting
-decryption operations to be successful.
+KMS supports the notion of an
+[Encryption Context](http://docs.aws.amazon.com/kms/latest/developerguide/encrypt-context.html):
+semi-structured data used in the encryption of data which is then
+required for resulting decryption operations to be successful.
 
 For example, let's pack some secrets like this:
 
@@ -158,6 +159,10 @@ used to unpack those secrets:
 ```shell
 sneaker unpack secrets.tar decrypted.tar --context="hostname=web1.example.com,version=20"
 ```
+
+This allows us to limit the use of a set of secrets to a single server
+or even to require a shared secret in addition to the KMS access
+controls.
 
 ### Maintenance Operations
 
