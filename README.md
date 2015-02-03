@@ -1,5 +1,7 @@
 # secman
 
+*Seatec Astronomy? Keynote Shogun.*
+
 `secman` is a utility for storing sensitive information on AWS using S3
 and the Key Management Service (KMS) to provide durability,
 confidentiality, and integrity.
