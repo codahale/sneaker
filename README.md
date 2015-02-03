@@ -30,19 +30,19 @@ credentials. It will look for the `AWS_ACCESS_KEY_ID` and
 profile (e.g. `~/.aws/credentials`), and finally any instance profile
 credentials for systems running on EC2 instances.
 
-You should also specify which region you'll be operating in via the
-`AWS_DEFAULT_REGION` environment variable.
-
 In general, if the `aws` command works, `secman` should work as well.
 
 ### Setting Up The Environment
 
-`secman` needs two things: the ID of a KMS key and the S3 path where
-secrets will be stored.
+`secman` needs three things: the AWS region to use, the ID of a KMS key
+and the S3 path where secrets will be stored.
+
+You should also specify which region you'll be operating in via the
+`SECMAN_REGION` environment variable.
 
 You can create a KMS key via the AWS Console or using a recent version
 of `aws`. When you've created the key, store its ID (a UUID) in the
-`KMS_KEY_ID` environment variable.
+`SECMAN_KEY_ID` environment variable.
 
 As with the key, you can create an S3 bucket via the AWS Console or with
 the `aws` command. You can either use a dedicated bucket or use a
@@ -55,8 +55,8 @@ directory in a common bucket, but we recommend you do two things:
    bucket. While Amazon's CloudTrail provides audit logging for the vast
    majority of AWS services, it does not do so for S3 access.
 
-Once you're done, set the `S3_PATH` environment variable to the location
-where secrets should be stored (e.g. `s3://bucket1/secrets/`).
+Once you're done, set the `SEMAN_S3_PATH` environment variable to the
+location where secrets should be stored (e.g. `s3://bucket1/secrets/`).
 
 ### Managing Secrets
 
@@ -138,7 +138,8 @@ This will perform the following steps:
 
 (To simplify things, if you specify `-` as the output path, `secman`
 will write the data to STDOUT, allowing you to pipe the output directly
-to `tar`.)
+to `tar`. Using `-` as the input path will also cause `secman` to use
+STDIN as the input.)
 
 ### Maintenance Operations
 

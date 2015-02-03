@@ -32,8 +32,9 @@ Options:
   -h --help  Show this help information.
 
 Environment Variables:
-  KMS_KEY_ID  The ID of the KMS key to use when encrypting secrets.
-  S3_PATH     The S3 path where secrets will be stored (e.g. s3://bucket/path).
+  SECMAN_REGION   The AWS region where the key and bucket are located.
+  SECMAN_KEY_ID   The KMS key to use when encrypting secrets.
+  SECMAN_S3_PATH  Where secrets will be stored (e.g. s3://bucket/path).
 `
 
 func main() {
@@ -191,15 +192,14 @@ func main() {
 }
 
 func loadManager() *secman.Manager {
-	region := os.Getenv("AWS_DEFAULT_REGION")
+	region := os.Getenv("SECMAN_REGION")
 	if region == "" {
-		region = "us-west-2"
-		log.Printf("no region specified, defaulting to %s", region)
+		log.Fatal("missing SECMAN_REGION")
 	}
 
-	u, err := url.Parse(os.Getenv("S3_PATH"))
+	u, err := url.Parse(os.Getenv("SECMAN_S3_PATH"))
 	if err != nil {
-		log.Fatalf("bad S3_PATH: %s", err)
+		log.Fatalf("bad SECMAN_S3_PATH: %s", err)
 	}
 
 	creds := aws.DetectCreds("", "", "")
@@ -207,7 +207,7 @@ func loadManager() *secman.Manager {
 	return &secman.Manager{
 		Objects: s3.New(creds, region, nil),
 		Keys:    kms.New(creds, region, nil),
-		KeyID:   os.Getenv("KMS_KEY_ID"),
+		KeyID:   os.Getenv("SECMAN_KEY_ID"),
 		Bucket:  u.Host,
 		Prefix:  u.Path,
 	}
