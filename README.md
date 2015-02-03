@@ -146,4 +146,4 @@ encrypt the secrets, run `secman rotate`. It will download and decrypt
 each secret, generate a new data key, and upload a re-encrypted copy.
 
 To rotate the KMS key used for each secret, simply specify a different
-`KMS_KEY_ID` and run `secman rotate`.
+`SECMAN_KEY_ID` and run `secman rotate`.
