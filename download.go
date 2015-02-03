@@ -1,6 +1,7 @@
 package sneaker
 
 import (
+	"fmt"
 	"io/ioutil"
 	"path"
 
@@ -27,12 +28,17 @@ func (m *Manager) Download(paths []string) (map[string][]byte, error) {
 			CiphertextBlob: key,
 		})
 		if err != nil {
+			if apiErr, ok := err.(aws.APIError); ok {
+				if apiErr.Type == "InvalidCiphertextException" {
+					return nil, fmt.Errorf("unable to decrypt data key")
+				}
+			}
 			return nil, err
 		}
 
 		data, err = decrypt(d.Plaintext, data)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("unable to decrypt secret")
 		}
 
 		secrets[path] = data

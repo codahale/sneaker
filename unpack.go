@@ -3,9 +3,11 @@ package sneaker
 import (
 	"archive/tar"
 	"bytes"
+	"fmt"
 	"io"
 	"io/ioutil"
 
+	"github.com/awslabs/aws-sdk-go/aws"
 	"github.com/awslabs/aws-sdk-go/gen/kms"
 )
 
@@ -44,12 +46,17 @@ func (m *Manager) Unpack(ctxt map[string]string, r io.Reader) (io.Reader, error)
 		EncryptionContext: ctxt,
 	})
 	if err != nil {
+		if apiErr, ok := err.(aws.APIError); ok {
+			if apiErr.Type == "InvalidCiphertextException" {
+				return nil, fmt.Errorf("unable to decrypt data key")
+			}
+		}
 		return nil, err
 	}
 
 	decTar, err := decrypt(key.Plaintext, encTar)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("unable to decrypt secrets")
 	}
 
 	return bytes.NewReader(decTar), nil
