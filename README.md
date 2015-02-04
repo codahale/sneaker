@@ -166,6 +166,10 @@ This allows us to limit the use of a set of secrets to a single server
 or even to require a shared secret in addition to the KMS access
 controls.
 
+**Note:** there is currently no way to change the contents of
+`SNEAKER_ENC_CONTEXT` in place. If you want to change it, you'll need to
+download all your secrets and re-upload them with the new context.
+
 ### Maintenance Operations
 
 A common maintenance task is key rotate. To rotate the data keys used to
