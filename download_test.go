@@ -43,7 +43,6 @@ func TestDownload(t *testing.T) {
 		Bucket:            "bucket",
 		Prefix:            "secrets",
 		EncryptionContext: map[string]string{"A": "B"},
-		GrantTokens:       []string{"C"},
 	}
 
 	actual, err := man.Download([]string{"secret1.txt"})
@@ -90,9 +89,5 @@ func TestDownload(t *testing.T) {
 
 	if v := decReq.EncryptionContext; !reflect.DeepEqual(v, man.EncryptionContext) {
 		t.Errorf("EncryptionContext was %v, but expected %v", v, man.EncryptionContext)
-	}
-
-	if v := decReq.GrantTokens; !reflect.DeepEqual(v, man.GrantTokens) {
-		t.Errorf("GrantTokens was %v, but expected %v", v, man.GrantTokens)
 	}
 }

@@ -36,7 +36,6 @@ Environment Variables:
   SNEAKER_REGION        The AWS region where the key and bucket are located.
   SNEAKER_KEY_ID        The KMS key to use when encrypting secrets.
   SNEAKER_S3_PATH       Where secrets will be stored (e.g. s3://bucket/path).
-  SNEAKER_GRANT_TOKENS  A comma-separated list of KMS grant tokens.
   SNEAKER_ENC_CONTEXT   The KMS encryption context to use for stored secrets.
 `
 
@@ -234,11 +233,6 @@ func loadManager() *sneaker.Manager {
 		log.Fatalf("bad SNEAKER_ENC_CONTEXT: %s", err)
 	}
 
-	var tokens []string
-	if s := os.Getenv("SNEAKER_GRANT_TOKENS"); s != "" {
-		tokens = strings.Split(s, ",")
-	}
-
 	return &sneaker.Manager{
 		Objects:           s3.New(creds, region, nil),
 		Keys:              kms.New(creds, region, nil),
@@ -246,7 +240,6 @@ func loadManager() *sneaker.Manager {
 		Bucket:            u.Host,
 		Prefix:            u.Path,
 		EncryptionContext: ctxt,
-		GrantTokens:       tokens,
 	}
 }
 

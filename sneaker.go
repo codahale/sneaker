@@ -38,6 +38,5 @@ type Manager struct {
 	Keys              KeyManagement
 	KeyID             string
 	Bucket, Prefix    string
-	GrantTokens       []string
 	EncryptionContext map[string]string
 }

@@ -17,7 +17,6 @@ import (
 func (m *Manager) Pack(secrets map[string][]byte, ctxt map[string]string, w io.Writer) error {
 	key, err := m.Keys.GenerateDataKey(&kms.GenerateDataKeyRequest{
 		EncryptionContext: ctxt,
-		GrantTokens:       m.GrantTokens,
 		KeyID:             &m.KeyID,
 		NumberOfBytes:     aws.Integer(32),
 	})

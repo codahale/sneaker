@@ -44,7 +44,6 @@ func (m *Manager) Unpack(ctxt map[string]string, r io.Reader) (io.Reader, error)
 	key, err := m.Keys.Decrypt(&kms.DecryptRequest{
 		CiphertextBlob:    encKey,
 		EncryptionContext: ctxt,
-		GrantTokens:       m.GrantTokens,
 	})
 	if err != nil {
 		if apiErr, ok := err.(aws.APIError); ok {

@@ -28,7 +28,6 @@ func TestPackagingRoundTrip(t *testing.T) {
 
 	man := Manager{
 		EncryptionContext: map[string]string{"A": "B"},
-		GrantTokens:       []string{"C"},
 		Keys:              fakeKMS,
 		KeyID:             "key1",
 	}
@@ -86,10 +85,6 @@ func TestPackagingRoundTrip(t *testing.T) {
 		t.Errorf("Encryption context was %#v, but expected %#v", v, want)
 	}
 
-	if v := genReq.GrantTokens; !reflect.DeepEqual(v, man.GrantTokens) {
-		t.Errorf("GrantTokens was %v, but expected %v", v, man.GrantTokens)
-	}
-
 	decReq := fakeKMS.DecryptRequests[0]
 	if v, want := decReq.CiphertextBlob, []byte("encrypted key"); !bytes.Equal(v, want) {
 		t.Errorf("Ciphertext Blob was %v, but expected %v", v, want)
@@ -97,9 +92,5 @@ func TestPackagingRoundTrip(t *testing.T) {
 
 	if v, want := decReq.EncryptionContext, context; !reflect.DeepEqual(v, want) {
 		t.Errorf("Encryption context was %#v, but expected %#v", v, want)
-	}
-
-	if v := decReq.GrantTokens; !reflect.DeepEqual(v, man.GrantTokens) {
-		t.Errorf("GrantTokens was %v, but expected %v", v, man.GrantTokens)
 	}
 }
