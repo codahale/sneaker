@@ -1,3 +1,9 @@
+# WARNING
+
+**This project has not been reviewed by our Security Team, nor has
+anyone committed to supporting it. Both its internals, data formats, and
+interfaces may chance at any time in the future without warning.**
+
 # Sneaker
 
 *Seatec Astronomy? Keynote Shogun.*
