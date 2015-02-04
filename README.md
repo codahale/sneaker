@@ -147,7 +147,9 @@ KMS supports the notion of an
 semi-structured data used in the encryption of data which is then
 required for resulting decryption operations to be successful.
 
-For example, let's pack some secrets like this:
+For the secrets stored in S3, we can set the `SNEAKER_ENC_CONTEXT`
+environment variable, and for packing and unpacking secrets we can
+specify them on the command line:
 
 ```shell
 sneaker pack /example/* secrets.tar --context="hostname=web1.example.com,version=20"
