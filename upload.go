@@ -21,8 +21,10 @@ func (m *Manager) Upload(path string, r io.Reader) error {
 	}
 
 	key, err := m.Keys.GenerateDataKey(&kms.GenerateDataKeyRequest{
-		KeyID:         &m.KeyID,
-		NumberOfBytes: aws.Integer(32),
+		EncryptionContext: m.EncryptionContext,
+		GrantTokens:       m.GrantTokens,
+		KeyID:             &m.KeyID,
+		NumberOfBytes:     aws.Integer(32),
 	})
 	if err != nil {
 		return err

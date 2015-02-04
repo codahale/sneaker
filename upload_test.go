@@ -2,6 +2,7 @@ package sneaker
 
 import (
 	"io/ioutil"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -27,11 +28,13 @@ func TestUpload(t *testing.T) {
 	}
 
 	man := Manager{
-		Objects: fakeS3,
-		Keys:    fakeKMS,
-		Bucket:  "bucket",
-		Prefix:  "secrets",
-		KeyID:   "key1",
+		Objects:           fakeS3,
+		Keys:              fakeKMS,
+		Bucket:            "bucket",
+		Prefix:            "secrets",
+		EncryptionContext: map[string]string{"A": "B"},
+		GrantTokens:       []string{"C"},
+		KeyID:             "key1",
 	}
 
 	if err := man.Upload("weeble.txt", strings.NewReader("this is a test")); err != nil {
@@ -47,6 +50,14 @@ func TestUpload(t *testing.T) {
 
 	if v, want := *genReq.NumberOfBytes, 32; v != want {
 		t.Errorf("Key size was %d, but expected %d", v, want)
+	}
+
+	if v := genReq.EncryptionContext; !reflect.DeepEqual(v, man.EncryptionContext) {
+		t.Errorf("EncryptionContext was %v, but expected %v", v, man.EncryptionContext)
+	}
+
+	if v := genReq.GrantTokens; !reflect.DeepEqual(v, man.GrantTokens) {
+		t.Errorf("GrantTokens was %v, but expected %v", v, man.GrantTokens)
 	}
 
 	// key upload

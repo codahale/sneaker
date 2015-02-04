@@ -34,8 +34,10 @@ type File struct {
 
 // A Manager allows you to manage files.
 type Manager struct {
-	Objects        ObjectStorage
-	Keys           KeyManagement
-	KeyID          string
-	Bucket, Prefix string
+	Objects           ObjectStorage
+	Keys              KeyManagement
+	KeyID             string
+	Bucket, Prefix    string
+	GrantTokens       []string
+	EncryptionContext map[string]string
 }

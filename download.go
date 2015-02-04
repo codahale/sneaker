@@ -25,7 +25,9 @@ func (m *Manager) Download(paths []string) (map[string][]byte, error) {
 		}
 
 		d, err := m.Keys.Decrypt(&kms.DecryptRequest{
-			CiphertextBlob: key,
+			CiphertextBlob:    key,
+			EncryptionContext: m.EncryptionContext,
+			GrantTokens:       m.GrantTokens,
 		})
 		if err != nil {
 			if apiErr, ok := err.(aws.APIError); ok {
