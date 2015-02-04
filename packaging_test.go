@@ -41,7 +41,7 @@ func TestPackagingRoundTrip(t *testing.T) {
 	}
 
 	buf := bytes.NewBuffer(nil)
-	if err := man.Pack(input, context, buf); err != nil {
+	if err := man.Pack(input, context, "", buf); err != nil {
 		t.Fatal(err)
 	}
 

@@ -97,9 +97,10 @@ Finally, you can delete the file:
 sneaker rm /example/secret.txt
 ```
 
-#### Packing And Unpacking
+#### Packing Secrets
 
-To install a secret on a machine, you'll need to first create a package:
+To install a secret on a machine, you'll need to pack them into a
+tarball:
 
 ```shell
 sneaker pack /example/* example.enc.tar
@@ -125,7 +126,19 @@ The result is safe to store and transmit -- only those with access to
 the `Decrypt` operation of the KMS key being used will be able to
 decrypt the data.
 
-To unpackage the secrets, run the following:
+You can also use a different KMS key than your `SNEAKER_KEY_ID` when
+packing secrets:
+
+```shell
+sneaker pack /example/* example.enc.tar --key-id=deb207cd-d3a7-4777-aca0-01fbceb4c927
+```
+
+This allows you to unpack your secrets in environments with no access to
+the key used to store your secrets.
+
+#### Unpacking Secrets
+
+To unpack the secrets, run the following:
 
 ```shell
 sneaker unpack example.enc.tar example.sec.tar

@@ -14,10 +14,14 @@ import (
 // Pack encrypts the given secrets with a new data key from KMS with the given
 // context, and writes a TAR archive containing both the encrypted data key and
 // the encrypted TAR file to the given io.Writer.
-func (m *Manager) Pack(secrets map[string][]byte, ctxt map[string]string, w io.Writer) error {
+func (m *Manager) Pack(secrets map[string][]byte, ctxt map[string]string, keyID string, w io.Writer) error {
+	if keyID == "" {
+		keyID = m.KeyID
+	}
+
 	key, err := m.Keys.GenerateDataKey(&kms.GenerateDataKeyRequest{
 		EncryptionContext: ctxt,
-		KeyID:             &m.KeyID,
+		KeyID:             &keyID,
 		NumberOfBytes:     aws.Integer(32),
 	})
 	if err != nil {

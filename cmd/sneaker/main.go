@@ -24,7 +24,7 @@ Usage:
   sneaker ls [<pattern>]
   sneaker upload <file> <path>
   sneaker rm <path>
-  sneaker pack <pattern> <file> [--context=<k1=v2,k2=v2>]
+  sneaker pack <pattern> <file> [--key=<id>] [--context=<k1=v2,k2=v2>]
   sneaker unpack <file> <path> [--context=<k1=v2,k2=v2>]
   sneaker rotate [<pattern>]
   sneaker version
@@ -108,6 +108,7 @@ func main() {
 	} else if args["pack"] == true {
 		pattern := args["<pattern>"].(string)
 		file := args["<file>"].(string)
+
 		var context map[string]string
 		if s, ok := args["--context"].(string); ok {
 			c, err := parseContext(s)
@@ -115,6 +116,11 @@ func main() {
 				log.Fatal(err)
 			}
 			context = c
+		}
+
+		var key string
+		if s, ok := args["--key"].(string); ok {
+			key = s
 		}
 
 		// list files
@@ -141,7 +147,7 @@ func main() {
 		defer out.Close()
 
 		// pack secrets
-		if err := manager.Pack(secrets, context, out); err != nil {
+		if err := manager.Pack(secrets, context, key, out); err != nil {
 			log.Fatal(err)
 		}
 	} else if args["unpack"] == true {
