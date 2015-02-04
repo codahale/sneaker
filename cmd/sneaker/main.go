@@ -136,21 +136,12 @@ func main() {
 			log.Fatal(err)
 		}
 
-		var w io.Writer
-		if file == "-" {
-			// write to STDOUT if file is -
-			w = os.Stdout
-		} else {
-			f, err := os.Create(file)
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer f.Close()
-			w = f
-		}
+		// write to file or STDOUT
+		out := openPath(file, os.Create, os.Stdout)
+		defer out.Close()
 
 		// pack secrets
-		if err := manager.Pack(secrets, context, w); err != nil {
+		if err := manager.Pack(secrets, context, out); err != nil {
 			log.Fatal(err)
 		}
 	} else if args["unpack"] == true {
@@ -165,38 +156,20 @@ func main() {
 			context = c
 		}
 
-		var r io.Reader
-		if file == "-" {
-			// read from STDIN if file is -
-			r = os.Stdin
-		} else {
-			f, err := os.Open(file)
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer f.Close()
-			r = f
-		}
+		// read from file or STDIN
+		in := openPath(file, os.Open, os.Stdin)
+		defer in.Close()
 
-		var w io.Writer
-		if path == "-" {
-			// write to STDOUT if path is -
-			w = os.Stdout
-		} else {
-			f, err := os.Create(path)
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer f.Close()
-			w = f
-		}
+		// write to file or STDOUT
+		out := openPath(path, os.Create, os.Stdout)
+		defer out.Close()
 
-		r, err := manager.Unpack(context, r)
+		r, err := manager.Unpack(context, in)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if _, err := io.Copy(w, r); err != nil {
+		if _, err := io.Copy(out, r); err != nil {
 			log.Fatal(err)
 		}
 	} else if args["rotate"] == true {
@@ -257,6 +230,17 @@ func parseContext(s string) (map[string]string, error) {
 		context[parts[0]] = parts[1]
 	}
 	return context, nil
+}
+
+func openPath(file string, o func(string) (*os.File, error), def *os.File) *os.File {
+	if file == "-" {
+		return def
+	}
+	f, err := o(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return f
 }
 
 var (
