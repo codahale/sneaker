@@ -147,9 +147,18 @@ KMS supports the notion of an
 semi-structured data used in the encryption of data which is then
 required for resulting decryption operations to be successful.
 
-For the secrets stored in S3, we can set the `SNEAKER_ENC_CONTEXT`
-environment variable, and for packing and unpacking secrets we can
-specify them on the command line:
+`sneaker` uses the `SNEAKER_ENC_CONTEXT` environment variable as the
+default encryption context for the secrets which are stored in S3. In
+addition, `sneaker` also includes the full S3 path, including bucket and
+prefix. Because of this, secrets in S3 cannot be renamed; they can only
+be deleted and re-uploaded.
+
+**Note:** there is currently no way to change the contents of
+`SNEAKER_ENC_CONTEXT` in place. If you want to change it, you'll need to
+download all your secrets and re-upload them with the new context.
+
+For packing and unpacking secrets you can specify a different encryption
+context on the command line:
 
 ```shell
 sneaker pack /example/* secrets.tar --context="hostname=web1.example.com,version=20"
@@ -162,13 +171,9 @@ used to unpack those secrets:
 sneaker unpack secrets.tar decrypted.tar --context="hostname=web1.example.com,version=20"
 ```
 
-This allows us to limit the use of a set of secrets to a single server
+This allows you to limit the use of a set of secrets to a single server
 or even to require a shared secret in addition to the KMS access
 controls.
-
-**Note:** there is currently no way to change the contents of
-`SNEAKER_ENC_CONTEXT` in place. If you want to change it, you'll need to
-download all your secrets and re-upload them with the new context.
 
 ### Maintenance Operations
 

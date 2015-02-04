@@ -45,6 +45,11 @@ func TestDownload(t *testing.T) {
 		EncryptionContext: map[string]string{"A": "B"},
 	}
 
+	ctxt := map[string]string{
+		"A":    "B",
+		"Path": "s3://bucket/secrets/secret1.txt",
+	}
+
 	actual, err := man.Download([]string{"secret1.txt"})
 	if err != nil {
 		t.Fatal(err)
@@ -87,7 +92,7 @@ func TestDownload(t *testing.T) {
 		t.Errorf("CiphertextBlob was %x, but expected %x", v, encryptedDataKey)
 	}
 
-	if v := decReq.EncryptionContext; !reflect.DeepEqual(v, man.EncryptionContext) {
-		t.Errorf("EncryptionContext was %v, but expected %v", v, man.EncryptionContext)
+	if v := decReq.EncryptionContext; !reflect.DeepEqual(v, ctxt) {
+		t.Errorf("EncryptionContext was %v, but expected %v", v, ctxt)
 	}
 }

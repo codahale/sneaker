@@ -3,7 +3,7 @@ package sneaker
 import (
 	"fmt"
 	"io/ioutil"
-	"path"
+	fpath "path"
 
 	"github.com/awslabs/aws-sdk-go/aws"
 	"github.com/awslabs/aws-sdk-go/gen/kms"
@@ -26,7 +26,7 @@ func (m *Manager) Download(paths []string) (map[string][]byte, error) {
 
 		d, err := m.Keys.Decrypt(&kms.DecryptRequest{
 			CiphertextBlob:    key,
-			EncryptionContext: m.EncryptionContext,
+			EncryptionContext: m.secretContext(fpath.Join(m.Prefix, path)),
 		})
 		if err != nil {
 			if apiErr, ok := err.(aws.APIError); ok {
@@ -50,7 +50,7 @@ func (m *Manager) Download(paths []string) (map[string][]byte, error) {
 func (m *Manager) fetch(key string) ([]byte, error) {
 	resp, err := m.Objects.GetObject(&s3.GetObjectRequest{
 		Bucket: aws.String(m.Bucket),
-		Key:    aws.String(path.Join(m.Prefix, key)),
+		Key:    aws.String(fpath.Join(m.Prefix, key)),
 	})
 	if err != nil {
 		return nil, err

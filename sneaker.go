@@ -4,6 +4,7 @@
 package sneaker
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/awslabs/aws-sdk-go/gen/kms"
@@ -39,4 +40,13 @@ type Manager struct {
 	KeyID             string
 	Bucket, Prefix    string
 	EncryptionContext map[string]string
+}
+
+func (m *Manager) secretContext(path string) map[string]string {
+	ctxt := make(map[string]string, len(m.EncryptionContext))
+	for k, v := range m.EncryptionContext {
+		ctxt[k] = v
+	}
+	ctxt["Path"] = fmt.Sprintf("s3://%s/%s", m.Bucket, path)
+	return ctxt
 }

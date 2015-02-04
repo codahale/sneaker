@@ -21,7 +21,7 @@ func (m *Manager) Upload(path string, r io.Reader) error {
 	}
 
 	key, err := m.Keys.GenerateDataKey(&kms.GenerateDataKeyRequest{
-		EncryptionContext: m.EncryptionContext,
+		EncryptionContext: m.secretContext(path),
 		KeyID:             &m.KeyID,
 		NumberOfBytes:     aws.Integer(32),
 	})
