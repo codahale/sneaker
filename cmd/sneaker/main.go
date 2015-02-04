@@ -24,8 +24,8 @@ Usage:
   sneaker ls [<pattern>]
   sneaker upload <file> <path>
   sneaker rm <path>
-  sneaker pack <pattern> <file> [--context=<context>]
-  sneaker unpack <file> <path> [--context=<context>]
+  sneaker pack <pattern> <file> [--context=<k1=v2,k2=v2>]
+  sneaker unpack <file> <path> [--context=<k1=v2,k2=v2>]
   sneaker rotate [<pattern>]
   sneaker version
 
@@ -33,9 +33,11 @@ Options:
   -h --help  Show this help information.
 
 Environment Variables:
-  SNEAKER_REGION   The AWS region where the key and bucket are located.
-  SNEAKER_KEY_ID   The KMS key to use when encrypting secrets.
-  SNEAKER_S3_PATH  Where secrets will be stored (e.g. s3://bucket/path).
+  SNEAKER_REGION        The AWS region where the key and bucket are located.
+  SNEAKER_KEY_ID        The KMS key to use when encrypting secrets.
+  SNEAKER_S3_PATH       Where secrets will be stored (e.g. s3://bucket/path).
+  SNEAKER_GRANT_TOKENS  A comma-separated list of KMS grant tokens.
+  SNEAKER_ENC_CONTEXT   The KMS encryption context to use for stored secrets.
 `
 
 func main() {
@@ -227,12 +229,24 @@ func loadManager() *sneaker.Manager {
 
 	creds := aws.DetectCreds("", "", "")
 
+	ctxt, err := parseContext(os.Getenv("SNEAKER_ENC_CONTEXT"))
+	if err != nil {
+		log.Fatalf("bad SNEAKER_ENC_CONTEXT: %s", err)
+	}
+
+	var tokens []string
+	if s := os.Getenv("SNEAKER_GRANT_TOKENS"); s != "" {
+		tokens = strings.Split(s, ",")
+	}
+
 	return &sneaker.Manager{
-		Objects: s3.New(creds, region, nil),
-		Keys:    kms.New(creds, region, nil),
-		KeyID:   os.Getenv("SNEAKER_KEY_ID"),
-		Bucket:  u.Host,
-		Prefix:  u.Path,
+		Objects:           s3.New(creds, region, nil),
+		Keys:              kms.New(creds, region, nil),
+		KeyID:             os.Getenv("SNEAKER_KEY_ID"),
+		Bucket:            u.Host,
+		Prefix:            u.Path,
+		EncryptionContext: ctxt,
+		GrantTokens:       tokens,
 	}
 }
 
