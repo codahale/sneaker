@@ -29,7 +29,7 @@ func (m *Manager) Upload(path string, r io.Reader) error {
 		return err
 	}
 
-	ciphertext, err := encrypt(key.Plaintext, plaintext, nil)
+	ciphertext, err := encrypt(key.Plaintext, plaintext, []byte(*key.KeyID))
 	if err != nil {
 		return err
 	}

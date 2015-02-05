@@ -17,7 +17,7 @@ func TestRotate(t *testing.T) {
 	newKey[0] = 100
 
 	encryptedDataKey := []byte("encrypted old key")
-	encryptedSecret, err := encrypt(oldKey, []byte("this is a secret"), nil)
+	encryptedSecret, err := encrypt(oldKey, []byte("this is a secret"), []byte("key1"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -51,13 +51,15 @@ func TestRotate(t *testing.T) {
 	fakeKMS := &FakeKMS{
 		DecryptResponses: []kms.DecryptResponse{
 			{
+				KeyID:     aws.String("key1"),
 				Plaintext: oldKey,
 			},
 		},
 		GenerateResponses: []kms.GenerateDataKeyResponse{
 			{
-				Plaintext:      newKey,
 				CiphertextBlob: []byte("encrypted new key"),
+				KeyID:          aws.String("key1"),
+				Plaintext:      newKey,
 			},
 		},
 	}
@@ -137,7 +139,7 @@ func TestRotate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	secret, err := decrypt(newKey, encSecret, nil)
+	secret, err := decrypt(newKey, encSecret, []byte("key1"))
 	if err != nil {
 		t.Fatal(err)
 	}

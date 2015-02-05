@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/awslabs/aws-sdk-go/aws"
 	"github.com/awslabs/aws-sdk-go/gen/kms"
 	"github.com/awslabs/aws-sdk-go/gen/s3"
 )
@@ -14,7 +15,7 @@ func TestDownload(t *testing.T) {
 	key := make([]byte, 32)
 
 	encryptedDataKey := []byte("woo hoo")
-	encryptedSecret, err := encrypt(key, []byte("this is a secret"), nil)
+	encryptedSecret, err := encrypt(key, []byte("this is a secret"), []byte("key1"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -32,6 +33,7 @@ func TestDownload(t *testing.T) {
 	fakeKMS := &FakeKMS{
 		DecryptResponses: []kms.DecryptResponse{
 			{
+				KeyID:     aws.String("key1"),
 				Plaintext: key,
 			},
 		},

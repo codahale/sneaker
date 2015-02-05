@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/awslabs/aws-sdk-go/aws"
 	"github.com/awslabs/aws-sdk-go/gen/kms"
 	"github.com/awslabs/aws-sdk-go/gen/s3"
 )
@@ -14,8 +15,9 @@ func TestUpload(t *testing.T) {
 	fakeKMS := &FakeKMS{
 		GenerateResponses: []kms.GenerateDataKeyResponse{
 			{
-				Plaintext:      make([]byte, 32),
 				CiphertextBlob: []byte("encrypted key"),
+				KeyID:          aws.String("key1"),
+				Plaintext:      make([]byte, 32),
 			},
 		},
 	}
@@ -112,7 +114,7 @@ func TestUpload(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	secret, err := decrypt(make([]byte, 32), encSecret, nil)
+	secret, err := decrypt(make([]byte, 32), encSecret, []byte("key1"))
 	if err != nil {
 		t.Fatal(err)
 	}

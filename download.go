@@ -37,7 +37,7 @@ func (m *Manager) Download(paths []string) (map[string][]byte, error) {
 			return nil, err
 		}
 
-		plaintext, err := decrypt(d.Plaintext, ciphertext, nil)
+		plaintext, err := decrypt(d.Plaintext, ciphertext, []byte(*d.KeyID))
 		if err != nil {
 			return nil, fmt.Errorf("unable to decrypt secret")
 		}
