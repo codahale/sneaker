@@ -14,12 +14,12 @@ import (
 func (m *Manager) Download(paths []string) (map[string][]byte, error) {
 	secrets := make(map[string][]byte, len(paths))
 	for _, path := range paths {
-		ciphertext, err := m.fetch(path + ".aes")
+		ciphertext, err := m.fetch(path + aesExt)
 		if err != nil {
 			return nil, err
 		}
 
-		key, err := m.fetch(path + ".kms")
+		key, err := m.fetch(path + kmsExt)
 		if err != nil {
 			return nil, err
 		}

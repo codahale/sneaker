@@ -11,14 +11,14 @@ import (
 func (m *Manager) Rm(path string) error {
 	if _, err := m.Objects.DeleteObject(&s3.DeleteObjectRequest{
 		Bucket: aws.String(m.Bucket),
-		Key:    aws.String(fpath.Join(m.Prefix, path+".kms")),
+		Key:    aws.String(fpath.Join(m.Prefix, path+kmsExt)),
 	}); err != nil {
 		return err
 	}
 
 	if _, err := m.Objects.DeleteObject(&s3.DeleteObjectRequest{
 		Bucket: aws.String(m.Bucket),
-		Key:    aws.String(fpath.Join(m.Prefix, path+".aes")),
+		Key:    aws.String(fpath.Join(m.Prefix, path+aesExt)),
 	}); err != nil {
 		return err
 	}

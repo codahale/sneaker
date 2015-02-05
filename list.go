@@ -63,8 +63,3 @@ func matchPath(pattern, name string) (bool, error) {
 	}
 	return false, nil
 }
-
-const (
-	aesExt = ".aes"
-	kmsExt = ".kms"
-)

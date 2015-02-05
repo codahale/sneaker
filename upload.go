@@ -37,9 +37,9 @@ func (m *Manager) Upload(path string, r io.Reader) error {
 	if _, err := m.Objects.PutObject(
 		&s3.PutObjectRequest{
 			ContentLength: aws.Long(int64(len(key.CiphertextBlob))),
-			ContentType:   aws.String(contentType),
+			ContentType:   aws.String(kmsContentType),
 			Bucket:        aws.String(m.Bucket),
-			Key:           aws.String(path + ".kms"),
+			Key:           aws.String(path + kmsExt),
 			Body:          ioutil.NopCloser(bytes.NewReader(key.CiphertextBlob)),
 		},
 	); err != nil {
@@ -49,9 +49,9 @@ func (m *Manager) Upload(path string, r io.Reader) error {
 	if _, err := m.Objects.PutObject(
 		&s3.PutObjectRequest{
 			ContentLength: aws.Long(int64(len(ciphertext))),
-			ContentType:   aws.String(contentType),
+			ContentType:   aws.String(aesContentType),
 			Bucket:        aws.String(m.Bucket),
-			Key:           aws.String(path + ".aes"),
+			Key:           aws.String(path + aesExt),
 			Body:          ioutil.NopCloser(bytes.NewReader(ciphertext)),
 		},
 	); err != nil {
@@ -59,5 +59,3 @@ func (m *Manager) Upload(path string, r io.Reader) error {
 	}
 	return nil
 }
-
-const contentType = "application/octet-stream"

@@ -100,8 +100,3 @@ func (m *Manager) Pack(secrets map[string][]byte, ctxt map[string]string, keyID 
 
 	return outer.Close()
 }
-
-const (
-	keyFilename = "key.kms"
-	tarFilename = "encrypted.tar.aes"
-)

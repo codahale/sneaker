@@ -75,3 +75,14 @@ func Untar(r io.Reader) (map[string][]byte, error) {
 	}
 	return contents, nil
 }
+
+const (
+	aesExt = ".aes"
+	kmsExt = ".kms"
+
+	aesContentType = "application/octet-stream"
+	kmsContentType = "application/octet-stream"
+
+	keyFilename = "key" + kmsExt
+	tarFilename = "secrets.tar" + aesExt
+)
