@@ -117,7 +117,7 @@ This will perform the following steps:
 4. Use the data key to encrypt the `TAR` file with AES-GCM.
 
 5. Package the encrypted `TAR` file and the encrypted data key in a
-   `TAR` file and write it to `example-secrets.tar`.
+   `TAR` file and write it to `example.enc.tar`.
 
 Using `-` as the output path will make `sneaker` write the data to
 `STDOUT`.
@@ -141,7 +141,7 @@ the key used to store your secrets.
 To unpack the secrets, run the following:
 
 ```shell
-sneaker unpack example.enc.tar example.sec.tar
+sneaker unpack example.enc.tar example.tar
 ```
 
 This will perform the following steps:
@@ -152,7 +152,7 @@ This will perform the following steps:
 
 3. Use KMS to decrypt the data key.
 
-4. Decrypt the `TAR` file and write the result to `example.sec.tar`.
+4. Decrypt the `TAR` file and write the result to `example.tar`.
 
 Using `-` instead of a filename will make `sneaker` read the data from
 `STDIN`. Likewise, using `-` as the output path will make `sneaker`
