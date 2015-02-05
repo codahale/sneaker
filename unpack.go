@@ -1,11 +1,9 @@
 package sneaker
 
 import (
-	"archive/tar"
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 
 	"github.com/awslabs/aws-sdk-go/aws"
 	"github.com/awslabs/aws-sdk-go/gen/kms"
@@ -15,34 +13,23 @@ import (
 // KMS and the given context, decrypts the secrets, and returns an io.Reader
 // containing a TAR file with all the secrets.
 func (m *Manager) Unpack(ctxt map[string]string, r io.Reader) (io.Reader, error) {
-	var encKey, ciphertext []byte
+	contents, err := Untar(r)
+	if err != nil {
+		return nil, err
+	}
 
-	tr := tar.NewReader(r)
-	for {
-		hdr, err := tr.Next()
-		if err == io.EOF {
-			break // end of tar archive
-		} else if err != nil {
-			return nil, err
-		}
+	keyCiphertext, ok := contents[keyFilename]
+	if !ok {
+		return nil, fmt.Errorf("%s not found", keyFilename)
+	}
 
-		if hdr.Name == keyFilename {
-			buf, err := ioutil.ReadAll(tr)
-			if err != nil {
-				return nil, err
-			}
-			encKey = buf
-		} else if hdr.Name == tarFilename {
-			buf, err := ioutil.ReadAll(tr)
-			if err != nil {
-				return nil, err
-			}
-			ciphertext = buf
-		}
+	ciphertext, ok := contents[tarFilename]
+	if !ok {
+		return nil, fmt.Errorf("%s not found", tarFilename)
 	}
 
 	key, err := m.Keys.Decrypt(&kms.DecryptRequest{
-		CiphertextBlob:    encKey,
+		CiphertextBlob:    keyCiphertext,
 		EncryptionContext: ctxt,
 	})
 	if err != nil {

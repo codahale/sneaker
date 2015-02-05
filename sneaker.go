@@ -4,7 +4,10 @@
 package sneaker
 
 import (
+	"archive/tar"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"time"
 
 	"github.com/awslabs/aws-sdk-go/gen/kms"
@@ -49,4 +52,26 @@ func (m *Manager) secretContext(path string) map[string]string {
 	}
 	ctxt["Path"] = fmt.Sprintf("s3://%s/%s", m.Bucket, path)
 	return ctxt
+}
+
+// Untar parses the contents of the given reader as a TAR archive and returns a
+// map of file names to file contents.
+func Untar(r io.Reader) (map[string][]byte, error) {
+	contents := map[string][]byte{}
+	tr := tar.NewReader(r)
+	for {
+		hdr, err := tr.Next()
+		if err == io.EOF {
+			break // end of tar archive
+		} else if err != nil {
+			return nil, err
+		}
+
+		buf, err := ioutil.ReadAll(tr)
+		if err != nil {
+			return nil, err
+		}
+		contents[hdr.Name] = buf
+	}
+	return contents, nil
 }
