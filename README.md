@@ -119,8 +119,8 @@ This will perform the following steps:
 5. Package the encrypted `TAR` file and the encrypted data key in a
    `TAR` file and write it to `example-secrets.tar`.
 
-(To simplify things, if you specify `-` as the output path,
-`sneaker` will write the data to STDOUT.)
+Using `-` as the output path will make `sneaker` write the data to
+`STDOUT`.
 
 The result is safe to store and transmit -- only those with access to
 the `Decrypt` operation of the KMS key being used will be able to
@@ -154,10 +154,10 @@ This will perform the following steps:
 
 4. Decrypt the `TAR` file and write the result to `example.sec.tar`.
 
-(To simplify things, if you specify `-` as the output path, `sneaker`
-will write the data to STDOUT, allowing you to pipe the output directly
-to `tar`. Using `-` as the input path will also cause `sneaker` to use
-STDIN as the input.)
+Using `-` instead of a filename will make `sneaker` read the data from
+`STDIN`. Likewise, using `-` as the output path will make `sneaker`
+write the data to `STDOUT`. This allows you to pipe the output directly
+to a `tar` process, for example.
 
 #### Encryption Contexts
 
