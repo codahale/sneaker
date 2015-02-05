@@ -46,7 +46,7 @@ You should also specify which region you'll be operating in via the
 
 You can create a KMS key via the AWS Console or using a recent version
 of `aws`. When you've created the key, store its ID (a UUID) in the
-`SNEAKER_KEY_ID` environment variable.
+`SNEAKER_MASTER_KEY` environment variable.
 
 As with the key, you can create an S3 bucket via the AWS Console or with
 the `aws` command. You can either use a dedicated bucket or use a
@@ -126,7 +126,7 @@ The result is safe to store and transmit -- only those with access to
 the `Decrypt` operation of the KMS key being used will be able to
 decrypt the data.
 
-You can also use a different KMS key than your `SNEAKER_KEY_ID` when
+You can also use a different KMS key than your `SNEAKER_MASTER_KEY` when
 packing secrets:
 
 ```shell
@@ -166,15 +166,15 @@ KMS supports the notion of an
 semi-structured data used in the encryption of data which is then
 required for resulting decryption operations to be successful.
 
-`sneaker` uses the `SNEAKER_ENC_CONTEXT` environment variable as the
+`sneaker` uses the `SNEAKER_MASTER_CONTEXT` environment variable as the
 default encryption context for the secrets which are stored in S3. In
 addition, `sneaker` also includes the full S3 path, including bucket and
 prefix. Because of this, secrets in S3 cannot be renamed; they can only
 be deleted and re-uploaded.
 
 **Note:** there is currently no way to change the contents of
-`SNEAKER_ENC_CONTEXT` in place. If you want to change it, you'll need to
-download all your secrets and re-upload them with the new context.
+`SNEAKER_MASTER_CONTEXT` in place. If you want to change it, you'll need
+to download all your secrets and re-upload them with the new context.
 
 For packing and unpacking secrets you can specify a different encryption
 context on the command line:
@@ -201,4 +201,4 @@ encrypt the secrets, run `sneaker rotate`. It will download and decrypt
 each secret, generate a new data key, and upload a re-encrypted copy.
 
 To rotate the KMS key used for each secret, simply specify a different
-`SNEAKER_KEY_ID` and run `sneaker rotate`.
+`SNEAKER_MASTER_KEY` and run `sneaker rotate`.

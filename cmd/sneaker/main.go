@@ -33,10 +33,10 @@ Options:
   -h --help  Show this help information.
 
 Environment Variables:
-  SNEAKER_REGION        The AWS region where the key and bucket are located.
-  SNEAKER_KEY_ID        The KMS key to use when encrypting secrets.
-  SNEAKER_S3_PATH       Where secrets will be stored (e.g. s3://bucket/path).
-  SNEAKER_ENC_CONTEXT   The KMS encryption context to use for stored secrets.
+  SNEAKER_REGION          The AWS region where the key and bucket are located.
+  SNEAKER_MASTER_KEY      The KMS key to use when encrypting secrets.
+  SNEAKER_MASTER_CONTEXT  The KMS encryption context to use for stored secrets.
+  SNEAKER_S3_PATH         Where secrets will be stored (e.g. s3://bucket/path).
 `
 
 func main() {
@@ -207,15 +207,15 @@ func loadManager() *sneaker.Manager {
 
 	creds := aws.DetectCreds("", "", "")
 
-	ctxt, err := parseContext(os.Getenv("SNEAKER_ENC_CONTEXT"))
+	ctxt, err := parseContext(os.Getenv("SNEAKER_MASTER_CONTEXT"))
 	if err != nil {
-		log.Fatalf("bad SNEAKER_ENC_CONTEXT: %s", err)
+		log.Fatalf("bad SNEAKER_MASTER_CONTEXT: %s", err)
 	}
 
 	return &sneaker.Manager{
 		Objects:           s3.New(creds, region, nil),
 		Keys:              kms.New(creds, region, nil),
-		KeyID:             os.Getenv("SNEAKER_KEY_ID"),
+		KeyID:             os.Getenv("SNEAKER_MASTER_KEY"),
 		Bucket:            u.Host,
 		Prefix:            u.Path,
 		EncryptionContext: ctxt,
