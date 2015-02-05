@@ -15,10 +15,10 @@ import (
 	"errors"
 )
 
-// encrypt encrypts the given data with the given key using AES-GCM and a random
-// nonce, which is prepended to the ciphertext. The key should be 128-, 196-, or
-// 256-bits long.
-func encrypt(key, data []byte) ([]byte, error) {
+// encrypt encrypts the given plaintext using AES-GCM with the given key and a
+// random nonce, which is then prepended to the ciphertext. The key should be
+// 128-, 196-, or 256-bits long.
+func encrypt(key, plaintext []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -34,12 +34,12 @@ func encrypt(key, data []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	return gcm.Seal(nonce, nonce, data, nil), nil
+	return gcm.Seal(nonce, nonce, plaintext, nil), nil
 }
 
-// decrypt attempts to decrypt the given ciphertext with the given key using
-// AES-GCM. The key should be 128-, 196-, or 256-bits long.
-func decrypt(key, data []byte) ([]byte, error) {
+// decrypt attempts to decrypt the given ciphertext using AES-GCM with the given
+// key. The key should be 128-, 196-, or 256-bits long.
+func decrypt(key, ciphertext []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -50,12 +50,12 @@ func decrypt(key, data []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	if len(data) <= gcm.NonceSize()+gcm.Overhead() {
+	if len(ciphertext) <= gcm.NonceSize()+gcm.Overhead() {
 		return nil, errors.New("cipher: message authentication failed")
 	}
 
-	nonce := data[:gcm.NonceSize()]
-	ciphertext := data[gcm.NonceSize():]
+	nonce := ciphertext[:gcm.NonceSize()]
+	ciphertext = ciphertext[gcm.NonceSize():]
 
 	return gcm.Open(nil, nonce, ciphertext, nil)
 }
