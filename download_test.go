@@ -14,7 +14,7 @@ func TestDownload(t *testing.T) {
 	key := make([]byte, 32)
 
 	encryptedDataKey := []byte("woo hoo")
-	encryptedSecret, err := encrypt(key, []byte("this is a secret"))
+	encryptedSecret, err := encrypt(key, []byte("this is a secret"), nil)
 	if err != nil {
 		t.Fatal(err)
 	}

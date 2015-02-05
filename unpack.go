@@ -15,7 +15,7 @@ import (
 // KMS and the given context, decrypts the secrets, and returns an io.Reader
 // containing a TAR file with all the secrets.
 func (m *Manager) Unpack(ctxt map[string]string, r io.Reader) (io.Reader, error) {
-	var encKey, encTar []byte
+	var encKey, ciphertext []byte
 
 	tr := tar.NewReader(r)
 	for {
@@ -37,7 +37,7 @@ func (m *Manager) Unpack(ctxt map[string]string, r io.Reader) (io.Reader, error)
 			if err != nil {
 				return nil, err
 			}
-			encTar = buf
+			ciphertext = buf
 		}
 	}
 
@@ -54,10 +54,10 @@ func (m *Manager) Unpack(ctxt map[string]string, r io.Reader) (io.Reader, error)
 		return nil, err
 	}
 
-	decTar, err := decrypt(key.Plaintext, encTar)
+	plaintext, err := decrypt(key.Plaintext, ciphertext, nil)
 	if err != nil {
 		return nil, fmt.Errorf("unable to decrypt secrets")
 	}
 
-	return bytes.NewReader(decTar), nil
+	return bytes.NewReader(plaintext), nil
 }

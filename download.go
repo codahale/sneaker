@@ -14,7 +14,7 @@ import (
 func (m *Manager) Download(paths []string) (map[string][]byte, error) {
 	secrets := make(map[string][]byte, len(paths))
 	for _, path := range paths {
-		data, err := m.fetch(path + ".aes")
+		ciphertext, err := m.fetch(path + ".aes")
 		if err != nil {
 			return nil, err
 		}
@@ -37,12 +37,12 @@ func (m *Manager) Download(paths []string) (map[string][]byte, error) {
 			return nil, err
 		}
 
-		data, err = decrypt(d.Plaintext, data)
+		plaintext, err := decrypt(d.Plaintext, ciphertext, nil)
 		if err != nil {
 			return nil, fmt.Errorf("unable to decrypt secret")
 		}
 
-		secrets[path] = data
+		secrets[path] = plaintext
 	}
 	return secrets, nil
 }

@@ -15,7 +15,7 @@ import (
 func (m *Manager) Upload(path string, r io.Reader) error {
 	path = fpath.Join(m.Prefix, path)
 
-	secret, err := ioutil.ReadAll(r)
+	plaintext, err := ioutil.ReadAll(r)
 	if err != nil {
 		return err
 	}
@@ -29,7 +29,7 @@ func (m *Manager) Upload(path string, r io.Reader) error {
 		return err
 	}
 
-	ciphertext, err := encrypt(key.Plaintext, secret)
+	ciphertext, err := encrypt(key.Plaintext, plaintext, nil)
 	if err != nil {
 		return err
 	}

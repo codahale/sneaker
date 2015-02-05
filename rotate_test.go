@@ -17,7 +17,7 @@ func TestRotate(t *testing.T) {
 	newKey[0] = 100
 
 	encryptedDataKey := []byte("encrypted old key")
-	encryptedSecret, err := encrypt(oldKey, []byte("this is a secret"))
+	encryptedSecret, err := encrypt(oldKey, []byte("this is a secret"), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -137,7 +137,7 @@ func TestRotate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	secret, err := decrypt(newKey, encSecret)
+	secret, err := decrypt(newKey, encSecret, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

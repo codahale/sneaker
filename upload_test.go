@@ -112,7 +112,7 @@ func TestUpload(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	secret, err := decrypt(make([]byte, 32), encSecret)
+	secret, err := decrypt(make([]byte, 32), encSecret, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

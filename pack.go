@@ -53,7 +53,7 @@ func (m *Manager) Pack(secrets map[string][]byte, ctxt map[string]string, keyID 
 		return err
 	}
 
-	enc, err := encrypt(key.Plaintext, buf.Bytes())
+	ciphertext, err := encrypt(key.Plaintext, buf.Bytes(), nil)
 	if err != nil {
 		return err
 	}
@@ -63,7 +63,7 @@ func (m *Manager) Pack(secrets map[string][]byte, ctxt map[string]string, keyID 
 	// write encrypted tar
 
 	if err := outer.WriteHeader(&tar.Header{
-		Size:       int64(len(enc)),
+		Size:       int64(len(ciphertext)),
 		Uname:      "root",
 		Gname:      "root",
 		Name:       tarFilename,
@@ -75,7 +75,7 @@ func (m *Manager) Pack(secrets map[string][]byte, ctxt map[string]string, keyID 
 		return err
 	}
 
-	if _, err := outer.Write(enc); err != nil {
+	if _, err := outer.Write(ciphertext); err != nil {
 		return err
 	}
 
