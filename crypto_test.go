@@ -5,6 +5,22 @@ import (
 	"testing"
 )
 
+func TestZerosKeyAfterUse(t *testing.T) {
+	key1 := []byte("ayellowsubmarine")
+	key2 := []byte("ayellowsubmarine")
+	plaintext := []byte("hello this is Stripe")
+
+	ciphertext, _ := encrypt(key1, plaintext, nil)
+	if !bytes.Equal(key1, make([]byte, len(key1))) {
+		t.Errorf("Key was not zeroed")
+	}
+
+	_, _ = decrypt(key2, ciphertext, nil)
+	if !bytes.Equal(key2, make([]byte, len(key2))) {
+		t.Errorf("Key was not zeroed")
+	}
+}
+
 func TestGCMRoundTrip(t *testing.T) {
 	key := make([]byte, 32)
 	input := []byte("hello this is Stripe")

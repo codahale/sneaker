@@ -19,6 +19,8 @@ import (
 // AES-GCM with the given key and a random nonce, which is then prepended to the
 // ciphertext. The key should be 128-, 196-, or 256-bits long.
 func encrypt(key, plaintext, data []byte) ([]byte, error) {
+	defer zero(key)
+
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -41,6 +43,8 @@ func encrypt(key, plaintext, data []byte) ([]byte, error) {
 // data using AES-GCM with the given key. The key should be 128-, 196-, or
 // 256-bits long.
 func decrypt(key, ciphertext, data []byte) ([]byte, error) {
+	defer zero(key)
+
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -59,4 +63,10 @@ func decrypt(key, ciphertext, data []byte) ([]byte, error) {
 	ciphertext = ciphertext[gcm.NonceSize():]
 
 	return gcm.Open(nil, nonce, ciphertext, data)
+}
+
+func zero(b []byte) {
+	for i := range b {
+		b[i] = 0
+	}
 }
