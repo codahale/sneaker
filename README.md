@@ -1,8 +1,8 @@
 # WARNING
 
-**This project has not been reviewed by our Security Team, nor has
-anyone committed to supporting it. Both its internals, data formats, and
-interfaces may chance at any time in the future without warning.**
+**This project has not been reviewed by security professionals. Both its
+internals, data formats, and interfaces may chance at any time in the
+future without warning.**
 
 # Sneaker
 
@@ -18,8 +18,8 @@ KMS-generated data keys.
 ## Installing
 
 ```shell
-go get -d -u github.com/stripe/sneaker
-cd $GOPATH/src/github.com/stripe/sneaker
+go get -d -u github.com/codahale/sneaker
+cd $GOPATH/src/github.com/codahale/sneaker
 make install
 sneaker version
 ```
