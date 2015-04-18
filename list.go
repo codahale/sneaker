@@ -22,14 +22,12 @@ func (m *Manager) List(pattern string) ([]File, error) {
 
 	var secrets []File
 	for _, obj := range resp.Contents {
-		if strings.HasSuffix(*obj.Key, aesExt) {
-			secrets = append(secrets, File{
-				Path:         (*obj.Key)[len(m.Prefix) : len(*obj.Key)-len(aesExt)],
-				LastModified: obj.LastModified.In(time.UTC),
-				Size:         int(*obj.Size),
-				ETag:         strings.Replace(*obj.ETag, "\"", "", -1),
-			})
-		}
+		secrets = append(secrets, File{
+			Path:         (*obj.Key)[len(m.Prefix):len(*obj.Key)],
+			LastModified: obj.LastModified.In(time.UTC),
+			Size:         int(*obj.Size),
+			ETag:         strings.Replace(*obj.ETag, "\"", "", -1),
+		})
 	}
 
 	if pattern == "" {

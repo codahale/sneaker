@@ -7,20 +7,11 @@ import (
 	"github.com/awslabs/aws-sdk-go/service/s3"
 )
 
-// Rm deletes the given secret and its encrypted data key.
+// Rm deletes the given secret.
 func (m *Manager) Rm(path string) error {
-	if _, err := m.Objects.DeleteObject(&s3.DeleteObjectInput{
+	_, err := m.Objects.DeleteObject(&s3.DeleteObjectInput{
 		Bucket: aws.String(m.Bucket),
-		Key:    aws.String(fpath.Join(m.Prefix, path+kmsExt)),
-	}); err != nil {
-		return err
-	}
-
-	if _, err := m.Objects.DeleteObject(&s3.DeleteObjectInput{
-		Bucket: aws.String(m.Bucket),
-		Key:    aws.String(fpath.Join(m.Prefix, path+aesExt)),
-	}); err != nil {
-		return err
-	}
-	return nil
+		Key:    aws.String(fpath.Join(m.Prefix, path)),
+	})
+	return err
 }

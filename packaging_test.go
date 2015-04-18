@@ -17,28 +17,31 @@ func TestPackagingRoundTrip(t *testing.T) {
 		GenerateOutputs: []kms.GenerateDataKeyOutput{
 			{
 				Plaintext:      make([]byte, 32),
+				KeyID:          aws.String("key1"),
 				CiphertextBlob: []byte("encrypted key"),
 			},
 		},
 		DecryptOutputs: []kms.DecryptOutput{
 			{
+				KeyID:     aws.String("key1"),
 				Plaintext: make([]byte, 32),
 			},
 		},
 	}
 
 	man := Manager{
-		EncryptionContext: &map[string]*string{"A": aws.String("B")},
-		Keys:              fakeKMS,
-		KeyID:             "key1",
+		Envelope: Envelope{
+			KMS: fakeKMS,
+		},
+		KeyID: "key1",
 	}
 
 	input := map[string][]byte{
 		"example.txt": []byte("hello world"),
 	}
 
-	context := &map[string]*string{
-		"hostname": aws.String("example.com"),
+	context := map[string]string{
+		"hostname": "example.com",
 	}
 
 	buf := bytes.NewBuffer(nil)
@@ -82,7 +85,7 @@ func TestPackagingRoundTrip(t *testing.T) {
 		t.Errorf("Key size was %v, but expected %v", v, want)
 	}
 
-	if v, want := genReq.EncryptionContext, context; !reflect.DeepEqual(v, want) {
+	if v, want := fromAWS(genReq.EncryptionContext), context; !reflect.DeepEqual(v, want) {
 		t.Errorf("Encryption context was %#v, but expected %#v", v, want)
 	}
 
@@ -91,7 +94,19 @@ func TestPackagingRoundTrip(t *testing.T) {
 		t.Errorf("Ciphertext Blob was %v, but expected %v", v, want)
 	}
 
-	if v, want := decReq.EncryptionContext, context; !reflect.DeepEqual(v, want) {
+	if v, want := fromAWS(decReq.EncryptionContext), context; !reflect.DeepEqual(v, want) {
 		t.Errorf("Encryption context was %#v, but expected %#v", v, want)
 	}
+}
+
+func fromAWS(m *map[string]*string) map[string]string {
+	if m == nil {
+		return nil
+	}
+
+	res := make(map[string]string, len(*m))
+	for k, v := range *m {
+		res[k] = *v
+	}
+	return res
 }

@@ -12,21 +12,17 @@ import (
 )
 
 func TestDownload(t *testing.T) {
-	key := make([]byte, 32)
-
-	encryptedDataKey := []byte("woo hoo")
-	encryptedSecret, err := encrypt(key, []byte("this is a secret"), []byte("key1"))
-	if err != nil {
-		t.Fatal(err)
+	ciphertext := []byte{
+		0x00, 0x00, 0x00, 0x0d, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x65,
+		0x64, 0x20, 0x6b, 0x65, 0x79, 0xba, 0xcf, 0x29, 0x4e, 0x6d, 0x09, 0x18,
+		0x4e, 0x66, 0x6e, 0xb1, 0xb6, 0xc9, 0x87, 0x65, 0xcc, 0xe1, 0x06, 0x8c,
+		0xbf, 0x7f, 0xdd, 0x5d, 0x70, 0x4e, 0x3d, 0xbf, 0xd5, 0x44, 0xec,
 	}
 
 	fakeS3 := &FakeS3{
 		GetOutputs: []s3.GetObjectOutput{
 			{
-				Body: ioutil.NopCloser(bytes.NewReader(encryptedSecret)),
-			},
-			{
-				Body: ioutil.NopCloser(bytes.NewReader(encryptedDataKey)),
+				Body: ioutil.NopCloser(bytes.NewReader(ciphertext)),
 			},
 		},
 	}
@@ -34,22 +30,19 @@ func TestDownload(t *testing.T) {
 		DecryptOutputs: []kms.DecryptOutput{
 			{
 				KeyID:     aws.String("key1"),
-				Plaintext: key,
+				Plaintext: make([]byte, 32),
 			},
 		},
 	}
 
 	man := Manager{
-		Objects:           fakeS3,
-		Keys:              fakeKMS,
+		Objects: fakeS3,
+		Envelope: Envelope{
+			KMS: fakeKMS,
+		},
 		Bucket:            "bucket",
 		Prefix:            "secrets",
-		EncryptionContext: &map[string]*string{"A": aws.String("B")},
-	}
-
-	ctxt := map[string]*string{
-		"A":    aws.String("B"),
-		"Path": aws.String("s3://bucket/secrets/secret1.txt"),
+		EncryptionContext: map[string]string{"A": "B"},
 	}
 
 	actual, err := man.Download([]string{"secret1.txt"})
@@ -58,46 +51,19 @@ func TestDownload(t *testing.T) {
 	}
 
 	expected := map[string][]byte{
-		"secret1.txt": []byte("this is a secret"),
+		"secret1.txt": []byte("this is a test"),
 	}
 
 	if !reflect.DeepEqual(actual, expected) {
 		t.Errorf("Result was %#v, but expected %#v", actual, expected)
 	}
 
-	// AES get
-
 	getReq := fakeS3.GetInputs[0]
 	if v, want := *getReq.Bucket, "bucket"; v != want {
 		t.Errorf("Bucket was %q, but expected %q", v, want)
 	}
 
-	if v, want := *getReq.Key, "secrets/secret1.txt.aes"; v != want {
+	if v, want := *getReq.Key, "secrets/secret1.txt"; v != want {
 		t.Errorf("Key was %q, but expected %q", v, want)
-	}
-
-	// KMS get
-
-	getReq = fakeS3.GetInputs[1]
-	if v, want := *getReq.Bucket, "bucket"; v != want {
-		t.Errorf("Bucket was %q, but expected %q", v, want)
-	}
-
-	if v, want := *getReq.Key, "secrets/secret1.txt.kms"; v != want {
-		t.Errorf("Key was %q, but expected %q", v, want)
-	}
-
-	// decrypt
-
-	decReq := fakeKMS.DecryptInputs[0]
-	if v := decReq.CiphertextBlob; !bytes.Equal(v, encryptedDataKey) {
-		t.Errorf("CiphertextBlob was %x, but expected %x", v, encryptedDataKey)
-	}
-
-	for name, a := range *decReq.EncryptionContext {
-		b := ctxt[name]
-		if *a != *b {
-			t.Errorf("EncryptionContext[%v] was %v, but expected %v", name, *a, *b)
-		}
 	}
 }

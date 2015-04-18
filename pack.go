@@ -4,38 +4,26 @@ import (
 	"archive/tar"
 	"bytes"
 	"io"
-	"path/filepath"
+	fpath "path"
 	"time"
-
-	"github.com/awslabs/aws-sdk-go/aws"
-	"github.com/awslabs/aws-sdk-go/service/kms"
 )
 
 // Pack encrypts the given secrets with a new data key from KMS with the given
 // context, and writes a TAR archive containing both the encrypted data key and
 // the encrypted TAR file to the given io.Writer.
-func (m *Manager) Pack(secrets map[string][]byte, ctxt *map[string]*string, keyID string, w io.Writer) error {
+func (m *Manager) Pack(secrets map[string][]byte, ctxt map[string]string, keyID string, w io.Writer) error {
 	if keyID == "" {
 		keyID = m.KeyID
 	}
 
-	key, err := m.Keys.GenerateDataKey(&kms.GenerateDataKeyInput{
-		EncryptionContext: ctxt,
-		KeyID:             &keyID,
-		NumberOfBytes:     aws.Long(32),
-	})
-	if err != nil {
-		return err
-	}
-
 	buf := bytes.NewBuffer(nil)
-	inner := tar.NewWriter(buf)
+	tw := tar.NewWriter(buf)
 	for path, data := range secrets {
-		if err := inner.WriteHeader(&tar.Header{
+		if err := tw.WriteHeader(&tar.Header{
 			Size:       int64(len(data)),
 			Uname:      "root",
 			Gname:      "root",
-			Name:       filepath.Join(".", path),
+			Name:       fpath.Join(".", path),
 			Mode:       0400,
 			ModTime:    time.Now(),
 			AccessTime: time.Now(),
@@ -44,59 +32,20 @@ func (m *Manager) Pack(secrets map[string][]byte, ctxt *map[string]*string, keyI
 			return err
 		}
 
-		if _, err := inner.Write(data); err != nil {
+		if _, err := tw.Write(data); err != nil {
 			return err
 		}
 	}
 
-	if err := inner.Close(); err != nil {
+	if err := tw.Close(); err != nil {
 		return err
 	}
 
-	ciphertext, err := encrypt(key.Plaintext, buf.Bytes(), nil)
+	ciphertext, err := m.Envelope.Seal(keyID, ctxt, buf.Bytes())
 	if err != nil {
 		return err
 	}
 
-	outer := tar.NewWriter(w)
-
-	// write encrypted tar
-
-	if err := outer.WriteHeader(&tar.Header{
-		Size:       int64(len(ciphertext)),
-		Uname:      "root",
-		Gname:      "root",
-		Name:       tarFilename,
-		Mode:       0400,
-		ModTime:    time.Now(),
-		AccessTime: time.Now(),
-		ChangeTime: time.Now(),
-	}); err != nil {
-		return err
-	}
-
-	if _, err := outer.Write(ciphertext); err != nil {
-		return err
-	}
-
-	// write encrypted data key
-
-	if err := outer.WriteHeader(&tar.Header{
-		Size:       int64(len(key.CiphertextBlob)),
-		Uname:      "root",
-		Gname:      "root",
-		Name:       keyFilename,
-		Mode:       0400,
-		ModTime:    time.Now(),
-		AccessTime: time.Now(),
-		ChangeTime: time.Now(),
-	}); err != nil {
-		return err
-	}
-
-	if _, err := outer.Write(key.CiphertextBlob); err != nil {
-		return err
-	}
-
-	return outer.Close()
+	_, err = w.Write(ciphertext)
+	return err
 }

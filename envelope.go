@@ -13,9 +13,7 @@ import (
 // An Envelope encrypts and decrypts secrets with single-use KMS data keys using
 // AES-256-GCM.
 type Envelope struct {
-	KMS            KeyManagement
-	KeyID          string
-	DefaultContext map[string]string
+	KMS KeyManagement
 }
 
 // Seal generates a 256-bit data key using KMS and encrypts the given plaintext
@@ -24,10 +22,10 @@ type Envelope struct {
 //
 // The KMS data key's encryption context consists of the Envelope's default
 // context plus the given path, if any.
-func (e *Envelope) Seal(path string, plaintext []byte) ([]byte, error) {
+func (e *Envelope) Seal(keyID string, ctxt map[string]string, plaintext []byte) ([]byte, error) {
 	key, err := e.KMS.GenerateDataKey(&kms.GenerateDataKeyInput{
-		EncryptionContext: e.context(path),
-		KeyID:             &e.KeyID,
+		EncryptionContext: e.context(ctxt),
+		KeyID:             &keyID,
 		NumberOfBytes:     aws.Long(keySize),
 	})
 	if err != nil {
@@ -53,12 +51,12 @@ func (e *Envelope) Seal(path string, plaintext []byte) ([]byte, error) {
 // Open takes the output of Seal and decrypts it. If any part of the ciphertext,
 // context, or path is modified, Seal will return an error instead of the
 // decrypted data.
-func (e *Envelope) Open(path string, ciphertext []byte) ([]byte, error) {
+func (e *Envelope) Open(ctxt map[string]string, ciphertext []byte) ([]byte, error) {
 	key, ciphertext := split(ciphertext)
 
 	d, err := e.KMS.Decrypt(&kms.DecryptInput{
 		CiphertextBlob:    key,
-		EncryptionContext: e.context(path),
+		EncryptionContext: e.context(ctxt),
 	})
 	if err != nil {
 		if apiErr, ok := err.(aws.APIError); ok {
@@ -83,17 +81,11 @@ func (e *Envelope) Open(path string, ciphertext []byte) ([]byte, error) {
 	return gcm.Open(nil, nonce, ciphertext, []byte(*d.KeyID))
 }
 
-func (e *Envelope) context(path string) *map[string]*string {
+func (e *Envelope) context(c map[string]string) *map[string]*string {
 	ctxt := make(map[string]*string)
-
-	for k, v := range e.DefaultContext {
+	for k, v := range c {
 		ctxt[k] = aws.String(v)
 	}
-
-	if path != "" {
-		ctxt["Path"] = aws.String(path)
-	}
-
 	return &ctxt
 }
 

@@ -109,7 +109,7 @@ func main() {
 		pattern := args["<pattern>"].(string)
 		file := args["<file>"].(string)
 
-		var context map[string]*string
+		var context map[string]string
 		if s, ok := args["--context"].(string); ok {
 			c, err := parseContext(s)
 			if err != nil {
@@ -147,13 +147,13 @@ func main() {
 		defer out.Close()
 
 		// pack secrets
-		if err := manager.Pack(secrets, &context, key, out); err != nil {
+		if err := manager.Pack(secrets, context, key, out); err != nil {
 			log.Fatal(err)
 		}
 	} else if args["unpack"] == true {
 		file := args["<file>"].(string)
 		path := args["<path>"].(string)
-		var context map[string]*string
+		var context map[string]string
 		if s, ok := args["--context"].(string); ok {
 			c, err := parseContext(s)
 			if err != nil {
@@ -170,7 +170,7 @@ func main() {
 		out := openPath(path, os.Create, os.Stdout)
 		defer out.Close()
 
-		r, err := manager.Unpack(&context, in)
+		r, err := manager.Unpack(context, in)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -218,27 +218,29 @@ func loadManager() *sneaker.Manager {
 	}
 
 	return &sneaker.Manager{
-		Objects:           s3.New(config),
-		Keys:              kms.New(config),
-		KeyID:             os.Getenv("SNEAKER_MASTER_KEY"),
+		Objects: s3.New(config),
+		Envelope: sneaker.Envelope{
+			KMS: kms.New(config),
+		},
 		Bucket:            u.Host,
 		Prefix:            u.Path,
-		EncryptionContext: &ctxt,
+		EncryptionContext: ctxt,
+		KeyID:             os.Getenv("SNEAKER_MASTER_KEY"),
 	}
 }
 
-func parseContext(s string) (map[string]*string, error) {
+func parseContext(s string) (map[string]string, error) {
 	if s == "" {
 		return nil, nil
 	}
 
-	context := map[string]*string{}
+	context := map[string]string{}
 	for _, v := range strings.Split(s, ",") {
 		parts := strings.SplitN(v, "=", 2)
 		if len(parts) != 2 {
 			return nil, fmt.Errorf("unable to parse context: %q", v)
 		}
-		context[parts[0]] = &parts[1]
+		context[parts[0]] = parts[1]
 	}
 	return context, nil
 }

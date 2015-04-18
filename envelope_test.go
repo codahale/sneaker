@@ -20,12 +20,11 @@ func TestEnvelopeSeal(t *testing.T) {
 	}
 
 	envelope := Envelope{
-		KMS:            fakeKMS,
-		KeyID:          "yay",
-		DefaultContext: map[string]string{"A": "B"},
+		KMS: fakeKMS,
 	}
 
-	ciphertext, err := envelope.Seal("a/b/c/", []byte("this is the plaintext"))
+	ctxt := map[string]string{"A": "B"}
+	ciphertext, err := envelope.Seal("yay", ctxt, []byte("this is the plaintext"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -60,12 +59,11 @@ func TestEnvelopeOpen(t *testing.T) {
 	}
 
 	envelope := Envelope{
-		KMS:            fakeKMS,
-		KeyID:          "yay",
-		DefaultContext: map[string]string{"A": "B"},
+		KMS: fakeKMS,
 	}
 
-	plaintext, err := envelope.Open("a/b/c/", ciphertext)
+	ctxt := map[string]string{"A": "B"}
+	plaintext, err := envelope.Open(ctxt, ciphertext)
 	if err != nil {
 		t.Fatal(err)
 	}

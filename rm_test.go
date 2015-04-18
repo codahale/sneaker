@@ -29,16 +29,7 @@ func TestRm(t *testing.T) {
 		t.Errorf("Bucket was %q, but expected %q", v, want)
 	}
 
-	if v, want := *req.Key, "secrets/weeble/wobble.txt.kms"; v != want {
-		t.Errorf("Key was %q, but expected %q", v, want)
-	}
-
-	req = fakeS3.DeleteInputs[1]
-	if v, want := *req.Bucket, "bucket"; v != want {
-		t.Errorf("Bucket was %q, but expected %q", v, want)
-	}
-
-	if v, want := *req.Key, "secrets/weeble/wobble.txt.aes"; v != want {
+	if v, want := *req.Key, "secrets/weeble/wobble.txt"; v != want {
 		t.Errorf("Key was %q, but expected %q", v, want)
 	}
 }

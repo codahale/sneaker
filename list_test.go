@@ -17,19 +17,19 @@ func TestListPattern(t *testing.T) {
 			{
 				Contents: []*s3.Object{
 					{
-						Key:          aws.String("secrets/one.aes"),
+						Key:          aws.String("secrets/one"),
 						ETag:         aws.String(`"etag1"`),
 						Size:         aws.Long(1004),
 						LastModified: aws.Time(time.Date(2006, 1, 2, 15, 4, 5, 0, utc1)),
 					},
 					{
-						Key:          aws.String("secrets/two.aes"),
+						Key:          aws.String("secrets/two"),
 						ETag:         aws.String(`"etag2"`),
 						Size:         aws.Long(1005),
 						LastModified: aws.Time(time.Date(2007, 1, 2, 15, 4, 5, 0, utc1)),
 					},
 					{
-						Key:          aws.String("secrets/winkle.aes"),
+						Key:          aws.String("secrets/winkle"),
 						ETag:         aws.String(`"etag3"`),
 						Size:         aws.Long(1006),
 						LastModified: aws.Time(time.Date(2008, 1, 2, 15, 4, 5, 0, utc1)),
@@ -88,19 +88,19 @@ func TestListNoPattern(t *testing.T) {
 			{
 				Contents: []*s3.Object{
 					{
-						Key:          aws.String("secrets/one.aes"),
+						Key:          aws.String("secrets/one"),
 						ETag:         aws.String(`"etag1"`),
 						Size:         aws.Long(1004),
 						LastModified: aws.Time(time.Date(2006, 1, 2, 15, 4, 5, 0, utc1)),
 					},
 					{
-						Key:          aws.String("secrets/two.aes"),
+						Key:          aws.String("secrets/two"),
 						ETag:         aws.String(`"etag2"`),
 						Size:         aws.Long(1005),
 						LastModified: aws.Time(time.Date(2007, 1, 2, 15, 4, 5, 0, utc1)),
 					},
 					{
-						Key:          aws.String("secrets/winkle.aes"),
+						Key:          aws.String("secrets/winkle"),
 						ETag:         aws.String(`"etag3"`),
 						Size:         aws.Long(1006),
 						LastModified: aws.Time(time.Date(2008, 1, 2, 15, 4, 5, 0, utc1)),

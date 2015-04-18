@@ -103,7 +103,7 @@ To install a secret on a machine, you'll need to pack them into a
 tarball:
 
 ```shell
-sneaker pack /example/* example.enc.tar
+sneaker pack /example/* example.tar.enc
 ```
 
 This will perform the following steps:
@@ -116,8 +116,8 @@ This will perform the following steps:
 
 4. Use the data key to encrypt the `TAR` file with AES-GCM.
 
-5. Package the encrypted `TAR` file and the encrypted data key in a
-   `TAR` file and write it to `example.enc.tar`.
+5. Write both the encrypted data key and the encrypted `TAR` file to
+   `example.tar.enc`.
 
 Using `-` as the output path will make `sneaker` write the data to
 `STDOUT`.
@@ -130,7 +130,7 @@ You can also use a different KMS key than your `SNEAKER_MASTER_KEY` when
 packing secrets:
 
 ```shell
-sneaker pack /example/* example.enc.tar --key-id=deb207cd-d3a7-4777-aca0-01fbceb4c927
+sneaker pack /example/* example.tar.enc --key-id=deb207cd-d3a7-4777-aca0-01fbceb4c927
 ```
 
 This allows you to unpack your secrets in environments with no access to
@@ -141,12 +141,12 @@ the key used to store your secrets.
 To unpack the secrets, run the following:
 
 ```shell
-sneaker unpack example.enc.tar example.tar
+sneaker unpack example.tar.enc example.tar
 ```
 
 This will perform the following steps:
 
-1. Read `example.enc.tar`.
+1. Read `example.tar.enc`.
 
 2. Extract the encrypted data key and encrypted `TAR` file.
 
@@ -180,14 +180,14 @@ For packing and unpacking secrets you can specify a different encryption
 context on the command line:
 
 ```shell
-sneaker pack /example/* secrets.tar --context="hostname=web1.example.com,version=20"
+sneaker pack /example/* secrets.tar.enc --context="hostname=web1.example.com,version=20"
 ```
 
 That same context (`hostname=web1.example.com,version=20`) **must** be
 used to unpack those secrets:
 
 ```shell
-sneaker unpack secrets.tar decrypted.tar --context="hostname=web1.example.com,version=20"
+sneaker unpack secrets.tar.enc secrets.tar --context="hostname=web1.example.com,version=20"
 ```
 
 This allows you to limit the use of a set of secrets to a single server
@@ -209,21 +209,15 @@ To rotate the KMS key used for each secret, simply specify a different
 
 All data is encrypted with AES-256-GCM using randomly generated,
 single-use keys. Because all keys are single-use, a fixed, all-zero
-nonce is used for all data.
+nonce is used for all data. The ID of the KMS key is used as
+authenticated data.
 
-### Stored Secrets
+The final result is the concatentation of the following:
 
-A secret is represented by two S3 objects: the encrypted secret, which
-ends in `.aes`, and the encrypted KMS data key, which ends in
-`.kms`. The ID of the KMS key (as returned in the `GenerateDataKey`
-operation) used to encrypt the data key is used as authenticated data.
+* A four-byte header of the length of the encrypted KMS data key, in
+  bytes, in network order.
 
-The encrypted data key is the `CiphertextBlob` property of the
-`GenerateDataKey` operation, and is an opaque format.
+* The encrypted KMS data key, verbatim. (This is an opaque Amazon format
+  which includes the key ID.)
 
-### Packed Secrets
-
-Packing a set of secrets produces a TAR archive with two files:
-`key.kms`, which is the encrypted data key, and `secrets.tar.aes`, which
-is an AES-GCM encrypted TAR archive containing the actual secrets
-(again, using the KMS key ID as authenticated data).
+* The AES-256-GCM ciphertext and tag of the secret.

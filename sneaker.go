@@ -4,13 +4,10 @@
 package sneaker
 
 import (
-	"archive/tar"
 	"fmt"
-	"io"
-	"io/ioutil"
+	fpath "path"
 	"time"
 
-	"github.com/awslabs/aws-sdk-go/aws"
 	"github.com/awslabs/aws-sdk-go/service/kms"
 	"github.com/awslabs/aws-sdk-go/service/s3"
 )
@@ -40,52 +37,17 @@ type File struct {
 // A Manager allows you to manage files.
 type Manager struct {
 	Objects           ObjectStorage
-	Keys              KeyManagement
+	Envelope          Envelope
 	KeyID             string
+	EncryptionContext map[string]string
 	Bucket, Prefix    string
-	EncryptionContext *map[string]*string
 }
 
-func (m *Manager) secretContext(path string) *map[string]*string {
-	ctxt := make(map[string]*string)
-	if m.EncryptionContext != nil {
-		for k, v := range *m.EncryptionContext {
-			ctxt[k] = v
-		}
+func (m *Manager) context(path string) map[string]string {
+	ctxt := make(map[string]string, len(m.EncryptionContext)+1)
+	for k, v := range m.EncryptionContext {
+		ctxt[k] = v
 	}
-	ctxt["Path"] = aws.String(fmt.Sprintf("s3://%s/%s", m.Bucket, path))
-	return &ctxt
+	ctxt["Path"] = fmt.Sprintf("s3://%s/%s", m.Bucket, fpath.Join(m.Prefix, path))
+	return ctxt
 }
-
-// Untar parses the contents of the given reader as a TAR archive and returns a
-// map of file names to file contents.
-func Untar(r io.Reader) (map[string][]byte, error) {
-	contents := map[string][]byte{}
-	tr := tar.NewReader(r)
-	for {
-		hdr, err := tr.Next()
-		if err == io.EOF {
-			break // end of tar archive
-		} else if err != nil {
-			return nil, err
-		}
-
-		buf, err := ioutil.ReadAll(tr)
-		if err != nil {
-			return nil, err
-		}
-		contents[hdr.Name] = buf
-	}
-	return contents, nil
-}
-
-const (
-	aesExt = ".aes"
-	kmsExt = ".kms"
-
-	aesContentType = "application/octet-stream"
-	kmsContentType = "application/octet-stream"
-
-	keyFilename = "key" + kmsExt
-	tarFilename = "secrets.tar" + aesExt
-)
