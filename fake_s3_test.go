@@ -1,45 +1,45 @@
 package sneaker
 
-import "github.com/awslabs/aws-sdk-go/gen/s3"
+import "github.com/awslabs/aws-sdk-go/service/s3"
 
 type FakeS3 struct {
-	ListRequests  []s3.ListObjectsRequest
-	ListResponses []s3.ListObjectsOutput
+	ListInputs  []s3.ListObjectsInput
+	ListOutputs []s3.ListObjectsOutput
 
-	DeleteRequests  []s3.DeleteObjectRequest
-	DeleteResponses []s3.DeleteObjectOutput
+	DeleteInputs  []s3.DeleteObjectInput
+	DeleteOutputs []s3.DeleteObjectOutput
 
-	PutRequests  []s3.PutObjectRequest
-	PutResponses []s3.PutObjectOutput
+	PutInputs  []s3.PutObjectInput
+	PutOutputs []s3.PutObjectOutput
 
-	GetRequests  []s3.GetObjectRequest
-	GetResponses []s3.GetObjectOutput
+	GetInputs  []s3.GetObjectInput
+	GetOutputs []s3.GetObjectOutput
 }
 
-func (f *FakeS3) ListObjects(req *s3.ListObjectsRequest) (*s3.ListObjectsOutput, error) {
-	f.ListRequests = append(f.ListRequests, *req)
-	resp := f.ListResponses[0]
-	f.ListResponses = f.ListResponses[1:]
+func (f *FakeS3) ListObjects(req *s3.ListObjectsInput) (*s3.ListObjectsOutput, error) {
+	f.ListInputs = append(f.ListInputs, *req)
+	resp := f.ListOutputs[0]
+	f.ListOutputs = f.ListOutputs[1:]
 	return &resp, nil
 }
 
-func (f *FakeS3) DeleteObject(req *s3.DeleteObjectRequest) (*s3.DeleteObjectOutput, error) {
-	f.DeleteRequests = append(f.DeleteRequests, *req)
-	resp := f.DeleteResponses[0]
-	f.DeleteResponses = f.DeleteResponses[1:]
+func (f *FakeS3) DeleteObject(req *s3.DeleteObjectInput) (*s3.DeleteObjectOutput, error) {
+	f.DeleteInputs = append(f.DeleteInputs, *req)
+	resp := f.DeleteOutputs[0]
+	f.DeleteOutputs = f.DeleteOutputs[1:]
 	return &resp, nil
 }
 
-func (f *FakeS3) PutObject(req *s3.PutObjectRequest) (*s3.PutObjectOutput, error) {
-	f.PutRequests = append(f.PutRequests, *req)
-	resp := f.PutResponses[0]
-	f.PutResponses = f.PutResponses[1:]
+func (f *FakeS3) PutObject(req *s3.PutObjectInput) (*s3.PutObjectOutput, error) {
+	f.PutInputs = append(f.PutInputs, *req)
+	resp := f.PutOutputs[0]
+	f.PutOutputs = f.PutOutputs[1:]
 	return &resp, nil
 }
 
-func (f *FakeS3) GetObject(req *s3.GetObjectRequest) (*s3.GetObjectOutput, error) {
-	f.GetRequests = append(f.GetRequests, *req)
-	resp := f.GetResponses[0]
-	f.GetResponses = f.GetResponses[1:]
+func (f *FakeS3) GetObject(req *s3.GetObjectInput) (*s3.GetObjectOutput, error) {
+	f.GetInputs = append(f.GetInputs, *req)
+	resp := f.GetOutputs[0]
+	f.GetOutputs = f.GetOutputs[1:]
 	return &resp, nil
 }

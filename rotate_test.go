@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/awslabs/aws-sdk-go/aws"
-	"github.com/awslabs/aws-sdk-go/gen/kms"
-	"github.com/awslabs/aws-sdk-go/gen/s3"
+	"github.com/awslabs/aws-sdk-go/service/kms"
+	"github.com/awslabs/aws-sdk-go/service/s3"
 )
 
 func TestRotate(t *testing.T) {
@@ -29,19 +29,19 @@ func TestRotate(t *testing.T) {
 	}
 
 	fakeS3 := &FakeS3{
-		ListResponses: []s3.ListObjectsOutput{
+		ListOutputs: []s3.ListObjectsOutput{
 			{
-				Contents: []s3.Object{
+				Contents: []*s3.Object{
 					{
 						Key:          aws.String("secrets/weeble.txt.aes"),
 						ETag:         aws.String(`"etag1"`),
 						Size:         aws.Long(1004),
-						LastModified: time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC),
+						LastModified: aws.Time(time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC)),
 					},
 				},
 			},
 		},
-		GetResponses: []s3.GetObjectOutput{
+		GetOutputs: []s3.GetObjectOutput{
 			{
 				Body: ioutil.NopCloser(bytes.NewReader(encryptedSecret)),
 			},
@@ -49,19 +49,19 @@ func TestRotate(t *testing.T) {
 				Body: ioutil.NopCloser(bytes.NewReader(encryptedDataKey)),
 			},
 		},
-		PutResponses: []s3.PutObjectOutput{
+		PutOutputs: []s3.PutObjectOutput{
 			{},
 			{},
 		},
 	}
 	fakeKMS := &FakeKMS{
-		DecryptResponses: []kms.DecryptResponse{
+		DecryptOutputs: []kms.DecryptOutput{
 			{
 				KeyID:     aws.String("key1"),
 				Plaintext: oldKey(),
 			},
 		},
-		GenerateResponses: []kms.GenerateDataKeyResponse{
+		GenerateOutputs: []kms.GenerateDataKeyOutput{
 			{
 				CiphertextBlob: []byte("encrypted new key"),
 				KeyID:          aws.String("key1"),
@@ -84,18 +84,18 @@ func TestRotate(t *testing.T) {
 
 	// KMS request
 
-	genReq := fakeKMS.GenerateRequests[0]
+	genReq := fakeKMS.GenerateInputs[0]
 	if v, want := *genReq.KeyID, "key1"; v != want {
 		t.Errorf("Key ID was %q, but expected %q", v, want)
 	}
 
-	if v, want := *genReq.NumberOfBytes, 32; v != want {
+	if v, want := *genReq.NumberOfBytes, int64(32); v != want {
 		t.Errorf("Key size was %d, but expected %d", v, want)
 	}
 
 	// key upload
 
-	putReq := fakeS3.PutRequests[0]
+	putReq := fakeS3.PutInputs[0]
 	if v, want := *putReq.Bucket, "bucket"; v != want {
 		t.Errorf("Bucket was %q, but expected %q", v, want)
 	}
@@ -123,7 +123,7 @@ func TestRotate(t *testing.T) {
 
 	// secret upload
 
-	putReq = fakeS3.PutRequests[1]
+	putReq = fakeS3.PutInputs[1]
 	if v, want := *putReq.Bucket, "bucket"; v != want {
 		t.Errorf("Bucket was %q, but expected %q", v, want)
 	}

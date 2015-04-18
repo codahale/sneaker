@@ -1,25 +1,25 @@
 package sneaker
 
-import "github.com/awslabs/aws-sdk-go/gen/kms"
+import "github.com/awslabs/aws-sdk-go/service/kms"
 
 type FakeKMS struct {
-	GenerateRequests  []kms.GenerateDataKeyRequest
-	GenerateResponses []kms.GenerateDataKeyResponse
+	GenerateInputs  []kms.GenerateDataKeyInput
+	GenerateOutputs []kms.GenerateDataKeyOutput
 
-	DecryptRequests  []kms.DecryptRequest
-	DecryptResponses []kms.DecryptResponse
+	DecryptInputs  []kms.DecryptInput
+	DecryptOutputs []kms.DecryptOutput
 }
 
-func (f *FakeKMS) GenerateDataKey(req *kms.GenerateDataKeyRequest) (*kms.GenerateDataKeyResponse, error) {
-	f.GenerateRequests = append(f.GenerateRequests, *req)
-	resp := f.GenerateResponses[0]
-	f.GenerateResponses = f.GenerateResponses[1:]
+func (f *FakeKMS) GenerateDataKey(req *kms.GenerateDataKeyInput) (*kms.GenerateDataKeyOutput, error) {
+	f.GenerateInputs = append(f.GenerateInputs, *req)
+	resp := f.GenerateOutputs[0]
+	f.GenerateOutputs = f.GenerateOutputs[1:]
 	return &resp, nil
 }
 
-func (f *FakeKMS) Decrypt(req *kms.DecryptRequest) (*kms.DecryptResponse, error) {
-	f.DecryptRequests = append(f.DecryptRequests, *req)
-	resp := f.DecryptResponses[0]
-	f.DecryptResponses = f.DecryptResponses[1:]
+func (f *FakeKMS) Decrypt(req *kms.DecryptInput) (*kms.DecryptOutput, error) {
+	f.DecryptInputs = append(f.DecryptInputs, *req)
+	resp := f.DecryptOutputs[0]
+	f.DecryptOutputs = f.DecryptOutputs[1:]
 	return &resp, nil
 }

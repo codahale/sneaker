@@ -6,13 +6,13 @@ import (
 	"io"
 
 	"github.com/awslabs/aws-sdk-go/aws"
-	"github.com/awslabs/aws-sdk-go/gen/kms"
+	"github.com/awslabs/aws-sdk-go/service/kms"
 )
 
 // Unpack reads the packed secrets from the reader, decrypts the data key using
 // KMS and the given context, decrypts the secrets, and returns an io.Reader
 // containing a TAR file with all the secrets.
-func (m *Manager) Unpack(ctxt map[string]string, r io.Reader) (io.Reader, error) {
+func (m *Manager) Unpack(ctxt *map[string]*string, r io.Reader) (io.Reader, error) {
 	contents, err := Untar(r)
 	if err != nil {
 		return nil, err
@@ -28,13 +28,13 @@ func (m *Manager) Unpack(ctxt map[string]string, r io.Reader) (io.Reader, error)
 		return nil, fmt.Errorf("%s not found", tarFilename)
 	}
 
-	key, err := m.Keys.Decrypt(&kms.DecryptRequest{
+	key, err := m.Keys.Decrypt(&kms.DecryptInput{
 		CiphertextBlob:    keyCiphertext,
 		EncryptionContext: ctxt,
 	})
 	if err != nil {
 		if apiErr, ok := err.(aws.APIError); ok {
-			if apiErr.Type == "InvalidCiphertextException" {
+			if apiErr.Code == "InvalidCiphertextException" {
 				return nil, fmt.Errorf("unable to decrypt data key")
 			}
 		}

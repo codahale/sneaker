@@ -2,18 +2,17 @@ package sneaker
 
 import (
 	"io/ioutil"
-	"reflect"
 	"strings"
 	"testing"
 
 	"github.com/awslabs/aws-sdk-go/aws"
-	"github.com/awslabs/aws-sdk-go/gen/kms"
-	"github.com/awslabs/aws-sdk-go/gen/s3"
+	"github.com/awslabs/aws-sdk-go/service/kms"
+	"github.com/awslabs/aws-sdk-go/service/s3"
 )
 
 func TestUpload(t *testing.T) {
 	fakeKMS := &FakeKMS{
-		GenerateResponses: []kms.GenerateDataKeyResponse{
+		GenerateOutputs: []kms.GenerateDataKeyOutput{
 			{
 				CiphertextBlob: []byte("encrypted key"),
 				KeyID:          aws.String("key1"),
@@ -23,7 +22,7 @@ func TestUpload(t *testing.T) {
 	}
 
 	fakeS3 := &FakeS3{
-		PutResponses: []s3.PutObjectOutput{
+		PutOutputs: []s3.PutObjectOutput{
 			{},
 			{},
 		},
@@ -34,13 +33,13 @@ func TestUpload(t *testing.T) {
 		Keys:              fakeKMS,
 		Bucket:            "bucket",
 		Prefix:            "secrets",
-		EncryptionContext: map[string]string{"A": "B"},
+		EncryptionContext: &map[string]*string{"A": aws.String("B")},
 		KeyID:             "key1",
 	}
 
-	ctxt := map[string]string{
-		"A":    "B",
-		"Path": "s3://bucket/secrets/weeble.txt",
+	ctxt := map[string]*string{
+		"A":    aws.String("B"),
+		"Path": aws.String("s3://bucket/secrets/weeble.txt"),
 	}
 
 	if err := man.Upload("weeble.txt", strings.NewReader("this is a test")); err != nil {
@@ -49,22 +48,25 @@ func TestUpload(t *testing.T) {
 
 	// KMS request
 
-	genReq := fakeKMS.GenerateRequests[0]
+	genReq := fakeKMS.GenerateInputs[0]
 	if v, want := *genReq.KeyID, "key1"; v != want {
 		t.Errorf("Key ID was %q, but expected %q", v, want)
 	}
 
-	if v, want := *genReq.NumberOfBytes, 32; v != want {
+	if v, want := *genReq.NumberOfBytes, int64(32); v != want {
 		t.Errorf("Key size was %d, but expected %d", v, want)
 	}
 
-	if v := genReq.EncryptionContext; !reflect.DeepEqual(v, ctxt) {
-		t.Errorf("EncryptionContext was %v, but expected %v", v, ctxt)
+	for name, a := range *genReq.EncryptionContext {
+		b := ctxt[name]
+		if *a != *b {
+			t.Errorf("EncryptionContext[%v] was %v, but expected %v", name, *a, *b)
+		}
 	}
 
 	// key upload
 
-	putReq := fakeS3.PutRequests[0]
+	putReq := fakeS3.PutInputs[0]
 	if v, want := *putReq.Bucket, "bucket"; v != want {
 		t.Errorf("Bucket was %q, but expected %q", v, want)
 	}
@@ -92,7 +94,7 @@ func TestUpload(t *testing.T) {
 
 	// secret upload
 
-	putReq = fakeS3.PutRequests[1]
+	putReq = fakeS3.PutInputs[1]
 	if v, want := *putReq.Bucket, "bucket"; v != want {
 		t.Errorf("Bucket was %q, but expected %q", v, want)
 	}

@@ -8,18 +8,19 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/awslabs/aws-sdk-go/gen/kms"
+	"github.com/awslabs/aws-sdk-go/aws"
+	"github.com/awslabs/aws-sdk-go/service/kms"
 )
 
 func TestPackagingRoundTrip(t *testing.T) {
 	fakeKMS := &FakeKMS{
-		GenerateResponses: []kms.GenerateDataKeyResponse{
+		GenerateOutputs: []kms.GenerateDataKeyOutput{
 			{
 				Plaintext:      make([]byte, 32),
 				CiphertextBlob: []byte("encrypted key"),
 			},
 		},
-		DecryptResponses: []kms.DecryptResponse{
+		DecryptOutputs: []kms.DecryptOutput{
 			{
 				Plaintext: make([]byte, 32),
 			},
@@ -27,7 +28,7 @@ func TestPackagingRoundTrip(t *testing.T) {
 	}
 
 	man := Manager{
-		EncryptionContext: map[string]string{"A": "B"},
+		EncryptionContext: &map[string]*string{"A": aws.String("B")},
 		Keys:              fakeKMS,
 		KeyID:             "key1",
 	}
@@ -36,8 +37,8 @@ func TestPackagingRoundTrip(t *testing.T) {
 		"example.txt": []byte("hello world"),
 	}
 
-	context := map[string]string{
-		"hostname": "example.com",
+	context := &map[string]*string{
+		"hostname": aws.String("example.com"),
 	}
 
 	buf := bytes.NewBuffer(nil)
@@ -72,12 +73,12 @@ func TestPackagingRoundTrip(t *testing.T) {
 		t.Errorf("Input was %#v, but output was %#v", input, output)
 	}
 
-	genReq := fakeKMS.GenerateRequests[0]
+	genReq := fakeKMS.GenerateInputs[0]
 	if v, want := *genReq.KeyID, "key1"; v != want {
 		t.Errorf("Key ID was %q, but expected %q", v, want)
 	}
 
-	if v, want := *genReq.NumberOfBytes, 32; v != want {
+	if v, want := *genReq.NumberOfBytes, int64(32); v != want {
 		t.Errorf("Key size was %v, but expected %v", v, want)
 	}
 
@@ -85,7 +86,7 @@ func TestPackagingRoundTrip(t *testing.T) {
 		t.Errorf("Encryption context was %#v, but expected %#v", v, want)
 	}
 
-	decReq := fakeKMS.DecryptRequests[0]
+	decReq := fakeKMS.DecryptInputs[0]
 	if v, want := decReq.CiphertextBlob, []byte("encrypted key"); !bytes.Equal(v, want) {
 		t.Errorf("Ciphertext Blob was %v, but expected %v", v, want)
 	}

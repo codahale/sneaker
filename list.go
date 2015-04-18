@@ -6,13 +6,13 @@ import (
 	"time"
 
 	"github.com/awslabs/aws-sdk-go/aws"
-	"github.com/awslabs/aws-sdk-go/gen/s3"
+	"github.com/awslabs/aws-sdk-go/service/s3"
 )
 
 // List returns a list of files which match the given pattern, or if the pattern
 // is blank, all files.
 func (m *Manager) List(pattern string) ([]File, error) {
-	resp, err := m.Objects.ListObjects(&s3.ListObjectsRequest{
+	resp, err := m.Objects.ListObjects(&s3.ListObjectsInput{
 		Bucket: aws.String(m.Bucket),
 		Prefix: aws.String(m.Prefix),
 	})

@@ -12,10 +12,10 @@ import (
 	"text/tabwriter"
 
 	"github.com/awslabs/aws-sdk-go/aws"
-	"github.com/awslabs/aws-sdk-go/gen/kms"
-	"github.com/awslabs/aws-sdk-go/gen/s3"
+	"github.com/awslabs/aws-sdk-go/service/kms"
+	"github.com/awslabs/aws-sdk-go/service/s3"
+	"github.com/codahale/sneaker"
 	"github.com/docopt/docopt-go"
-	"github.com/stripe/sneaker"
 )
 
 const usage = `sneaker manages secrets.
@@ -109,7 +109,7 @@ func main() {
 		pattern := args["<pattern>"].(string)
 		file := args["<file>"].(string)
 
-		var context map[string]string
+		var context map[string]*string
 		if s, ok := args["--context"].(string); ok {
 			c, err := parseContext(s)
 			if err != nil {
@@ -147,13 +147,13 @@ func main() {
 		defer out.Close()
 
 		// pack secrets
-		if err := manager.Pack(secrets, context, key, out); err != nil {
+		if err := manager.Pack(secrets, &context, key, out); err != nil {
 			log.Fatal(err)
 		}
 	} else if args["unpack"] == true {
 		file := args["<file>"].(string)
 		path := args["<path>"].(string)
-		var context map[string]string
+		var context map[string]*string
 		if s, ok := args["--context"].(string); ok {
 			c, err := parseContext(s)
 			if err != nil {
@@ -170,7 +170,7 @@ func main() {
 		out := openPath(path, os.Create, os.Stdout)
 		defer out.Close()
 
-		r, err := manager.Unpack(context, in)
+		r, err := manager.Unpack(&context, in)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -207,33 +207,38 @@ func loadManager() *sneaker.Manager {
 
 	creds := aws.DetectCreds("", "", "")
 
+	config := &aws.Config{
+		Credentials: creds,
+		Region:      region,
+	}
+
 	ctxt, err := parseContext(os.Getenv("SNEAKER_MASTER_CONTEXT"))
 	if err != nil {
 		log.Fatalf("bad SNEAKER_MASTER_CONTEXT: %s", err)
 	}
 
 	return &sneaker.Manager{
-		Objects:           s3.New(creds, region, nil),
-		Keys:              kms.New(creds, region, nil),
+		Objects:           s3.New(config),
+		Keys:              kms.New(config),
 		KeyID:             os.Getenv("SNEAKER_MASTER_KEY"),
 		Bucket:            u.Host,
 		Prefix:            u.Path,
-		EncryptionContext: ctxt,
+		EncryptionContext: &ctxt,
 	}
 }
 
-func parseContext(s string) (map[string]string, error) {
+func parseContext(s string) (map[string]*string, error) {
 	if s == "" {
 		return nil, nil
 	}
 
-	context := map[string]string{}
+	context := map[string]*string{}
 	for _, v := range strings.Split(s, ",") {
 		parts := strings.SplitN(v, "=", 2)
 		if len(parts) != 2 {
 			return nil, fmt.Errorf("unable to parse context: %q", v)
 		}
-		context[parts[0]] = parts[1]
+		context[parts[0]] = &parts[1]
 	}
 	return context, nil
 }

@@ -3,12 +3,12 @@ package sneaker
 import (
 	"testing"
 
-	"github.com/awslabs/aws-sdk-go/gen/s3"
+	"github.com/awslabs/aws-sdk-go/service/s3"
 )
 
 func TestRm(t *testing.T) {
 	fakeS3 := &FakeS3{
-		DeleteResponses: []s3.DeleteObjectOutput{
+		DeleteOutputs: []s3.DeleteObjectOutput{
 			{},
 			{},
 		},
@@ -24,7 +24,7 @@ func TestRm(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	req := fakeS3.DeleteRequests[0]
+	req := fakeS3.DeleteInputs[0]
 	if v, want := *req.Bucket, "bucket"; v != want {
 		t.Errorf("Bucket was %q, but expected %q", v, want)
 	}
@@ -33,7 +33,7 @@ func TestRm(t *testing.T) {
 		t.Errorf("Key was %q, but expected %q", v, want)
 	}
 
-	req = fakeS3.DeleteRequests[1]
+	req = fakeS3.DeleteInputs[1]
 	if v, want := *req.Bucket, "bucket"; v != want {
 		t.Errorf("Bucket was %q, but expected %q", v, want)
 	}

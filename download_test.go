@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/awslabs/aws-sdk-go/aws"
-	"github.com/awslabs/aws-sdk-go/gen/kms"
-	"github.com/awslabs/aws-sdk-go/gen/s3"
+	"github.com/awslabs/aws-sdk-go/service/kms"
+	"github.com/awslabs/aws-sdk-go/service/s3"
 )
 
 func TestDownload(t *testing.T) {
@@ -21,7 +21,7 @@ func TestDownload(t *testing.T) {
 	}
 
 	fakeS3 := &FakeS3{
-		GetResponses: []s3.GetObjectOutput{
+		GetOutputs: []s3.GetObjectOutput{
 			{
 				Body: ioutil.NopCloser(bytes.NewReader(encryptedSecret)),
 			},
@@ -31,7 +31,7 @@ func TestDownload(t *testing.T) {
 		},
 	}
 	fakeKMS := &FakeKMS{
-		DecryptResponses: []kms.DecryptResponse{
+		DecryptOutputs: []kms.DecryptOutput{
 			{
 				KeyID:     aws.String("key1"),
 				Plaintext: key,
@@ -44,12 +44,12 @@ func TestDownload(t *testing.T) {
 		Keys:              fakeKMS,
 		Bucket:            "bucket",
 		Prefix:            "secrets",
-		EncryptionContext: map[string]string{"A": "B"},
+		EncryptionContext: &map[string]*string{"A": aws.String("B")},
 	}
 
-	ctxt := map[string]string{
-		"A":    "B",
-		"Path": "s3://bucket/secrets/secret1.txt",
+	ctxt := map[string]*string{
+		"A":    aws.String("B"),
+		"Path": aws.String("s3://bucket/secrets/secret1.txt"),
 	}
 
 	actual, err := man.Download([]string{"secret1.txt"})
@@ -67,7 +67,7 @@ func TestDownload(t *testing.T) {
 
 	// AES get
 
-	getReq := fakeS3.GetRequests[0]
+	getReq := fakeS3.GetInputs[0]
 	if v, want := *getReq.Bucket, "bucket"; v != want {
 		t.Errorf("Bucket was %q, but expected %q", v, want)
 	}
@@ -78,7 +78,7 @@ func TestDownload(t *testing.T) {
 
 	// KMS get
 
-	getReq = fakeS3.GetRequests[1]
+	getReq = fakeS3.GetInputs[1]
 	if v, want := *getReq.Bucket, "bucket"; v != want {
 		t.Errorf("Bucket was %q, but expected %q", v, want)
 	}
@@ -89,12 +89,15 @@ func TestDownload(t *testing.T) {
 
 	// decrypt
 
-	decReq := fakeKMS.DecryptRequests[0]
+	decReq := fakeKMS.DecryptInputs[0]
 	if v := decReq.CiphertextBlob; !bytes.Equal(v, encryptedDataKey) {
 		t.Errorf("CiphertextBlob was %x, but expected %x", v, encryptedDataKey)
 	}
 
-	if v := decReq.EncryptionContext; !reflect.DeepEqual(v, ctxt) {
-		t.Errorf("EncryptionContext was %v, but expected %v", v, ctxt)
+	for name, a := range *decReq.EncryptionContext {
+		b := ctxt[name]
+		if *a != *b {
+			t.Errorf("EncryptionContext[%v] was %v, but expected %v", name, *a, *b)
+		}
 	}
 }
