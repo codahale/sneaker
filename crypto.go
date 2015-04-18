@@ -1,5 +1,10 @@
 package sneaker
 
+import (
+	"crypto/aes"
+	"crypto/cipher"
+)
+
 // The encryption format used by sneaker is intentionally simple, with no
 // versioning or algorithm agility. It uses AES-GCM with a randomly-generated
 // 96-bit nonce. The nonce is prepended to the ciphertext.
@@ -7,11 +12,6 @@ package sneaker
 // Should AES-GCM no longer be desirable in the future, we will simply begin
 // encrypting using its replacement algorithm and only trying AES-GCM if a
 // decryption is unsuccessful.
-
-import (
-	"crypto/aes"
-	"crypto/cipher"
-)
 
 // encrypt encrypts the given plaintext and authenticates the given data using
 // AES-GCM with the given key and an all-zero nonce. The key should be 128-,
@@ -52,13 +52,3 @@ func decrypt(key, ciphertext, data []byte) ([]byte, error) {
 
 	return gcm.Open(nil, nonce, ciphertext, data)
 }
-
-func zero(b []byte) {
-	for i := range b {
-		b[i] = 0
-	}
-}
-
-var (
-	nonce = make([]byte, 12)
-)
