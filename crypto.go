@@ -11,13 +11,13 @@ package sneaker
 import (
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/rand"
-	"errors"
 )
 
 // encrypt encrypts the given plaintext and authenticates the given data using
-// AES-GCM with the given key and a random nonce, which is then prepended to the
-// ciphertext. The key should be 128-, 196-, or 256-bits long.
+// AES-GCM with the given key and an all-zero nonce. The key should be 128-,
+// 196-, or 256-bits long.
+//
+// N.B.: THIS IS ONLY SAFE IF THE KEY IS A SINGLE-USE KEY.
 func encrypt(key, plaintext, data []byte) ([]byte, error) {
 	defer zero(key)
 
@@ -31,12 +31,7 @@ func encrypt(key, plaintext, data []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	nonce := make([]byte, gcm.NonceSize())
-	if _, err := rand.Read(nonce); err != nil {
-		return nil, err
-	}
-
-	return gcm.Seal(nonce, nonce, plaintext, data), nil
+	return gcm.Seal(nil, nonce, plaintext, data), nil
 }
 
 // decrypt attempts to decrypt the given ciphertext and authenticate the given
@@ -55,13 +50,6 @@ func decrypt(key, ciphertext, data []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	if len(ciphertext) <= gcm.NonceSize()+gcm.Overhead() {
-		return nil, errors.New("cipher: message authentication failed")
-	}
-
-	nonce := ciphertext[:gcm.NonceSize()]
-	ciphertext = ciphertext[gcm.NonceSize():]
-
 	return gcm.Open(nil, nonce, ciphertext, data)
 }
 
@@ -70,3 +58,7 @@ func zero(b []byte) {
 		b[i] = 0
 	}
 }
+
+var (
+	nonce = make([]byte, 12)
+)

@@ -205,15 +205,18 @@ To rotate the KMS key used for each secret, simply specify a different
 
 ## Implementation Details
 
+### Encryption
+
+All data is encrypted with AES-256-GCM using randomly generated,
+single-use keys. Because all keys are single-use, a fixed, all-zero
+nonce is used for all data.
+
 ### Stored Secrets
 
 A secret is represented by two S3 objects: the encrypted secret, which
-ends in `.aes`, and the encrypted KMS data key, which ends in `.kms`.
-
-The encrypted secret consists of a random 96-bit nonce preprended to the
-AES-GCM ciphertext. The ID of the KMS key (as returned in the
-`GenerateDataKey` operation) used to encrypt the data key is used as
-authenticated data.
+ends in `.aes`, and the encrypted KMS data key, which ends in
+`.kms`. The ID of the KMS key (as returned in the `GenerateDataKey`
+operation) used to encrypt the data key is used as authenticated data.
 
 The encrypted data key is the `CiphertextBlob` property of the
 `GenerateDataKey` operation, and is an opaque format.
@@ -223,5 +226,4 @@ The encrypted data key is the `CiphertextBlob` property of the
 Packing a set of secrets produces a TAR archive with two files:
 `key.kms`, which is the encrypted data key, and `secrets.tar.aes`, which
 is an AES-GCM encrypted TAR archive containing the actual secrets
-(again, with the nonce prepended and using the KMS key ID as
-authenticated data).
+(again, using the KMS key ID as authenticated data).

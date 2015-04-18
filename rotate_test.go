@@ -132,7 +132,7 @@ func TestRotate(t *testing.T) {
 		t.Errorf("Key was %q, but expected %q", v, want)
 	}
 
-	if v, want := *putReq.ContentLength, int64(44); v != want {
+	if v, want := *putReq.ContentLength, int64(32); v != want {
 		t.Errorf("ContentLength was %d, but expected %d", v, want)
 	}
 
