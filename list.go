@@ -25,7 +25,7 @@ func (m *Manager) List(pattern string) ([]File, error) {
 		secrets = append(secrets, File{
 			Path:         (*obj.Key)[len(m.Prefix):len(*obj.Key)],
 			LastModified: obj.LastModified.In(time.UTC),
-			Size:         int(*obj.Size),
+			Size:         int(*obj.Size) - 224, // header + KMS data key
 			ETag:         strings.Replace(*obj.ETag, "\"", "", -1),
 		})
 	}
