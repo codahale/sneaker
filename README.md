@@ -202,9 +202,10 @@ controls.
 
 ### Maintenance Operations
 
-A common maintenance task is key rotate. To rotate the data keys used to
-encrypt the secrets, run `sneaker rotate`. It will download and decrypt
-each secret, generate a new data key, and upload a re-encrypted copy.
+A common maintenance task is key rotation. To rotate the data keys used
+to encrypt the secrets, run `sneaker rotate`. It will download and
+decrypt each secret, generate a new data key, and upload a re-encrypted
+copy.
 
 To rotate the KMS key used for each secret, simply specify a different
 `SNEAKER_MASTER_KEY` and run `sneaker rotate`.
