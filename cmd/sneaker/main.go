@@ -204,6 +204,9 @@ func loadManager() *sneaker.Manager {
 	if err != nil {
 		log.Fatalf("bad SNEAKER_S3_PATH: %s", err)
 	}
+	if u.Path != "" && u.Path[0] == '/' {
+		u.Path = u.Path[1:]
+	}
 
 	creds := aws.DetectCreds("", "", "")
 
