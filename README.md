@@ -86,7 +86,7 @@ Let's create an example secret file and upload it:
 
 ```shell
 echo "This is a secret!" > secret.txt
-sneaker upload secret.txt /example/secret.txt
+sneaker upload secret.txt example/secret.txt
 ```
 
 This will use KMS to generate a random, 256-bit data key, encrypt the
@@ -100,7 +100,7 @@ instead of a filename will make `sneaker` read the data from `STDIN`.
 Finally, you can delete the file:
 
 ```shell
-sneaker rm /example/secret.txt
+sneaker rm example/secret.txt
 ```
 
 #### Packing Secrets
@@ -109,12 +109,12 @@ To install a secret on a machine, you'll need to pack them into a
 tarball:
 
 ```shell
-sneaker pack /example/* example.tar.enc
+sneaker pack example/* example.tar.enc
 ```
 
 This will perform the following steps:
 
-1. Download and decrypt all secrets matching the `/example/*` pattern.
+1. Download and decrypt all secrets matching the `example/*` pattern.
 
 2. Package all the decrypted secrets into a `TAR` file in memory.
 
@@ -136,7 +136,7 @@ You can also use a different KMS key than your `SNEAKER_MASTER_KEY` when
 packing secrets:
 
 ```shell
-sneaker pack /example/* example.tar.enc --key-id=deb207cd-d3a7-4777-aca0-01fbceb4c927
+sneaker pack example/* example.tar.enc --key-id=deb207cd-d3a7-4777-aca0-01fbceb4c927
 ```
 
 This allows you to unpack your secrets in environments with no access to
@@ -186,7 +186,7 @@ For packing and unpacking secrets you can specify a different encryption
 context on the command line:
 
 ```shell
-sneaker pack /example/* secrets.tar.enc --context="hostname=web1.example.com,version=20"
+sneaker pack example/* secrets.tar.enc --context="hostname=web1.example.com,version=20"
 ```
 
 That same context (`hostname=web1.example.com,version=20`) **must** be
