@@ -45,6 +45,10 @@ credentials for systems running on EC2 instances.
 
 In general, if the `aws` command works, `sneaker` should work as well.
 
+If you have multi-factor authentication enabled for your AWS account
+(**and you should**), you may need to provide a token via the
+`AWS_SESSION_TOKEN` environment variable.
+
 ### Setting Up The Environment
 
 You should also specify which region you'll be operating in via the
@@ -139,8 +143,8 @@ packing secrets:
 sneaker pack example/* example.tar.enc --key-id=deb207cd-d3a7-4777-aca0-01fbceb4c927
 ```
 
-This allows you to unpack your secrets in environments with no access to
-the key used to store your secrets.
+This allows you to unpack your secrets in environments which don't have
+access to the key used to store your secrets.
 
 #### Unpacking Secrets
 
@@ -196,9 +200,9 @@ used to unpack those secrets:
 sneaker unpack secrets.tar.enc secrets.tar --context="hostname=web1.example.com,version=20"
 ```
 
-This allows you to limit the use of a set of secrets to a single server
-or even to require a shared secret in addition to the KMS access
-controls.
+All data in the encryption contexts are logged via CloudTrail, which
+allows you to track when and where particular secrets are packed and
+unpacked.
 
 ### Maintenance Operations
 
@@ -211,8 +215,6 @@ To rotate the KMS key used for each secret, simply specify a different
 `SNEAKER_MASTER_KEY` and run `sneaker rotate`.
 
 ## Implementation Details
-
-### Encryption
 
 All data is encrypted with AES-256-GCM using randomly generated,
 single-use keys. Because all keys are single-use, a fixed, all-zero
