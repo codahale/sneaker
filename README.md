@@ -228,3 +228,66 @@ The final result is the concatentation of the following:
   which includes the key ID.)
 
 * The AES-256-GCM ciphertext and tag of the secret.
+
+## Threat Model
+
+The threat model is defined in terms of what each possible attacker can
+achieve. The list is intended to be exhaustive, i.e. if an entity can do
+something that is not listed here then that should count as a break of
+Sneaker.
+
+### Assumptions About The User
+
+* The user must act reasonably and in their best interest. They must not
+  reveal secrets or allow unauthorized access to secrets.
+
+* The user must run a copy of Sneaker which has not been suborned.
+
+### Assumptions About The User's Computer
+
+* The user's computer must functional correctly and not be compromised
+  by malware.
+
+### Assumptions About Amazon
+
+* Communications with Amazon have confidentiality and integrity ensured
+  by the use of TLS.
+
+* Key Management Service is reasonably secure: its keys will not be
+  compromised, its random numbers are unguessable to adversaries, its
+  cryptographic algorithms are correct.
+
+* The access control functionality of both KMS and S3 are secure.
+
+### Assumptions About The World
+
+* AES-256 and GCM's security guarantees are valid.
+
+### Threats From Global Passive Adversaries
+
+An attacker who can eavesdrop on internet traffic globally can:
+
+* Observe when a user is using Sneaker, with a high probability of being
+  able to distinguish between uploads, downloads, rotations, and other
+  operations.
+
+* Identify packed Sneaker tarballs as such.
+
+### Threats From Active Network Adversaries
+
+An attacker with a privileged network position to the user can:
+
+* Possibly perform the same attacks as a GPA.
+
+* Modify secrets such that they are no longer valid.
+
+* Disrupt communications with KMS and/or S3.
+
+### Seizure Or Compromise Of The User's Computer
+
+An attacker who physically seizes the user's computer (or compromises
+the user's backups) or otherwise compromises it can:
+
+* Recover AWS credentials and pose as the user. If multi-factor
+  authentication is not enabled, this would allow the attacker to
+  extract all secrets, modify secrets, etc.
