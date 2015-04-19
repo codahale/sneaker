@@ -6,6 +6,8 @@ future without warning.**
 
 # Sneaker
 
+[![Build Status](https://travis-ci.org/codahale/sneaker.svg?branch=master)](https://travis-ci.org/codahale/sneaker)
+
 *Seatec Astronomy? Keynote Shogun.*
 
 `sneaker` is a utility for storing sensitive information on AWS using S3
