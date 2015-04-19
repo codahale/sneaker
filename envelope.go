@@ -19,9 +19,6 @@ type Envelope struct {
 // Seal generates a 256-bit data key using KMS and encrypts the given plaintext
 // with AES-256-GCM using a fixed, all-zero nonce. That ciphertext is appended
 // to the ciphertext of the KMS data key and returned.
-//
-// The KMS data key's encryption context consists of the Envelope's default
-// context plus the given path, if any.
 func (e *Envelope) Seal(keyID string, ctxt map[string]string, plaintext []byte) ([]byte, error) {
 	key, err := e.KMS.GenerateDataKey(&kms.GenerateDataKeyInput{
 		EncryptionContext: e.context(ctxt),
@@ -48,9 +45,9 @@ func (e *Envelope) Seal(keyID string, ctxt map[string]string, plaintext []byte) 
 	return join(key.CiphertextBlob, ciphertext), nil
 }
 
-// Open takes the output of Seal and decrypts it. If any part of the ciphertext,
-// context, or path is modified, Seal will return an error instead of the
-// decrypted data.
+// Open takes the output of Seal and decrypts it. If any part of the ciphertext
+// or context is modified, Seal will return an error instead of the decrypted
+// data.
 func (e *Envelope) Open(ctxt map[string]string, ciphertext []byte) ([]byte, error) {
 	key, ciphertext := split(ciphertext)
 

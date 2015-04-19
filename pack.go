@@ -8,9 +8,8 @@ import (
 	"time"
 )
 
-// Pack encrypts the given secrets with a new data key from KMS with the given
-// context, and writes a TAR archive containing both the encrypted data key and
-// the encrypted TAR file to the given io.Writer.
+// Pack puts the given secrets into a TAR file and encrypts that with a new KMS
+// data key with the context. The result is written into the given writer.
 func (m *Manager) Pack(secrets map[string][]byte, ctxt map[string]string, keyID string, w io.Writer) error {
 	if keyID == "" {
 		keyID = m.KeyID

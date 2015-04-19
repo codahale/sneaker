@@ -26,6 +26,15 @@ sneaker version
 
 ## Using
 
+All of Sneaker's configuration is handled via the following environment
+variables:
+
+* `SNEAKER_REGION`
+* `SNEAKER_MASTER_KEY`
+* `SNEAKER_MASTER_CONTEXT`
+* `SNEAKER_S3_PATH`
+
+
 ### Configuring Access to AWS
 
 `sneaker` requires access to AWS APIs, which means it needs a set of AWS
@@ -37,9 +46,6 @@ credentials for systems running on EC2 instances.
 In general, if the `aws` command works, `sneaker` should work as well.
 
 ### Setting Up The Environment
-
-`sneaker` needs three things: the AWS region to use, the ID of a KMS key
-and the S3 path where secrets will be stored.
 
 You should also specify which region you'll be operating in via the
 `SNEAKER_REGION` environment variable.
