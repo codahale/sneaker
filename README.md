@@ -1,6 +1,6 @@
 # WARNING
 
-**This project has not been reviewed by security professionals. Both its
+**This project has not been reviewed by security professionals. Its
 internals, data formats, and interfaces may chance at any time in the
 future without warning.**
 
@@ -26,15 +26,6 @@ sneaker version
 
 ## Using
 
-All of Sneaker's configuration is handled via the following environment
-variables:
-
-* `SNEAKER_REGION`
-* `SNEAKER_MASTER_KEY`
-* `SNEAKER_MASTER_CONTEXT`
-* `SNEAKER_S3_PATH`
-
-
 ### Configuring Access to AWS
 
 `sneaker` requires access to AWS APIs, which means it needs a set of AWS
@@ -51,12 +42,22 @@ If you have multi-factor authentication enabled for your AWS account
 
 ### Setting Up The Environment
 
-You should also specify which region you'll be operating in via the
-`SNEAKER_REGION` environment variable.
+First, pick a region. Any region. Specify which region you'll be
+operating in via the `SNEAKER_REGION` environment variable:
+
+```shell
+export SNEAKER_REGION="us-west-2"
+```
+
+Sneaker requires two things: a KMS master key and an S3 bucket.
 
 You can create a KMS key via the AWS Console or using a recent version
 of `aws`. When you've created the key, store its ID (a UUID) in the
-`SNEAKER_MASTER_KEY` environment variable.
+`SNEAKER_MASTER_KEY` environment variable:
+
+```shell
+export SNEAKER_MASTER_KEY="9ed356fb-5f0f-4792-983d-91866faa3705"
+```
 
 As with the key, you can create an S3 bucket via the AWS Console or with
 the `aws` command. You can either use a dedicated bucket or use a
@@ -71,20 +72,27 @@ directory in a common bucket, but we recommend you do two things:
    majority of AWS services, it does not do so for S3 access.
 
 Once you're done, set the `SNEAKER_S3_PATH` environment variable to the
-location where secrets should be stored (e.g. `s3://bucket1/secrets/`).
+location where secrets should be stored (e.g. `s3://bucket1/secrets/`):
+
+```shell
+export SNEAKER_S3_PATH="s3://bucket1/secrets/"
+```
+
+(That will store the encrypted secrets in the bucket `bucket1` prefixed
+with `secrets/`.)
 
 ### Managing Secrets
 
 #### Basic Operations
 
-Once you've got `sneaker` configured, try listing all the secrets:
+Once you've got `sneaker` configured, try listing the secrets:
 
 ```shell
 sneaker ls
 ```
 
-This will print out a table of all uploaded secrets. If you haven't
-uploaded anything yet, the table will be empty.
+This will print out a table of all uploaded secrets. You haven't
+uploaded anything yet, so the table will be empty.
 
 Let's create an example secret file and upload it:
 
@@ -137,7 +145,7 @@ the `Decrypt` operation of the KMS key being used will be able to
 decrypt the data.
 
 You can also use a different KMS key than your `SNEAKER_MASTER_KEY` when
-packing secrets:
+packing secrets by using the `--key-id` flag:
 
 ```shell
 sneaker pack example/* example.tar.enc --key-id=deb207cd-d3a7-4777-aca0-01fbceb4c927
