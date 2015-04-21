@@ -268,8 +268,6 @@ Sneaker.
 * The authentication and access control functionality of both KMS and S3
   are secure.
 
-### Assumptions About The World
-
 * AES-256 and GCM's security guarantees are valid.
 
 ### Threats From A KMS Compromise
@@ -287,7 +285,7 @@ An attacker who suborns S3 can:
 
 * Delete or modify secrets such that they are no longer valid.
 
-### Seizure Or Compromise Of The User's Computer
+### Threats From Seizure Or Compromise Of The User's Computer
 
 An attacker who physically seizes the user's computer (or compromises
 the user's backups) or otherwise compromises it can:
