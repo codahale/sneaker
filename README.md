@@ -257,8 +257,8 @@ Sneaker.
 
 ### Assumptions About The User's Computer
 
-* The user's computer must functional correctly and not be compromised
-  by malware.
+* The user's computer must function correctly and not be compromised by
+  malware.
 
 ### Assumptions About Amazon
 
