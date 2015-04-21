@@ -226,10 +226,8 @@ To rotate the KMS key used for each secret, simply specify a different
 
 ## Implementation Details
 
-All data is encrypted with AES-256-GCM using randomly generated,
-single-use keys. Because all keys are single-use, a fixed, all-zero
-nonce is used for all data. The ID of the KMS key is used as
-authenticated data.
+All data is encrypted with AES-256-GCM using random KMS data keys and
+random nonces. The ID of the KMS key is used as authenticated data.
 
 The final result is the concatentation of the following:
 

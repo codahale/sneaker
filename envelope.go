@@ -3,6 +3,7 @@ package sneaker
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/rand"
 	"encoding/binary"
 	"fmt"
 
@@ -17,8 +18,8 @@ type Envelope struct {
 }
 
 // Seal generates a 256-bit data key using KMS and encrypts the given plaintext
-// with AES-256-GCM using a fixed, all-zero nonce. That ciphertext is appended
-// to the ciphertext of the KMS data key and returned.
+// with AES-256-GCM using a random nonce. The ciphertext is appended to the
+// nonce, which is in turn appended to the KMS data key ciphertext and returned.
 func (e *Envelope) Seal(keyID string, ctxt map[string]string, plaintext []byte) ([]byte, error) {
 	key, err := e.KMS.GenerateDataKey(&kms.GenerateDataKeyInput{
 		EncryptionContext: e.context(ctxt),
@@ -28,19 +29,11 @@ func (e *Envelope) Seal(keyID string, ctxt map[string]string, plaintext []byte) 
 	if err != nil {
 		return nil, err
 	}
-	defer zero(key.Plaintext)
 
-	block, err := aes.NewCipher(key.Plaintext)
+	ciphertext, err := encrypt(key.Plaintext, plaintext, []byte(*key.KeyID))
 	if err != nil {
 		return nil, err
 	}
-
-	gcm, err := cipher.NewGCM(block)
-	if err != nil {
-		return nil, err
-	}
-
-	ciphertext := gcm.Seal(nil, nonce, plaintext, []byte(*key.KeyID))
 
 	return join(key.CiphertextBlob, ciphertext), nil
 }
@@ -63,9 +56,22 @@ func (e *Envelope) Open(ctxt map[string]string, ciphertext []byte) ([]byte, erro
 		}
 		return nil, err
 	}
-	defer zero(d.Plaintext)
 
-	block, err := aes.NewCipher(d.Plaintext)
+	return decrypt(d.Plaintext, ciphertext, []byte(*d.KeyID))
+}
+
+func (e *Envelope) context(c map[string]string) *map[string]*string {
+	ctxt := make(map[string]*string)
+	for k, v := range c {
+		ctxt[k] = aws.String(v)
+	}
+	return &ctxt
+}
+
+func decrypt(key, ciphertext, data []byte) ([]byte, error) {
+	defer zero(key)
+
+	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
 	}
@@ -75,15 +81,30 @@ func (e *Envelope) Open(ctxt map[string]string, ciphertext []byte) ([]byte, erro
 		return nil, err
 	}
 
-	return gcm.Open(nil, nonce, ciphertext, []byte(*d.KeyID))
+	nonce, ciphertext := ciphertext[:gcm.NonceSize()], ciphertext[gcm.NonceSize():]
+
+	return gcm.Open(nil, nonce, ciphertext, data)
 }
 
-func (e *Envelope) context(c map[string]string) *map[string]*string {
-	ctxt := make(map[string]*string)
-	for k, v := range c {
-		ctxt[k] = aws.String(v)
+func encrypt(key, plaintext, data []byte) ([]byte, error) {
+	defer zero(key)
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
 	}
-	return &ctxt
+
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return nil, err
+	}
+
+	nonce := make([]byte, gcm.NonceSize())
+	if _, err := rand.Read(nonce); err != nil {
+		return nil, err
+	}
+
+	return gcm.Seal(nonce, nonce, plaintext, data), nil
 }
 
 func join(a, b []byte) []byte {
@@ -104,7 +125,3 @@ func zero(b []byte) {
 		b[i] = 0
 	}
 }
-
-var (
-	nonce = make([]byte, 12)
-)

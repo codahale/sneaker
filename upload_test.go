@@ -53,7 +53,7 @@ func TestUpload(t *testing.T) {
 		t.Errorf("Key was %q, but expected %q", v, want)
 	}
 
-	if v, want := *putReq.ContentLength, int64(47); v != want {
+	if v, want := *putReq.ContentLength, int64(59); v != want {
 		t.Errorf("ContentLength was %d, but expected %d", v, want)
 	}
 
@@ -66,14 +66,23 @@ func TestUpload(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expected := []byte{
-		0x00, 0x00, 0x00, 0x0d, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x65,
-		0x64, 0x20, 0x6b, 0x65, 0x79, 0xba, 0xcf, 0x29, 0x4e, 0x6d, 0x09, 0x18,
-		0x4e, 0x66, 0x6e, 0xb1, 0xb6, 0xc9, 0x87, 0x65, 0xcc, 0xe1, 0x06, 0x8c,
-		0xbf, 0x7f, 0xdd, 0x5d, 0x70, 0x4e, 0x3d, 0xbf, 0xd5, 0x44, 0xec,
+	header := actual[:4]
+	if v := []byte{0x00, 0x00, 0x00, 0x0d}; !bytes.Equal(header, v) {
+		t.Errorf("Header was %x but expected %x", header, v)
 	}
 
-	if !bytes.Equal(actual, expected) {
-		t.Errorf("Was %x but expected %x", actual, expected)
+	blob := actual[4 : 13+4]
+	if v := []byte("encrypted key"); !bytes.Equal(blob, v) {
+		t.Errorf("Blob was %x but expected %x", blob, v)
+	}
+
+	ciphertext := actual[13+4:]
+	plaintext, err := decrypt(make([]byte, 32), ciphertext, []byte("key1"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if v, want := string(plaintext), "this is a test"; v != want {
+		t.Errorf("Plaintext was %x but expected %x", v, want)
 	}
 }
