@@ -4,7 +4,7 @@ import (
 	"archive/tar"
 	"bytes"
 	"io"
-	fpath "path"
+	"path"
 	"time"
 )
 
@@ -17,12 +17,12 @@ func (m *Manager) Pack(secrets map[string][]byte, ctxt map[string]string, keyID 
 
 	buf := bytes.NewBuffer(nil)
 	tw := tar.NewWriter(buf)
-	for path, data := range secrets {
+	for filename, data := range secrets {
 		if err := tw.WriteHeader(&tar.Header{
 			Size:       int64(len(data)),
 			Uname:      "root",
 			Gname:      "root",
-			Name:       fpath.Join(".", path),
+			Name:       path.Join(".", filename),
 			Mode:       0400,
 			ModTime:    time.Now(),
 			AccessTime: time.Now(),
