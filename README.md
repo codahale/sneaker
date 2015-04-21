@@ -248,19 +248,15 @@ achieve. The list is intended to be exhaustive, i.e. if an entity can do
 something that is not listed here then that should count as a break of
 Sneaker.
 
-### Assumptions About The User
+### Assumptions
 
 * The user must act reasonably and in their best interest. They must not
   reveal secrets or allow unauthorized access to secrets.
 
 * The user must run a copy of Sneaker which has not been suborned.
 
-### Assumptions About The User's Computer
-
 * The user's computer must function correctly and not be compromised by
   malware.
-
-### Assumptions About Amazon
 
 * Communications with Amazon have confidentiality and integrity ensured
   by the use of TLS.
@@ -269,31 +265,27 @@ Sneaker.
   compromised, its random numbers are unguessable to adversaries, its
   cryptographic algorithms are correct.
 
-* The access control functionality of both KMS and S3 are secure.
+* The authentication and access control functionality of both KMS and S3
+  are secure.
 
 ### Assumptions About The World
 
 * AES-256 and GCM's security guarantees are valid.
 
-### Threats From Global Passive Adversaries
+### Threats From A KMS Compromise
 
-An attacker who can eavesdrop on internet traffic globally can:
+An attacker who suborns KMS can:
 
-* Observe when a user is using Sneaker, with a high probability of being
-  able to distinguish between uploads, downloads, rotations, and other
-  operations.
+* Create forged secret packages.
+* Decrypt packaged tarballs.
+* Deny the ability to decrypt secrets, either temporarily or
+  permanently.
 
-* Identify packed Sneaker tarballs as such.
+### Threats From An S3 Compromise:
 
-### Threats From Active Network Adversaries
+An attacker who suborns S3 can:
 
-An attacker with a privileged network position to the user can:
-
-* Possibly perform the same attacks as a GPA.
-
-* Modify secrets such that they are no longer valid.
-
-* Disrupt communications with KMS and/or S3.
+* Delete or modify secrets such that they are no longer valid.
 
 ### Seizure Or Compromise Of The User's Computer
 
