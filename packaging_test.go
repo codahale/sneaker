@@ -81,8 +81,8 @@ func TestPackagingRoundTrip(t *testing.T) {
 		t.Errorf("Key ID was %q, but expected %q", v, want)
 	}
 
-	if v, want := *genReq.NumberOfBytes, int64(32); v != want {
-		t.Errorf("Key size was %v, but expected %v", v, want)
+	if v, want := *genReq.KeySpec, "AES_256"; v != want {
+		t.Errorf("Key spec was %v, but expected %v", v, want)
 	}
 
 	if v, want := fromAWS(genReq.EncryptionContext), context; !reflect.DeepEqual(v, want) {
@@ -90,6 +90,7 @@ func TestPackagingRoundTrip(t *testing.T) {
 	}
 
 	decReq := fakeKMS.DecryptInputs[0]
+
 	if v, want := decReq.CiphertextBlob, []byte("encrypted key"); !bytes.Equal(v, want) {
 		t.Errorf("Ciphertext Blob was %v, but expected %v", v, want)
 	}

@@ -89,8 +89,8 @@ func TestRotate(t *testing.T) {
 		t.Errorf("Key ID was %q, but expected %q", v, want)
 	}
 
-	if v, want := *genReq.NumberOfBytes, int64(32); v != want {
-		t.Errorf("Key size was %d, but expected %d", v, want)
+	if v, want := *genReq.KeySpec, "AES_256"; v != want {
+		t.Errorf("Key spec was %v, but expected %v", v, want)
 	}
 
 	putReq := fakeS3.PutInputs[0]

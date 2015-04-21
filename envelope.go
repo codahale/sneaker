@@ -22,8 +22,8 @@ type Envelope struct {
 func (e *Envelope) Seal(keyID string, ctxt map[string]string, plaintext []byte) ([]byte, error) {
 	key, err := e.KMS.GenerateDataKey(&kms.GenerateDataKeyInput{
 		EncryptionContext: e.context(ctxt),
+		KeySpec:           aws.String("AES_256"),
 		KeyID:             &keyID,
-		NumberOfBytes:     aws.Long(keySize),
 	})
 	if err != nil {
 		return nil, err
@@ -108,5 +108,3 @@ func zero(b []byte) {
 var (
 	nonce = make([]byte, 12)
 )
-
-const keySize = 32
