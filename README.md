@@ -1,9 +1,3 @@
-# WARNING
-
-**This project has not been reviewed by security professionals. Its
-internals, data formats, and interfaces may change at any time in the
-future without warning.**
-
 # Sneaker
 
 [![Build Status](https://travis-ci.org/codahale/sneaker.svg?branch=master)](https://travis-ci.org/codahale/sneaker)
@@ -16,6 +10,31 @@ confidentiality, and integrity.
 
 Secrets are stored on S3, encrypted with AES-GCM and single-use,
 KMS-generated data keys.
+
+## Table Of Contents
+
+* [WARNING](#warning)
+* [Installing](#installing)
+* [Using](#using)
+  * [Configuring Access To AWS](#configuring-access-to-aws)
+  * [Setting Up The Environment](#setting-up-the-environment)
+  * [Basic Operations](#basic-operations)
+  * [Packing Secrets](#packing-secrets)
+  * [Unpacking Secrets](#unpacking-secrets)
+  * [Encryption Contexts](#encryption-contexts)
+  * [Maintenance Operations](#maintenance-operations)
+* [Implementation Details](#implementation-details)
+* [Threat Model](#threat-model)
+  * [Assumptions](#assumptions)
+  * [Threats From A KMS Compromise](#threats-from-a-kms-compromise)
+  * [Threats From An S3 Compromise](#threats-from-an-s3-compromise)
+  * [Threats From Seizure Or Compromise Of The User's Computer](#threats-from-seizure-or-compromise-of-the-users-computer)
+
+## WARNING
+
+**This project has not been reviewed by security professionals. Its
+internals, data formats, and interfaces may change at any time in the
+future without warning.**
 
 ## Installing
 
@@ -83,9 +102,7 @@ export SNEAKER_S3_PATH="s3://bucket1/secrets/"
 (That will store the encrypted secrets in the bucket `bucket1` prefixed
 with `secrets/`.)
 
-### Managing Secrets
-
-#### Basic Operations
+### Basic Operations
 
 Once you've got `sneaker` configured, try listing the secrets:
 
@@ -117,7 +134,7 @@ Finally, you can delete the file:
 sneaker rm example/secret.txt
 ```
 
-#### Packing Secrets
+### Packing Secrets
 
 To install a secret on a machine, you'll need to pack them into a
 tarball:
@@ -156,7 +173,7 @@ sneaker pack example/* example.tar.enc --key-id=deb207cd-d3a7-4777-aca0-01fbceb4
 This allows you to unpack your secrets in environments which don't have
 access to the key used to store your secrets.
 
-#### Unpacking Secrets
+### Unpacking Secrets
 
 To unpack the secrets, run the following:
 
@@ -179,7 +196,7 @@ Using `-` instead of a filename will make `sneaker` read the data from
 write the data to `STDOUT`. This allows you to pipe the output directly
 to a `tar` process, for example.
 
-#### Encryption Contexts
+### Encryption Contexts
 
 KMS supports the notion of an
 [Encryption Context](http://docs.aws.amazon.com/kms/latest/developerguide/encrypt-context.html):
