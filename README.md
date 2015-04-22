@@ -1,7 +1,7 @@
 # WARNING
 
 **This project has not been reviewed by security professionals. Its
-internals, data formats, and interfaces may chance at any time in the
+internals, data formats, and interfaces may change at any time in the
 future without warning.**
 
 # Sneaker
