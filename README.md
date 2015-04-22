@@ -8,7 +8,7 @@
 and the Key Management Service (KMS) to provide durability,
 confidentiality, and integrity.
 
-Secrets are stored on S3, encrypted with AES-GCM and single-use,
+Secrets are stored on S3, encrypted with AES-256-GCM and single-use,
 KMS-generated data keys.
 
 ## Table Of Contents
@@ -121,9 +121,9 @@ sneaker upload secret.txt example/secret.txt
 ```
 
 This will use KMS to generate a random, 256-bit data key, encrypt the
-secret with AES-GCM, and upload the encrypted secret and an encrypted
-copy of the data key to S3. Running `sneaker ls` should display a table
-with the file in it.
+secret with AES-256-GCM, and upload the encrypted secret and an
+encrypted copy of the data key to S3. Running `sneaker ls` should
+display a table with the file in it.
 
 If your file is so sensitive it shouldn't be stored on disk, using `-`
 instead of a filename will make `sneaker` read the data from `STDIN`.
