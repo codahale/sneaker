@@ -34,21 +34,21 @@ func (m *Manager) List(pattern string) ([]File, error) {
 		return secrets, nil
 	}
 
-	var matchedSecrets []File
+	var matched []File
 	for _, f := range secrets {
-		ok, err := matchPath(pattern, f.Path)
+		ok, err := match(pattern, f.Path)
 		if err != nil {
 			return nil, err
 		}
 
 		if ok {
-			matchedSecrets = append(matchedSecrets, f)
+			matched = append(matched, f)
 		}
 	}
-	return matchedSecrets, nil
+	return matched, nil
 }
 
-func matchPath(pattern, name string) (bool, error) {
+func match(pattern, name string) (bool, error) {
 	for _, s := range strings.Split(pattern, ",") {
 		m, err := path.Match(s, name)
 		if err != nil {
