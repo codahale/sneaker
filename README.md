@@ -264,6 +264,10 @@ achieve. The list is intended to be exhaustive, i.e. if an entity can do
 something that is not listed here then that should count as a break of
 Sneaker.
 
+In broad strokes, the confidentiality and integrity of content stored
+with Sneaker is predicated on the integrity of Sneaker, the
+confidentiality and integrity of KMS, and the integrity of S3.
+
 ### Assumptions
 
 * The user must act reasonably and in their best interest. They must not
