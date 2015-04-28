@@ -25,6 +25,7 @@ KMS-generated data keys.
   * [Encryption Contexts](#encryption-contexts)
   * [Maintenance Operations](#maintenance-operations)
 * [Implementation Details](#implementation-details)
+* [Architecture](#architecture)
 * [Threat Model](#threat-model)
   * [Assumptions](#assumptions)
   * [Threats From A KMS Compromise](#threats-from-a-kms-compromise)
@@ -256,6 +257,10 @@ The final result is the concatentation of the following:
   which includes the key ID.)
 
 * The AES-256-GCM ciphertext and tag of the secret.
+
+## Architecture
+
+![Sneaker Architecture](https://raw.githubusercontent.com/codahale/sneaker/master/architecture.png)
 
 ## Threat Model
 
