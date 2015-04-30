@@ -259,12 +259,6 @@ func openPath(file string, o func(string) (*os.File, error), def *os.File) *os.F
 	return f
 }
 
-var (
-	version   = "unknown" // version of sneaker
-	goVersion = "unknown" // version of go we build with
-	buildTime = "unknown" // time of build
-)
-
 const (
 	conciseTime = "2006-01-02T15:04"
 )
