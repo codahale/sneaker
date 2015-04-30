@@ -32,7 +32,6 @@ Options:
   -h --help  Show this help information.
 
 Environment Variables:
-  SNEAKER_REGION          The AWS region where the key and bucket are located.
   SNEAKER_MASTER_KEY      The KMS key to use when encrypting secrets.
   SNEAKER_MASTER_CONTEXT  The KMS encryption context to use for stored secrets.
   SNEAKER_S3_PATH         Where secrets will be stored (e.g. s3://bucket/path).

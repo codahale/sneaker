@@ -65,13 +65,6 @@ If you have multi-factor authentication enabled for your AWS account
 
 ### Setting Up The Environment
 
-First, pick a region. Any region. Specify which region you'll be
-operating in via the `SNEAKER_REGION` environment variable:
-
-```shell
-export SNEAKER_REGION="us-west-2"
-```
-
 Sneaker requires two things: a KMS master key and an S3 bucket.
 
 You can create a KMS key via the AWS Console or using a recent version
