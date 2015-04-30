@@ -11,7 +11,6 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/awslabs/aws-sdk-go/aws"
 	"github.com/awslabs/aws-sdk-go/service/kms"
 	"github.com/awslabs/aws-sdk-go/service/s3"
 	"github.com/codahale/sneaker"
@@ -195,11 +194,6 @@ func main() {
 }
 
 func loadManager() *sneaker.Manager {
-	region := os.Getenv("SNEAKER_REGION")
-	if region == "" {
-		log.Fatal("missing SNEAKER_REGION")
-	}
-
 	u, err := url.Parse(os.Getenv("SNEAKER_S3_PATH"))
 	if err != nil {
 		log.Fatalf("bad SNEAKER_S3_PATH: %s", err)
@@ -208,22 +202,15 @@ func loadManager() *sneaker.Manager {
 		u.Path = u.Path[1:]
 	}
 
-	creds := aws.DetectCreds("", "", "")
-
-	config := &aws.Config{
-		Credentials: creds,
-		Region:      region,
-	}
-
 	ctxt, err := parseContext(os.Getenv("SNEAKER_MASTER_CONTEXT"))
 	if err != nil {
 		log.Fatalf("bad SNEAKER_MASTER_CONTEXT: %s", err)
 	}
 
 	return &sneaker.Manager{
-		Objects: s3.New(config),
+		Objects: s3.New(nil),
 		Envelope: sneaker.Envelope{
-			KMS: kms.New(config),
+			KMS: kms.New(nil),
 		},
 		Bucket:            u.Host,
 		Prefix:            u.Path,
