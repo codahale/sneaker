@@ -63,6 +63,9 @@ If you have multi-factor authentication enabled for your AWS account
 (**and you should**), you may need to provide a token via the
 `AWS_SESSION_TOKEN` environment variable.
 
+If you're using IAM instance roles, you may need to set the `AWS_REGION`
+environment variable to the AWS region you're using (e.g. `us-east-1`).
+
 ### Setting Up The Environment
 
 Sneaker requires two things: a KMS master key and an S3 bucket.
