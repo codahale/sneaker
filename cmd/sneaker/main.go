@@ -86,10 +86,7 @@ func main() {
 
 		log.Printf("uploading %s", file)
 
-		f, err := os.Open(file)
-		if err != nil {
-			log.Fatal(err)
-		}
+		f := openPath(file, os.Open, os.Stdin)
 		defer f.Close()
 
 		if err := manager.Upload(path, f); err != nil {
