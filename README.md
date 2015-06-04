@@ -138,12 +138,13 @@ To install a secret on a machine, you'll need to pack them into a
 tarball:
 
 ```shell
-sneaker pack example/* example.tar.enc
+sneaker pack example/*,extra.txt example.tar.enc
 ```
 
 This will perform the following steps:
 
-1. Download and decrypt all secrets matching the `example/*` pattern.
+1. Download and decrypt all secrets matching any of the patterns:
+   `example/*` or `extra.txt`.
 
 2. Package all the decrypted secrets into a `TAR` file in memory.
 
