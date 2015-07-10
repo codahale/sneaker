@@ -7,6 +7,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/awslabs/aws-sdk-go/aws"
 	"github.com/awslabs/aws-sdk-go/service/kms"
 )
@@ -49,8 +50,8 @@ func (e *Envelope) Open(ctxt map[string]string, ciphertext []byte) ([]byte, erro
 		EncryptionContext: e.context(ctxt),
 	})
 	if err != nil {
-		if apiErr, ok := err.(aws.APIError); ok {
-			if apiErr.Code == "InvalidCiphertextException" {
+		if apiErr, ok := err.(awserr.Error); ok {
+			if apiErr.Code() == "InvalidCiphertextException" {
 				return nil, fmt.Errorf("unable to decrypt data key")
 			}
 		}
@@ -60,12 +61,12 @@ func (e *Envelope) Open(ctxt map[string]string, ciphertext []byte) ([]byte, erro
 	return decrypt(d.Plaintext, ciphertext, []byte(*d.KeyID))
 }
 
-func (e *Envelope) context(c map[string]string) *map[string]*string {
+func (e *Envelope) context(c map[string]string) map[string]*string {
 	ctxt := make(map[string]*string)
 	for k, v := range c {
 		ctxt[k] = aws.String(v)
 	}
-	return &ctxt
+	return ctxt
 }
 
 func decrypt(key, ciphertext, data []byte) ([]byte, error) {
