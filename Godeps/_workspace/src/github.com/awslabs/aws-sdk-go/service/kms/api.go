@@ -4,32 +4,27 @@
 package kms
 
 import (
-	"sync"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awsutil"
 )
 
-var oprw sync.Mutex
+const opCreateAlias = "CreateAlias"
 
 // CreateAliasRequest generates a request for the CreateAlias operation.
 func (c *KMS) CreateAliasRequest(input *CreateAliasInput) (req *aws.Request, output *CreateAliasOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opCreateAlias == nil {
-		opCreateAlias = &aws.Operation{
-			Name:       "CreateAlias",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opCreateAlias,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &CreateAliasInput{}
 	}
 
-	req = c.newRequest(opCreateAlias, input, output)
+	req = c.newRequest(op, input, output)
 	output = &CreateAliasOutput{}
 	req.Data = output
 	return
@@ -53,26 +48,21 @@ func (c *KMS) CreateAlias(input *CreateAliasInput) (*CreateAliasOutput, error) {
 	return out, err
 }
 
-var opCreateAlias *aws.Operation
+const opCreateGrant = "CreateGrant"
 
 // CreateGrantRequest generates a request for the CreateGrant operation.
 func (c *KMS) CreateGrantRequest(input *CreateGrantInput) (req *aws.Request, output *CreateGrantOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opCreateGrant == nil {
-		opCreateGrant = &aws.Operation{
-			Name:       "CreateGrant",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opCreateGrant,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &CreateGrantInput{}
 	}
 
-	req = c.newRequest(opCreateGrant, input, output)
+	req = c.newRequest(op, input, output)
 	output = &CreateGrantOutput{}
 	req.Data = output
 	return
@@ -89,26 +79,21 @@ func (c *KMS) CreateGrant(input *CreateGrantInput) (*CreateGrantOutput, error) {
 	return out, err
 }
 
-var opCreateGrant *aws.Operation
+const opCreateKey = "CreateKey"
 
 // CreateKeyRequest generates a request for the CreateKey operation.
 func (c *KMS) CreateKeyRequest(input *CreateKeyInput) (req *aws.Request, output *CreateKeyOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opCreateKey == nil {
-		opCreateKey = &aws.Operation{
-			Name:       "CreateKey",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opCreateKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &CreateKeyInput{}
 	}
 
-	req = c.newRequest(opCreateKey, input, output)
+	req = c.newRequest(op, input, output)
 	output = &CreateKeyOutput{}
 	req.Data = output
 	return
@@ -124,26 +109,21 @@ func (c *KMS) CreateKey(input *CreateKeyInput) (*CreateKeyOutput, error) {
 	return out, err
 }
 
-var opCreateKey *aws.Operation
+const opDecrypt = "Decrypt"
 
 // DecryptRequest generates a request for the Decrypt operation.
 func (c *KMS) DecryptRequest(input *DecryptInput) (req *aws.Request, output *DecryptOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDecrypt == nil {
-		opDecrypt = &aws.Operation{
-			Name:       "Decrypt",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opDecrypt,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &DecryptInput{}
 	}
 
-	req = c.newRequest(opDecrypt, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DecryptOutput{}
 	req.Data = output
 	return
@@ -167,26 +147,21 @@ func (c *KMS) Decrypt(input *DecryptInput) (*DecryptOutput, error) {
 	return out, err
 }
 
-var opDecrypt *aws.Operation
+const opDeleteAlias = "DeleteAlias"
 
 // DeleteAliasRequest generates a request for the DeleteAlias operation.
 func (c *KMS) DeleteAliasRequest(input *DeleteAliasInput) (req *aws.Request, output *DeleteAliasOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDeleteAlias == nil {
-		opDeleteAlias = &aws.Operation{
-			Name:       "DeleteAlias",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opDeleteAlias,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &DeleteAliasInput{}
 	}
 
-	req = c.newRequest(opDeleteAlias, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DeleteAliasOutput{}
 	req.Data = output
 	return
@@ -200,26 +175,21 @@ func (c *KMS) DeleteAlias(input *DeleteAliasInput) (*DeleteAliasOutput, error) {
 	return out, err
 }
 
-var opDeleteAlias *aws.Operation
+const opDescribeKey = "DescribeKey"
 
 // DescribeKeyRequest generates a request for the DescribeKey operation.
 func (c *KMS) DescribeKeyRequest(input *DescribeKeyInput) (req *aws.Request, output *DescribeKeyOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDescribeKey == nil {
-		opDescribeKey = &aws.Operation{
-			Name:       "DescribeKey",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opDescribeKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &DescribeKeyInput{}
 	}
 
-	req = c.newRequest(opDescribeKey, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DescribeKeyOutput{}
 	req.Data = output
 	return
@@ -232,26 +202,21 @@ func (c *KMS) DescribeKey(input *DescribeKeyInput) (*DescribeKeyOutput, error) {
 	return out, err
 }
 
-var opDescribeKey *aws.Operation
+const opDisableKey = "DisableKey"
 
 // DisableKeyRequest generates a request for the DisableKey operation.
 func (c *KMS) DisableKeyRequest(input *DisableKeyInput) (req *aws.Request, output *DisableKeyOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDisableKey == nil {
-		opDisableKey = &aws.Operation{
-			Name:       "DisableKey",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opDisableKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &DisableKeyInput{}
 	}
 
-	req = c.newRequest(opDisableKey, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DisableKeyOutput{}
 	req.Data = output
 	return
@@ -264,26 +229,21 @@ func (c *KMS) DisableKey(input *DisableKeyInput) (*DisableKeyOutput, error) {
 	return out, err
 }
 
-var opDisableKey *aws.Operation
+const opDisableKeyRotation = "DisableKeyRotation"
 
 // DisableKeyRotationRequest generates a request for the DisableKeyRotation operation.
 func (c *KMS) DisableKeyRotationRequest(input *DisableKeyRotationInput) (req *aws.Request, output *DisableKeyRotationOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDisableKeyRotation == nil {
-		opDisableKeyRotation = &aws.Operation{
-			Name:       "DisableKeyRotation",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opDisableKeyRotation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &DisableKeyRotationInput{}
 	}
 
-	req = c.newRequest(opDisableKeyRotation, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DisableKeyRotationOutput{}
 	req.Data = output
 	return
@@ -296,26 +256,21 @@ func (c *KMS) DisableKeyRotation(input *DisableKeyRotationInput) (*DisableKeyRot
 	return out, err
 }
 
-var opDisableKeyRotation *aws.Operation
+const opEnableKey = "EnableKey"
 
 // EnableKeyRequest generates a request for the EnableKey operation.
 func (c *KMS) EnableKeyRequest(input *EnableKeyInput) (req *aws.Request, output *EnableKeyOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opEnableKey == nil {
-		opEnableKey = &aws.Operation{
-			Name:       "EnableKey",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opEnableKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &EnableKeyInput{}
 	}
 
-	req = c.newRequest(opEnableKey, input, output)
+	req = c.newRequest(op, input, output)
 	output = &EnableKeyOutput{}
 	req.Data = output
 	return
@@ -329,26 +284,21 @@ func (c *KMS) EnableKey(input *EnableKeyInput) (*EnableKeyOutput, error) {
 	return out, err
 }
 
-var opEnableKey *aws.Operation
+const opEnableKeyRotation = "EnableKeyRotation"
 
 // EnableKeyRotationRequest generates a request for the EnableKeyRotation operation.
 func (c *KMS) EnableKeyRotationRequest(input *EnableKeyRotationInput) (req *aws.Request, output *EnableKeyRotationOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opEnableKeyRotation == nil {
-		opEnableKeyRotation = &aws.Operation{
-			Name:       "EnableKeyRotation",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opEnableKeyRotation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &EnableKeyRotationInput{}
 	}
 
-	req = c.newRequest(opEnableKeyRotation, input, output)
+	req = c.newRequest(op, input, output)
 	output = &EnableKeyRotationOutput{}
 	req.Data = output
 	return
@@ -361,26 +311,21 @@ func (c *KMS) EnableKeyRotation(input *EnableKeyRotationInput) (*EnableKeyRotati
 	return out, err
 }
 
-var opEnableKeyRotation *aws.Operation
+const opEncrypt = "Encrypt"
 
 // EncryptRequest generates a request for the Encrypt operation.
 func (c *KMS) EncryptRequest(input *EncryptInput) (req *aws.Request, output *EncryptOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opEncrypt == nil {
-		opEncrypt = &aws.Operation{
-			Name:       "Encrypt",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opEncrypt,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &EncryptInput{}
 	}
 
-	req = c.newRequest(opEncrypt, input, output)
+	req = c.newRequest(op, input, output)
 	output = &EncryptOutput{}
 	req.Data = output
 	return
@@ -409,26 +354,21 @@ func (c *KMS) Encrypt(input *EncryptInput) (*EncryptOutput, error) {
 	return out, err
 }
 
-var opEncrypt *aws.Operation
+const opGenerateDataKey = "GenerateDataKey"
 
 // GenerateDataKeyRequest generates a request for the GenerateDataKey operation.
 func (c *KMS) GenerateDataKeyRequest(input *GenerateDataKeyInput) (req *aws.Request, output *GenerateDataKeyOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGenerateDataKey == nil {
-		opGenerateDataKey = &aws.Operation{
-			Name:       "GenerateDataKey",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opGenerateDataKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &GenerateDataKeyInput{}
 	}
 
-	req = c.newRequest(opGenerateDataKey, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GenerateDataKeyOutput{}
 	req.Data = output
 	return
@@ -470,26 +410,21 @@ func (c *KMS) GenerateDataKey(input *GenerateDataKeyInput) (*GenerateDataKeyOutp
 	return out, err
 }
 
-var opGenerateDataKey *aws.Operation
+const opGenerateDataKeyWithoutPlaintext = "GenerateDataKeyWithoutPlaintext"
 
 // GenerateDataKeyWithoutPlaintextRequest generates a request for the GenerateDataKeyWithoutPlaintext operation.
 func (c *KMS) GenerateDataKeyWithoutPlaintextRequest(input *GenerateDataKeyWithoutPlaintextInput) (req *aws.Request, output *GenerateDataKeyWithoutPlaintextOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGenerateDataKeyWithoutPlaintext == nil {
-		opGenerateDataKeyWithoutPlaintext = &aws.Operation{
-			Name:       "GenerateDataKeyWithoutPlaintext",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opGenerateDataKeyWithoutPlaintext,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &GenerateDataKeyWithoutPlaintextInput{}
 	}
 
-	req = c.newRequest(opGenerateDataKeyWithoutPlaintext, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GenerateDataKeyWithoutPlaintextOutput{}
 	req.Data = output
 	return
@@ -506,26 +441,21 @@ func (c *KMS) GenerateDataKeyWithoutPlaintext(input *GenerateDataKeyWithoutPlain
 	return out, err
 }
 
-var opGenerateDataKeyWithoutPlaintext *aws.Operation
+const opGenerateRandom = "GenerateRandom"
 
 // GenerateRandomRequest generates a request for the GenerateRandom operation.
 func (c *KMS) GenerateRandomRequest(input *GenerateRandomInput) (req *aws.Request, output *GenerateRandomOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGenerateRandom == nil {
-		opGenerateRandom = &aws.Operation{
-			Name:       "GenerateRandom",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opGenerateRandom,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &GenerateRandomInput{}
 	}
 
-	req = c.newRequest(opGenerateRandom, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GenerateRandomOutput{}
 	req.Data = output
 	return
@@ -538,26 +468,21 @@ func (c *KMS) GenerateRandom(input *GenerateRandomInput) (*GenerateRandomOutput,
 	return out, err
 }
 
-var opGenerateRandom *aws.Operation
+const opGetKeyPolicy = "GetKeyPolicy"
 
 // GetKeyPolicyRequest generates a request for the GetKeyPolicy operation.
 func (c *KMS) GetKeyPolicyRequest(input *GetKeyPolicyInput) (req *aws.Request, output *GetKeyPolicyOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetKeyPolicy == nil {
-		opGetKeyPolicy = &aws.Operation{
-			Name:       "GetKeyPolicy",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opGetKeyPolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &GetKeyPolicyInput{}
 	}
 
-	req = c.newRequest(opGetKeyPolicy, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetKeyPolicyOutput{}
 	req.Data = output
 	return
@@ -570,26 +495,21 @@ func (c *KMS) GetKeyPolicy(input *GetKeyPolicyInput) (*GetKeyPolicyOutput, error
 	return out, err
 }
 
-var opGetKeyPolicy *aws.Operation
+const opGetKeyRotationStatus = "GetKeyRotationStatus"
 
 // GetKeyRotationStatusRequest generates a request for the GetKeyRotationStatus operation.
 func (c *KMS) GetKeyRotationStatusRequest(input *GetKeyRotationStatusInput) (req *aws.Request, output *GetKeyRotationStatusOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetKeyRotationStatus == nil {
-		opGetKeyRotationStatus = &aws.Operation{
-			Name:       "GetKeyRotationStatus",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opGetKeyRotationStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &GetKeyRotationStatusInput{}
 	}
 
-	req = c.newRequest(opGetKeyRotationStatus, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetKeyRotationStatusOutput{}
 	req.Data = output
 	return
@@ -603,26 +523,27 @@ func (c *KMS) GetKeyRotationStatus(input *GetKeyRotationStatusInput) (*GetKeyRot
 	return out, err
 }
 
-var opGetKeyRotationStatus *aws.Operation
+const opListAliases = "ListAliases"
 
 // ListAliasesRequest generates a request for the ListAliases operation.
 func (c *KMS) ListAliasesRequest(input *ListAliasesInput) (req *aws.Request, output *ListAliasesOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opListAliases == nil {
-		opListAliases = &aws.Operation{
-			Name:       "ListAliases",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opListAliases,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"NextMarker"},
+			LimitToken:      "Limit",
+			TruncationToken: "Truncated",
+		},
 	}
 
 	if input == nil {
 		input = &ListAliasesInput{}
 	}
 
-	req = c.newRequest(opListAliases, input, output)
+	req = c.newRequest(op, input, output)
 	output = &ListAliasesOutput{}
 	req.Data = output
 	return
@@ -635,26 +556,34 @@ func (c *KMS) ListAliases(input *ListAliasesInput) (*ListAliasesOutput, error) {
 	return out, err
 }
 
-var opListAliases *aws.Operation
+func (c *KMS) ListAliasesPages(input *ListAliasesInput, fn func(p *ListAliasesOutput, lastPage bool) (shouldContinue bool)) error {
+	page, _ := c.ListAliasesRequest(input)
+	return page.EachPage(func(p interface{}, lastPage bool) bool {
+		return fn(p.(*ListAliasesOutput), lastPage)
+	})
+}
+
+const opListGrants = "ListGrants"
 
 // ListGrantsRequest generates a request for the ListGrants operation.
 func (c *KMS) ListGrantsRequest(input *ListGrantsInput) (req *aws.Request, output *ListGrantsOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opListGrants == nil {
-		opListGrants = &aws.Operation{
-			Name:       "ListGrants",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opListGrants,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"NextMarker"},
+			LimitToken:      "Limit",
+			TruncationToken: "Truncated",
+		},
 	}
 
 	if input == nil {
 		input = &ListGrantsInput{}
 	}
 
-	req = c.newRequest(opListGrants, input, output)
+	req = c.newRequest(op, input, output)
 	output = &ListGrantsOutput{}
 	req.Data = output
 	return
@@ -667,26 +596,34 @@ func (c *KMS) ListGrants(input *ListGrantsInput) (*ListGrantsOutput, error) {
 	return out, err
 }
 
-var opListGrants *aws.Operation
+func (c *KMS) ListGrantsPages(input *ListGrantsInput, fn func(p *ListGrantsOutput, lastPage bool) (shouldContinue bool)) error {
+	page, _ := c.ListGrantsRequest(input)
+	return page.EachPage(func(p interface{}, lastPage bool) bool {
+		return fn(p.(*ListGrantsOutput), lastPage)
+	})
+}
+
+const opListKeyPolicies = "ListKeyPolicies"
 
 // ListKeyPoliciesRequest generates a request for the ListKeyPolicies operation.
 func (c *KMS) ListKeyPoliciesRequest(input *ListKeyPoliciesInput) (req *aws.Request, output *ListKeyPoliciesOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opListKeyPolicies == nil {
-		opListKeyPolicies = &aws.Operation{
-			Name:       "ListKeyPolicies",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opListKeyPolicies,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"NextMarker"},
+			LimitToken:      "Limit",
+			TruncationToken: "Truncated",
+		},
 	}
 
 	if input == nil {
 		input = &ListKeyPoliciesInput{}
 	}
 
-	req = c.newRequest(opListKeyPolicies, input, output)
+	req = c.newRequest(op, input, output)
 	output = &ListKeyPoliciesOutput{}
 	req.Data = output
 	return
@@ -699,26 +636,34 @@ func (c *KMS) ListKeyPolicies(input *ListKeyPoliciesInput) (*ListKeyPoliciesOutp
 	return out, err
 }
 
-var opListKeyPolicies *aws.Operation
+func (c *KMS) ListKeyPoliciesPages(input *ListKeyPoliciesInput, fn func(p *ListKeyPoliciesOutput, lastPage bool) (shouldContinue bool)) error {
+	page, _ := c.ListKeyPoliciesRequest(input)
+	return page.EachPage(func(p interface{}, lastPage bool) bool {
+		return fn(p.(*ListKeyPoliciesOutput), lastPage)
+	})
+}
+
+const opListKeys = "ListKeys"
 
 // ListKeysRequest generates a request for the ListKeys operation.
 func (c *KMS) ListKeysRequest(input *ListKeysInput) (req *aws.Request, output *ListKeysOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opListKeys == nil {
-		opListKeys = &aws.Operation{
-			Name:       "ListKeys",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opListKeys,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"NextMarker"},
+			LimitToken:      "Limit",
+			TruncationToken: "Truncated",
+		},
 	}
 
 	if input == nil {
 		input = &ListKeysInput{}
 	}
 
-	req = c.newRequest(opListKeys, input, output)
+	req = c.newRequest(op, input, output)
 	output = &ListKeysOutput{}
 	req.Data = output
 	return
@@ -731,26 +676,28 @@ func (c *KMS) ListKeys(input *ListKeysInput) (*ListKeysOutput, error) {
 	return out, err
 }
 
-var opListKeys *aws.Operation
+func (c *KMS) ListKeysPages(input *ListKeysInput, fn func(p *ListKeysOutput, lastPage bool) (shouldContinue bool)) error {
+	page, _ := c.ListKeysRequest(input)
+	return page.EachPage(func(p interface{}, lastPage bool) bool {
+		return fn(p.(*ListKeysOutput), lastPage)
+	})
+}
+
+const opPutKeyPolicy = "PutKeyPolicy"
 
 // PutKeyPolicyRequest generates a request for the PutKeyPolicy operation.
 func (c *KMS) PutKeyPolicyRequest(input *PutKeyPolicyInput) (req *aws.Request, output *PutKeyPolicyOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutKeyPolicy == nil {
-		opPutKeyPolicy = &aws.Operation{
-			Name:       "PutKeyPolicy",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opPutKeyPolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &PutKeyPolicyInput{}
 	}
 
-	req = c.newRequest(opPutKeyPolicy, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutKeyPolicyOutput{}
 	req.Data = output
 	return
@@ -763,26 +710,21 @@ func (c *KMS) PutKeyPolicy(input *PutKeyPolicyInput) (*PutKeyPolicyOutput, error
 	return out, err
 }
 
-var opPutKeyPolicy *aws.Operation
+const opReEncrypt = "ReEncrypt"
 
 // ReEncryptRequest generates a request for the ReEncrypt operation.
 func (c *KMS) ReEncryptRequest(input *ReEncryptInput) (req *aws.Request, output *ReEncryptOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opReEncrypt == nil {
-		opReEncrypt = &aws.Operation{
-			Name:       "ReEncrypt",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opReEncrypt,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &ReEncryptInput{}
 	}
 
-	req = c.newRequest(opReEncrypt, input, output)
+	req = c.newRequest(op, input, output)
 	output = &ReEncryptOutput{}
 	req.Data = output
 	return
@@ -806,26 +748,21 @@ func (c *KMS) ReEncrypt(input *ReEncryptInput) (*ReEncryptOutput, error) {
 	return out, err
 }
 
-var opReEncrypt *aws.Operation
+const opRetireGrant = "RetireGrant"
 
 // RetireGrantRequest generates a request for the RetireGrant operation.
 func (c *KMS) RetireGrantRequest(input *RetireGrantInput) (req *aws.Request, output *RetireGrantOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opRetireGrant == nil {
-		opRetireGrant = &aws.Operation{
-			Name:       "RetireGrant",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opRetireGrant,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &RetireGrantInput{}
 	}
 
-	req = c.newRequest(opRetireGrant, input, output)
+	req = c.newRequest(op, input, output)
 	output = &RetireGrantOutput{}
 	req.Data = output
 	return
@@ -846,26 +783,21 @@ func (c *KMS) RetireGrant(input *RetireGrantInput) (*RetireGrantOutput, error) {
 	return out, err
 }
 
-var opRetireGrant *aws.Operation
+const opRevokeGrant = "RevokeGrant"
 
 // RevokeGrantRequest generates a request for the RevokeGrant operation.
 func (c *KMS) RevokeGrantRequest(input *RevokeGrantInput) (req *aws.Request, output *RevokeGrantOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opRevokeGrant == nil {
-		opRevokeGrant = &aws.Operation{
-			Name:       "RevokeGrant",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opRevokeGrant,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &RevokeGrantInput{}
 	}
 
-	req = c.newRequest(opRevokeGrant, input, output)
+	req = c.newRequest(op, input, output)
 	output = &RevokeGrantOutput{}
 	req.Data = output
 	return
@@ -879,26 +811,21 @@ func (c *KMS) RevokeGrant(input *RevokeGrantInput) (*RevokeGrantOutput, error) {
 	return out, err
 }
 
-var opRevokeGrant *aws.Operation
+const opUpdateAlias = "UpdateAlias"
 
 // UpdateAliasRequest generates a request for the UpdateAlias operation.
 func (c *KMS) UpdateAliasRequest(input *UpdateAliasInput) (req *aws.Request, output *UpdateAliasOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opUpdateAlias == nil {
-		opUpdateAlias = &aws.Operation{
-			Name:       "UpdateAlias",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opUpdateAlias,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &UpdateAliasInput{}
 	}
 
-	req = c.newRequest(opUpdateAlias, input, output)
+	req = c.newRequest(op, input, output)
 	output = &UpdateAliasOutput{}
 	req.Data = output
 	return
@@ -923,26 +850,21 @@ func (c *KMS) UpdateAlias(input *UpdateAliasInput) (*UpdateAliasOutput, error) {
 	return out, err
 }
 
-var opUpdateAlias *aws.Operation
+const opUpdateKeyDescription = "UpdateKeyDescription"
 
 // UpdateKeyDescriptionRequest generates a request for the UpdateKeyDescription operation.
 func (c *KMS) UpdateKeyDescriptionRequest(input *UpdateKeyDescriptionInput) (req *aws.Request, output *UpdateKeyDescriptionOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opUpdateKeyDescription == nil {
-		opUpdateKeyDescription = &aws.Operation{
-			Name:       "UpdateKeyDescription",
-			HTTPMethod: "POST",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opUpdateKeyDescription,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &UpdateKeyDescriptionInput{}
 	}
 
-	req = c.newRequest(opUpdateKeyDescription, input, output)
+	req = c.newRequest(op, input, output)
 	output = &UpdateKeyDescriptionOutput{}
 	req.Data = output
 	return
@@ -954,8 +876,6 @@ func (c *KMS) UpdateKeyDescription(input *UpdateKeyDescriptionInput) (*UpdateKey
 	err := req.Send()
 	return out, err
 }
-
-var opUpdateKeyDescription *aws.Operation
 
 // Contains information about an alias.
 type AliasListEntry struct {
@@ -973,6 +893,16 @@ type AliasListEntry struct {
 
 type metadataAliasListEntry struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s AliasListEntry) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s AliasListEntry) GoString() string {
+	return s.String()
 }
 
 type CreateAliasInput struct {
@@ -994,12 +924,32 @@ type metadataCreateAliasInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s CreateAliasInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CreateAliasInput) GoString() string {
+	return s.String()
+}
+
 type CreateAliasOutput struct {
 	metadataCreateAliasOutput `json:"-" xml:"-"`
 }
 
 type metadataCreateAliasOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateAliasOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CreateAliasOutput) GoString() string {
+	return s.String()
 }
 
 type CreateGrantInput struct {
@@ -1036,6 +986,16 @@ type metadataCreateGrantInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s CreateGrantInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CreateGrantInput) GoString() string {
+	return s.String()
+}
+
 type CreateGrantOutput struct {
 	// Unique grant identifier. You can use the GrantId value to revoke a grant.
 	GrantID *string `locationName:"GrantId" type:"string"`
@@ -1048,6 +1008,16 @@ type CreateGrantOutput struct {
 
 type metadataCreateGrantOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateGrantOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CreateGrantOutput) GoString() string {
+	return s.String()
 }
 
 type CreateKeyInput struct {
@@ -1070,6 +1040,16 @@ type metadataCreateKeyInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s CreateKeyInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CreateKeyInput) GoString() string {
+	return s.String()
+}
+
 type CreateKeyOutput struct {
 	// Metadata associated with the key.
 	KeyMetadata *KeyMetadata `type:"structure"`
@@ -1079,6 +1059,16 @@ type CreateKeyOutput struct {
 
 type metadataCreateKeyOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateKeyOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CreateKeyOutput) GoString() string {
+	return s.String()
 }
 
 type DecryptInput struct {
@@ -1100,6 +1090,16 @@ type metadataDecryptInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DecryptInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DecryptInput) GoString() string {
+	return s.String()
+}
+
 type DecryptOutput struct {
 	// ARN of the key used to perform the decryption. This value is returned if
 	// no errors are encountered during the operation.
@@ -1116,6 +1116,16 @@ type metadataDecryptOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DecryptOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DecryptOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteAliasInput struct {
 	// The alias to be deleted. The name must start with the word "alias" followed
 	// by a forward slash (alias/). Aliases that begin with "alias/AWS" are reserved.
@@ -1128,12 +1138,32 @@ type metadataDeleteAliasInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DeleteAliasInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAliasInput) GoString() string {
+	return s.String()
+}
+
 type DeleteAliasOutput struct {
 	metadataDeleteAliasOutput `json:"-" xml:"-"`
 }
 
 type metadataDeleteAliasOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteAliasOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAliasOutput) GoString() string {
+	return s.String()
 }
 
 type DescribeKeyInput struct {
@@ -1152,6 +1182,16 @@ type metadataDescribeKeyInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DescribeKeyInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DescribeKeyInput) GoString() string {
+	return s.String()
+}
+
 type DescribeKeyOutput struct {
 	// Metadata associated with the key.
 	KeyMetadata *KeyMetadata `type:"structure"`
@@ -1161,6 +1201,16 @@ type DescribeKeyOutput struct {
 
 type metadataDescribeKeyOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeKeyOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DescribeKeyOutput) GoString() string {
+	return s.String()
 }
 
 type DisableKeyInput struct {
@@ -1177,12 +1227,32 @@ type metadataDisableKeyInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DisableKeyInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DisableKeyInput) GoString() string {
+	return s.String()
+}
+
 type DisableKeyOutput struct {
 	metadataDisableKeyOutput `json:"-" xml:"-"`
 }
 
 type metadataDisableKeyOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DisableKeyOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DisableKeyOutput) GoString() string {
+	return s.String()
 }
 
 type DisableKeyRotationInput struct {
@@ -1199,12 +1269,32 @@ type metadataDisableKeyRotationInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DisableKeyRotationInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DisableKeyRotationInput) GoString() string {
+	return s.String()
+}
+
 type DisableKeyRotationOutput struct {
 	metadataDisableKeyRotationOutput `json:"-" xml:"-"`
 }
 
 type metadataDisableKeyRotationOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DisableKeyRotationOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DisableKeyRotationOutput) GoString() string {
+	return s.String()
 }
 
 type EnableKeyInput struct {
@@ -1221,12 +1311,32 @@ type metadataEnableKeyInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s EnableKeyInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s EnableKeyInput) GoString() string {
+	return s.String()
+}
+
 type EnableKeyOutput struct {
 	metadataEnableKeyOutput `json:"-" xml:"-"`
 }
 
 type metadataEnableKeyOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s EnableKeyOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s EnableKeyOutput) GoString() string {
+	return s.String()
 }
 
 type EnableKeyRotationInput struct {
@@ -1243,12 +1353,32 @@ type metadataEnableKeyRotationInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s EnableKeyRotationInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s EnableKeyRotationInput) GoString() string {
+	return s.String()
+}
+
 type EnableKeyRotationOutput struct {
 	metadataEnableKeyRotationOutput `json:"-" xml:"-"`
 }
 
 type metadataEnableKeyRotationOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s EnableKeyRotationOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s EnableKeyRotationOutput) GoString() string {
+	return s.String()
 }
 
 type EncryptInput struct {
@@ -1279,6 +1409,16 @@ type metadataEncryptInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s EncryptInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s EncryptInput) GoString() string {
+	return s.String()
+}
+
 type EncryptOutput struct {
 	// The encrypted plaintext. If you are using the CLI, the value is Base64 encoded.
 	// Otherwise, it is not encoded.
@@ -1292,6 +1432,16 @@ type EncryptOutput struct {
 
 type metadataEncryptOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s EncryptOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s EncryptOutput) GoString() string {
+	return s.String()
 }
 
 type GenerateDataKeyInput struct {
@@ -1327,6 +1477,16 @@ type metadataGenerateDataKeyInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GenerateDataKeyInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GenerateDataKeyInput) GoString() string {
+	return s.String()
+}
+
 type GenerateDataKeyOutput struct {
 	// Ciphertext that contains the encrypted data key. You must store the blob
 	// and enough information to reconstruct the encryption context so that the
@@ -1351,6 +1511,16 @@ type GenerateDataKeyOutput struct {
 
 type metadataGenerateDataKeyOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GenerateDataKeyOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GenerateDataKeyOutput) GoString() string {
+	return s.String()
 }
 
 type GenerateDataKeyWithoutPlaintextInput struct {
@@ -1385,6 +1555,16 @@ type metadataGenerateDataKeyWithoutPlaintextInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GenerateDataKeyWithoutPlaintextInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GenerateDataKeyWithoutPlaintextInput) GoString() string {
+	return s.String()
+}
+
 type GenerateDataKeyWithoutPlaintextOutput struct {
 	// Ciphertext that contains the wrapped data key. You must store the blob and
 	// encryption context so that the key can be used in a future decrypt operation.
@@ -1404,6 +1584,16 @@ type metadataGenerateDataKeyWithoutPlaintextOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GenerateDataKeyWithoutPlaintextOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GenerateDataKeyWithoutPlaintextOutput) GoString() string {
+	return s.String()
+}
+
 type GenerateRandomInput struct {
 	// Integer that contains the number of bytes to generate. Common values are
 	// 128, 256, 512, 1024 and so on. The current limit is 1024 bytes.
@@ -1416,6 +1606,16 @@ type metadataGenerateRandomInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GenerateRandomInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GenerateRandomInput) GoString() string {
+	return s.String()
+}
+
 type GenerateRandomOutput struct {
 	// Plaintext that contains the unpredictable byte string.
 	Plaintext []byte `type:"blob"`
@@ -1425,6 +1625,16 @@ type GenerateRandomOutput struct {
 
 type metadataGenerateRandomOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GenerateRandomOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GenerateRandomOutput) GoString() string {
+	return s.String()
 }
 
 type GetKeyPolicyInput struct {
@@ -1445,6 +1655,16 @@ type metadataGetKeyPolicyInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetKeyPolicyInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetKeyPolicyInput) GoString() string {
+	return s.String()
+}
+
 type GetKeyPolicyOutput struct {
 	// A policy document in JSON format.
 	Policy *string `type:"string"`
@@ -1454,6 +1674,16 @@ type GetKeyPolicyOutput struct {
 
 type metadataGetKeyPolicyOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetKeyPolicyOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetKeyPolicyOutput) GoString() string {
+	return s.String()
 }
 
 type GetKeyRotationStatusInput struct {
@@ -1470,6 +1700,16 @@ type metadataGetKeyRotationStatusInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetKeyRotationStatusInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetKeyRotationStatusInput) GoString() string {
+	return s.String()
+}
+
 type GetKeyRotationStatusOutput struct {
 	// A Boolean value that specifies whether key rotation is enabled.
 	KeyRotationEnabled *bool `type:"boolean"`
@@ -1479,6 +1719,16 @@ type GetKeyRotationStatusOutput struct {
 
 type metadataGetKeyRotationStatusOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetKeyRotationStatusOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetKeyRotationStatusOutput) GoString() string {
+	return s.String()
 }
 
 // Contains constraints on the grant.
@@ -1495,6 +1745,16 @@ type GrantConstraints struct {
 
 type metadataGrantConstraints struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GrantConstraints) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GrantConstraints) GoString() string {
+	return s.String()
 }
 
 // Contains information about each entry in the grant list.
@@ -1527,6 +1787,16 @@ type metadataGrantListEntry struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GrantListEntry) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GrantListEntry) GoString() string {
+	return s.String()
+}
+
 // Contains information about each entry in the key list.
 type KeyListEntry struct {
 	// ARN of the key.
@@ -1540,6 +1810,16 @@ type KeyListEntry struct {
 
 type metadataKeyListEntry struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s KeyListEntry) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s KeyListEntry) GoString() string {
+	return s.String()
 }
 
 // Contains metadata associated with a specific key.
@@ -1572,6 +1852,16 @@ type metadataKeyMetadata struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s KeyMetadata) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s KeyMetadata) GoString() string {
+	return s.String()
+}
+
 type ListAliasesInput struct {
 	// Specify this parameter when paginating results to indicate the maximum number
 	// of aliases you want in each response. If there are additional aliases beyond
@@ -1588,6 +1878,16 @@ type ListAliasesInput struct {
 
 type metadataListAliasesInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListAliasesInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListAliasesInput) GoString() string {
+	return s.String()
 }
 
 type ListAliasesOutput struct {
@@ -1608,6 +1908,16 @@ type ListAliasesOutput struct {
 
 type metadataListAliasesOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListAliasesOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListAliasesOutput) GoString() string {
+	return s.String()
 }
 
 type ListGrantsInput struct {
@@ -1635,6 +1945,16 @@ type metadataListGrantsInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s ListGrantsInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListGrantsInput) GoString() string {
+	return s.String()
+}
+
 type ListGrantsOutput struct {
 	// A list of grants.
 	Grants []*GrantListEntry `type:"list"`
@@ -1653,6 +1973,16 @@ type ListGrantsOutput struct {
 
 type metadataListGrantsOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListGrantsOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListGrantsOutput) GoString() string {
+	return s.String()
 }
 
 type ListKeyPoliciesInput struct {
@@ -1682,6 +2012,16 @@ type metadataListKeyPoliciesInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s ListKeyPoliciesInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListKeyPoliciesInput) GoString() string {
+	return s.String()
+}
+
 type ListKeyPoliciesOutput struct {
 	// If Truncated is true, this value is present and contains the value to use
 	// for the Marker request parameter in a subsequent pagination request.
@@ -1703,6 +2043,16 @@ type metadataListKeyPoliciesOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s ListKeyPoliciesOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListKeyPoliciesOutput) GoString() string {
+	return s.String()
+}
+
 type ListKeysInput struct {
 	// Specify this parameter only when paginating results to indicate the maximum
 	// number of keys you want listed in the response. If there are additional keys
@@ -1720,6 +2070,16 @@ type ListKeysInput struct {
 
 type metadataListKeysInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListKeysInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListKeysInput) GoString() string {
+	return s.String()
 }
 
 type ListKeysOutput struct {
@@ -1740,6 +2100,16 @@ type ListKeysOutput struct {
 
 type metadataListKeysOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListKeysOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListKeysOutput) GoString() string {
+	return s.String()
 }
 
 type PutKeyPolicyInput struct {
@@ -1763,12 +2133,32 @@ type metadataPutKeyPolicyInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s PutKeyPolicyInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutKeyPolicyInput) GoString() string {
+	return s.String()
+}
+
 type PutKeyPolicyOutput struct {
 	metadataPutKeyPolicyOutput `json:"-" xml:"-"`
 }
 
 type metadataPutKeyPolicyOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutKeyPolicyOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutKeyPolicyOutput) GoString() string {
+	return s.String()
 }
 
 type ReEncryptInput struct {
@@ -1801,6 +2191,16 @@ type metadataReEncryptInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s ReEncryptInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ReEncryptInput) GoString() string {
+	return s.String()
+}
+
 type ReEncryptOutput struct {
 	// The re-encrypted data. If you are using the CLI, the value is Base64 encoded.
 	// Otherwise, it is not encoded.
@@ -1817,6 +2217,16 @@ type ReEncryptOutput struct {
 
 type metadataReEncryptOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ReEncryptOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ReEncryptOutput) GoString() string {
+	return s.String()
 }
 
 type RetireGrantInput struct {
@@ -1840,12 +2250,32 @@ type metadataRetireGrantInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s RetireGrantInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s RetireGrantInput) GoString() string {
+	return s.String()
+}
+
 type RetireGrantOutput struct {
 	metadataRetireGrantOutput `json:"-" xml:"-"`
 }
 
 type metadataRetireGrantOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s RetireGrantOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s RetireGrantOutput) GoString() string {
+	return s.String()
 }
 
 type RevokeGrantInput struct {
@@ -1865,12 +2295,32 @@ type metadataRevokeGrantInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s RevokeGrantInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s RevokeGrantInput) GoString() string {
+	return s.String()
+}
+
 type RevokeGrantOutput struct {
 	metadataRevokeGrantOutput `json:"-" xml:"-"`
 }
 
 type metadataRevokeGrantOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s RevokeGrantOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s RevokeGrantOutput) GoString() string {
+	return s.String()
 }
 
 type UpdateAliasInput struct {
@@ -1892,12 +2342,32 @@ type metadataUpdateAliasInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s UpdateAliasInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAliasInput) GoString() string {
+	return s.String()
+}
+
 type UpdateAliasOutput struct {
 	metadataUpdateAliasOutput `json:"-" xml:"-"`
 }
 
 type metadataUpdateAliasOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateAliasOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAliasOutput) GoString() string {
+	return s.String()
 }
 
 type UpdateKeyDescriptionInput struct {
@@ -1917,10 +2387,30 @@ type metadataUpdateKeyDescriptionInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s UpdateKeyDescriptionInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s UpdateKeyDescriptionInput) GoString() string {
+	return s.String()
+}
+
 type UpdateKeyDescriptionOutput struct {
 	metadataUpdateKeyDescriptionOutput `json:"-" xml:"-"`
 }
 
 type metadataUpdateKeyDescriptionOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateKeyDescriptionOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s UpdateKeyDescriptionOutput) GoString() string {
+	return s.String()
 }

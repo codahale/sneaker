@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/aws/aws-sdk-go/internal/apierr"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 )
 
 const metadataCredentialsEndpoint = "http://169.254.169.254/latest/meta-data/iam/security-credentials/"
@@ -31,8 +31,9 @@ const metadataCredentialsEndpoint = "http://169.254.169.254/latest/meta-data/iam
 //         // specified the credentials will be expired early
 //         ExpiryWindow: 0,
 //     }
-//
 type EC2RoleProvider struct {
+	Expiry
+
 	// Endpoint must be fully quantified URL
 	Endpoint string
 
@@ -49,9 +50,6 @@ type EC2RoleProvider struct {
 	//
 	// If ExpiryWindow is 0 or less it will be ignored.
 	ExpiryWindow time.Duration
-
-	// The date/time at which the credentials expire.
-	expiresOn time.Time
 }
 
 // NewEC2RoleCredentials returns a pointer to a new Credentials object
@@ -91,7 +89,7 @@ func (m *EC2RoleProvider) Retrieve() (Value, error) {
 	}
 
 	if len(credsList) == 0 {
-		return Value{}, apierr.New("EmptyEC2RoleList", "empty EC2 Role list", nil)
+		return Value{}, awserr.New("EmptyEC2RoleList", "empty EC2 Role list", nil)
 	}
 	credsName := credsList[0]
 
@@ -100,22 +98,13 @@ func (m *EC2RoleProvider) Retrieve() (Value, error) {
 		return Value{}, err
 	}
 
-	m.expiresOn = roleCreds.Expiration
-	if m.ExpiryWindow > 0 {
-		// Offset based on expiry window if set.
-		m.expiresOn = m.expiresOn.Add(-m.ExpiryWindow)
-	}
+	m.SetExpiration(roleCreds.Expiration, m.ExpiryWindow)
 
 	return Value{
 		AccessKeyID:     roleCreds.AccessKeyID,
 		SecretAccessKey: roleCreds.SecretAccessKey,
 		SessionToken:    roleCreds.Token,
 	}, nil
-}
-
-// IsExpired returns if the credentials are expired.
-func (m *EC2RoleProvider) IsExpired() bool {
-	return m.expiresOn.Before(currentTime())
 }
 
 // A ec2RoleCredRespBody provides the shape for deserializing credential
@@ -132,7 +121,7 @@ type ec2RoleCredRespBody struct {
 func requestCredList(client *http.Client, endpoint string) ([]string, error) {
 	resp, err := client.Get(endpoint)
 	if err != nil {
-		return nil, apierr.New("ListEC2Role", "failed to list EC2 Roles", err)
+		return nil, awserr.New("ListEC2Role", "failed to list EC2 Roles", err)
 	}
 	defer resp.Body.Close()
 
@@ -143,7 +132,7 @@ func requestCredList(client *http.Client, endpoint string) ([]string, error) {
 	}
 
 	if err := s.Err(); err != nil {
-		return nil, apierr.New("ReadEC2Role", "failed to read list of EC2 Roles", err)
+		return nil, awserr.New("ReadEC2Role", "failed to read list of EC2 Roles", err)
 	}
 
 	return credsList, nil
@@ -156,7 +145,7 @@ func requestCredList(client *http.Client, endpoint string) ([]string, error) {
 func requestCred(client *http.Client, endpoint, credsName string) (*ec2RoleCredRespBody, error) {
 	resp, err := client.Get(endpoint + credsName)
 	if err != nil {
-		return nil, apierr.New("GetEC2RoleCredentials",
+		return nil, awserr.New("GetEC2RoleCredentials",
 			fmt.Sprintf("failed to get %s EC2 Role credentials", credsName),
 			err)
 	}
@@ -164,7 +153,7 @@ func requestCred(client *http.Client, endpoint, credsName string) (*ec2RoleCredR
 
 	respCreds := &ec2RoleCredRespBody{}
 	if err := json.NewDecoder(resp.Body).Decode(respCreds); err != nil {
-		return nil, apierr.New("DecodeEC2RoleCredentials",
+		return nil, awserr.New("DecodeEC2RoleCredentials",
 			fmt.Sprintf("failed to decode %s EC2 Role credentials", credsName),
 			err)
 	}

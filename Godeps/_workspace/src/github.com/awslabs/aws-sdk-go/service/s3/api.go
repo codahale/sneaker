@@ -5,32 +5,27 @@ package s3
 
 import (
 	"io"
-	"sync"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awsutil"
 )
 
-var oprw sync.Mutex
+const opAbortMultipartUpload = "AbortMultipartUpload"
 
 // AbortMultipartUploadRequest generates a request for the AbortMultipartUpload operation.
 func (c *S3) AbortMultipartUploadRequest(input *AbortMultipartUploadInput) (req *aws.Request, output *AbortMultipartUploadOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opAbortMultipartUpload == nil {
-		opAbortMultipartUpload = &aws.Operation{
-			Name:       "AbortMultipartUpload",
-			HTTPMethod: "DELETE",
-			HTTPPath:   "/{Bucket}/{Key+}",
-		}
+	op := &aws.Operation{
+		Name:       opAbortMultipartUpload,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/{Bucket}/{Key+}",
 	}
 
 	if input == nil {
 		input = &AbortMultipartUploadInput{}
 	}
 
-	req = c.newRequest(opAbortMultipartUpload, input, output)
+	req = c.newRequest(op, input, output)
 	output = &AbortMultipartUploadOutput{}
 	req.Data = output
 	return
@@ -47,26 +42,21 @@ func (c *S3) AbortMultipartUpload(input *AbortMultipartUploadInput) (*AbortMulti
 	return out, err
 }
 
-var opAbortMultipartUpload *aws.Operation
+const opCompleteMultipartUpload = "CompleteMultipartUpload"
 
 // CompleteMultipartUploadRequest generates a request for the CompleteMultipartUpload operation.
 func (c *S3) CompleteMultipartUploadRequest(input *CompleteMultipartUploadInput) (req *aws.Request, output *CompleteMultipartUploadOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opCompleteMultipartUpload == nil {
-		opCompleteMultipartUpload = &aws.Operation{
-			Name:       "CompleteMultipartUpload",
-			HTTPMethod: "POST",
-			HTTPPath:   "/{Bucket}/{Key+}",
-		}
+	op := &aws.Operation{
+		Name:       opCompleteMultipartUpload,
+		HTTPMethod: "POST",
+		HTTPPath:   "/{Bucket}/{Key+}",
 	}
 
 	if input == nil {
 		input = &CompleteMultipartUploadInput{}
 	}
 
-	req = c.newRequest(opCompleteMultipartUpload, input, output)
+	req = c.newRequest(op, input, output)
 	output = &CompleteMultipartUploadOutput{}
 	req.Data = output
 	return
@@ -79,26 +69,21 @@ func (c *S3) CompleteMultipartUpload(input *CompleteMultipartUploadInput) (*Comp
 	return out, err
 }
 
-var opCompleteMultipartUpload *aws.Operation
+const opCopyObject = "CopyObject"
 
 // CopyObjectRequest generates a request for the CopyObject operation.
 func (c *S3) CopyObjectRequest(input *CopyObjectInput) (req *aws.Request, output *CopyObjectOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opCopyObject == nil {
-		opCopyObject = &aws.Operation{
-			Name:       "CopyObject",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}/{Key+}",
-		}
+	op := &aws.Operation{
+		Name:       opCopyObject,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}/{Key+}",
 	}
 
 	if input == nil {
 		input = &CopyObjectInput{}
 	}
 
-	req = c.newRequest(opCopyObject, input, output)
+	req = c.newRequest(op, input, output)
 	output = &CopyObjectOutput{}
 	req.Data = output
 	return
@@ -111,26 +96,21 @@ func (c *S3) CopyObject(input *CopyObjectInput) (*CopyObjectOutput, error) {
 	return out, err
 }
 
-var opCopyObject *aws.Operation
+const opCreateBucket = "CreateBucket"
 
 // CreateBucketRequest generates a request for the CreateBucket operation.
 func (c *S3) CreateBucketRequest(input *CreateBucketInput) (req *aws.Request, output *CreateBucketOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opCreateBucket == nil {
-		opCreateBucket = &aws.Operation{
-			Name:       "CreateBucket",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}",
-		}
+	op := &aws.Operation{
+		Name:       opCreateBucket,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}",
 	}
 
 	if input == nil {
 		input = &CreateBucketInput{}
 	}
 
-	req = c.newRequest(opCreateBucket, input, output)
+	req = c.newRequest(op, input, output)
 	output = &CreateBucketOutput{}
 	req.Data = output
 	return
@@ -143,26 +123,21 @@ func (c *S3) CreateBucket(input *CreateBucketInput) (*CreateBucketOutput, error)
 	return out, err
 }
 
-var opCreateBucket *aws.Operation
+const opCreateMultipartUpload = "CreateMultipartUpload"
 
 // CreateMultipartUploadRequest generates a request for the CreateMultipartUpload operation.
 func (c *S3) CreateMultipartUploadRequest(input *CreateMultipartUploadInput) (req *aws.Request, output *CreateMultipartUploadOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opCreateMultipartUpload == nil {
-		opCreateMultipartUpload = &aws.Operation{
-			Name:       "CreateMultipartUpload",
-			HTTPMethod: "POST",
-			HTTPPath:   "/{Bucket}/{Key+}?uploads",
-		}
+	op := &aws.Operation{
+		Name:       opCreateMultipartUpload,
+		HTTPMethod: "POST",
+		HTTPPath:   "/{Bucket}/{Key+}?uploads",
 	}
 
 	if input == nil {
 		input = &CreateMultipartUploadInput{}
 	}
 
-	req = c.newRequest(opCreateMultipartUpload, input, output)
+	req = c.newRequest(op, input, output)
 	output = &CreateMultipartUploadOutput{}
 	req.Data = output
 	return
@@ -181,26 +156,21 @@ func (c *S3) CreateMultipartUpload(input *CreateMultipartUploadInput) (*CreateMu
 	return out, err
 }
 
-var opCreateMultipartUpload *aws.Operation
+const opDeleteBucket = "DeleteBucket"
 
 // DeleteBucketRequest generates a request for the DeleteBucket operation.
 func (c *S3) DeleteBucketRequest(input *DeleteBucketInput) (req *aws.Request, output *DeleteBucketOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDeleteBucket == nil {
-		opDeleteBucket = &aws.Operation{
-			Name:       "DeleteBucket",
-			HTTPMethod: "DELETE",
-			HTTPPath:   "/{Bucket}",
-		}
+	op := &aws.Operation{
+		Name:       opDeleteBucket,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/{Bucket}",
 	}
 
 	if input == nil {
 		input = &DeleteBucketInput{}
 	}
 
-	req = c.newRequest(opDeleteBucket, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DeleteBucketOutput{}
 	req.Data = output
 	return
@@ -214,26 +184,21 @@ func (c *S3) DeleteBucket(input *DeleteBucketInput) (*DeleteBucketOutput, error)
 	return out, err
 }
 
-var opDeleteBucket *aws.Operation
+const opDeleteBucketCORS = "DeleteBucketCors"
 
 // DeleteBucketCORSRequest generates a request for the DeleteBucketCORS operation.
 func (c *S3) DeleteBucketCORSRequest(input *DeleteBucketCORSInput) (req *aws.Request, output *DeleteBucketCORSOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDeleteBucketCORS == nil {
-		opDeleteBucketCORS = &aws.Operation{
-			Name:       "DeleteBucketCors",
-			HTTPMethod: "DELETE",
-			HTTPPath:   "/{Bucket}?cors",
-		}
+	op := &aws.Operation{
+		Name:       opDeleteBucketCORS,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/{Bucket}?cors",
 	}
 
 	if input == nil {
 		input = &DeleteBucketCORSInput{}
 	}
 
-	req = c.newRequest(opDeleteBucketCORS, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DeleteBucketCORSOutput{}
 	req.Data = output
 	return
@@ -246,26 +211,21 @@ func (c *S3) DeleteBucketCORS(input *DeleteBucketCORSInput) (*DeleteBucketCORSOu
 	return out, err
 }
 
-var opDeleteBucketCORS *aws.Operation
+const opDeleteBucketLifecycle = "DeleteBucketLifecycle"
 
 // DeleteBucketLifecycleRequest generates a request for the DeleteBucketLifecycle operation.
 func (c *S3) DeleteBucketLifecycleRequest(input *DeleteBucketLifecycleInput) (req *aws.Request, output *DeleteBucketLifecycleOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDeleteBucketLifecycle == nil {
-		opDeleteBucketLifecycle = &aws.Operation{
-			Name:       "DeleteBucketLifecycle",
-			HTTPMethod: "DELETE",
-			HTTPPath:   "/{Bucket}?lifecycle",
-		}
+	op := &aws.Operation{
+		Name:       opDeleteBucketLifecycle,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/{Bucket}?lifecycle",
 	}
 
 	if input == nil {
 		input = &DeleteBucketLifecycleInput{}
 	}
 
-	req = c.newRequest(opDeleteBucketLifecycle, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DeleteBucketLifecycleOutput{}
 	req.Data = output
 	return
@@ -278,26 +238,21 @@ func (c *S3) DeleteBucketLifecycle(input *DeleteBucketLifecycleInput) (*DeleteBu
 	return out, err
 }
 
-var opDeleteBucketLifecycle *aws.Operation
+const opDeleteBucketPolicy = "DeleteBucketPolicy"
 
 // DeleteBucketPolicyRequest generates a request for the DeleteBucketPolicy operation.
 func (c *S3) DeleteBucketPolicyRequest(input *DeleteBucketPolicyInput) (req *aws.Request, output *DeleteBucketPolicyOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDeleteBucketPolicy == nil {
-		opDeleteBucketPolicy = &aws.Operation{
-			Name:       "DeleteBucketPolicy",
-			HTTPMethod: "DELETE",
-			HTTPPath:   "/{Bucket}?policy",
-		}
+	op := &aws.Operation{
+		Name:       opDeleteBucketPolicy,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/{Bucket}?policy",
 	}
 
 	if input == nil {
 		input = &DeleteBucketPolicyInput{}
 	}
 
-	req = c.newRequest(opDeleteBucketPolicy, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DeleteBucketPolicyOutput{}
 	req.Data = output
 	return
@@ -310,26 +265,21 @@ func (c *S3) DeleteBucketPolicy(input *DeleteBucketPolicyInput) (*DeleteBucketPo
 	return out, err
 }
 
-var opDeleteBucketPolicy *aws.Operation
+const opDeleteBucketReplication = "DeleteBucketReplication"
 
 // DeleteBucketReplicationRequest generates a request for the DeleteBucketReplication operation.
 func (c *S3) DeleteBucketReplicationRequest(input *DeleteBucketReplicationInput) (req *aws.Request, output *DeleteBucketReplicationOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDeleteBucketReplication == nil {
-		opDeleteBucketReplication = &aws.Operation{
-			Name:       "DeleteBucketReplication",
-			HTTPMethod: "DELETE",
-			HTTPPath:   "/{Bucket}?replication",
-		}
+	op := &aws.Operation{
+		Name:       opDeleteBucketReplication,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/{Bucket}?replication",
 	}
 
 	if input == nil {
 		input = &DeleteBucketReplicationInput{}
 	}
 
-	req = c.newRequest(opDeleteBucketReplication, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DeleteBucketReplicationOutput{}
 	req.Data = output
 	return
@@ -341,26 +291,21 @@ func (c *S3) DeleteBucketReplication(input *DeleteBucketReplicationInput) (*Dele
 	return out, err
 }
 
-var opDeleteBucketReplication *aws.Operation
+const opDeleteBucketTagging = "DeleteBucketTagging"
 
 // DeleteBucketTaggingRequest generates a request for the DeleteBucketTagging operation.
 func (c *S3) DeleteBucketTaggingRequest(input *DeleteBucketTaggingInput) (req *aws.Request, output *DeleteBucketTaggingOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDeleteBucketTagging == nil {
-		opDeleteBucketTagging = &aws.Operation{
-			Name:       "DeleteBucketTagging",
-			HTTPMethod: "DELETE",
-			HTTPPath:   "/{Bucket}?tagging",
-		}
+	op := &aws.Operation{
+		Name:       opDeleteBucketTagging,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/{Bucket}?tagging",
 	}
 
 	if input == nil {
 		input = &DeleteBucketTaggingInput{}
 	}
 
-	req = c.newRequest(opDeleteBucketTagging, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DeleteBucketTaggingOutput{}
 	req.Data = output
 	return
@@ -373,26 +318,21 @@ func (c *S3) DeleteBucketTagging(input *DeleteBucketTaggingInput) (*DeleteBucket
 	return out, err
 }
 
-var opDeleteBucketTagging *aws.Operation
+const opDeleteBucketWebsite = "DeleteBucketWebsite"
 
 // DeleteBucketWebsiteRequest generates a request for the DeleteBucketWebsite operation.
 func (c *S3) DeleteBucketWebsiteRequest(input *DeleteBucketWebsiteInput) (req *aws.Request, output *DeleteBucketWebsiteOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDeleteBucketWebsite == nil {
-		opDeleteBucketWebsite = &aws.Operation{
-			Name:       "DeleteBucketWebsite",
-			HTTPMethod: "DELETE",
-			HTTPPath:   "/{Bucket}?website",
-		}
+	op := &aws.Operation{
+		Name:       opDeleteBucketWebsite,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/{Bucket}?website",
 	}
 
 	if input == nil {
 		input = &DeleteBucketWebsiteInput{}
 	}
 
-	req = c.newRequest(opDeleteBucketWebsite, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DeleteBucketWebsiteOutput{}
 	req.Data = output
 	return
@@ -405,26 +345,21 @@ func (c *S3) DeleteBucketWebsite(input *DeleteBucketWebsiteInput) (*DeleteBucket
 	return out, err
 }
 
-var opDeleteBucketWebsite *aws.Operation
+const opDeleteObject = "DeleteObject"
 
 // DeleteObjectRequest generates a request for the DeleteObject operation.
 func (c *S3) DeleteObjectRequest(input *DeleteObjectInput) (req *aws.Request, output *DeleteObjectOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDeleteObject == nil {
-		opDeleteObject = &aws.Operation{
-			Name:       "DeleteObject",
-			HTTPMethod: "DELETE",
-			HTTPPath:   "/{Bucket}/{Key+}",
-		}
+	op := &aws.Operation{
+		Name:       opDeleteObject,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/{Bucket}/{Key+}",
 	}
 
 	if input == nil {
 		input = &DeleteObjectInput{}
 	}
 
-	req = c.newRequest(opDeleteObject, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DeleteObjectOutput{}
 	req.Data = output
 	return
@@ -439,26 +374,21 @@ func (c *S3) DeleteObject(input *DeleteObjectInput) (*DeleteObjectOutput, error)
 	return out, err
 }
 
-var opDeleteObject *aws.Operation
+const opDeleteObjects = "DeleteObjects"
 
 // DeleteObjectsRequest generates a request for the DeleteObjects operation.
 func (c *S3) DeleteObjectsRequest(input *DeleteObjectsInput) (req *aws.Request, output *DeleteObjectsOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opDeleteObjects == nil {
-		opDeleteObjects = &aws.Operation{
-			Name:       "DeleteObjects",
-			HTTPMethod: "POST",
-			HTTPPath:   "/{Bucket}?delete",
-		}
+	op := &aws.Operation{
+		Name:       opDeleteObjects,
+		HTTPMethod: "POST",
+		HTTPPath:   "/{Bucket}?delete",
 	}
 
 	if input == nil {
 		input = &DeleteObjectsInput{}
 	}
 
-	req = c.newRequest(opDeleteObjects, input, output)
+	req = c.newRequest(op, input, output)
 	output = &DeleteObjectsOutput{}
 	req.Data = output
 	return
@@ -472,26 +402,21 @@ func (c *S3) DeleteObjects(input *DeleteObjectsInput) (*DeleteObjectsOutput, err
 	return out, err
 }
 
-var opDeleteObjects *aws.Operation
+const opGetBucketACL = "GetBucketAcl"
 
 // GetBucketACLRequest generates a request for the GetBucketACL operation.
 func (c *S3) GetBucketACLRequest(input *GetBucketACLInput) (req *aws.Request, output *GetBucketACLOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketACL == nil {
-		opGetBucketACL = &aws.Operation{
-			Name:       "GetBucketAcl",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?acl",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketACL,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?acl",
 	}
 
 	if input == nil {
 		input = &GetBucketACLInput{}
 	}
 
-	req = c.newRequest(opGetBucketACL, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetBucketACLOutput{}
 	req.Data = output
 	return
@@ -504,26 +429,21 @@ func (c *S3) GetBucketACL(input *GetBucketACLInput) (*GetBucketACLOutput, error)
 	return out, err
 }
 
-var opGetBucketACL *aws.Operation
+const opGetBucketCORS = "GetBucketCors"
 
 // GetBucketCORSRequest generates a request for the GetBucketCORS operation.
 func (c *S3) GetBucketCORSRequest(input *GetBucketCORSInput) (req *aws.Request, output *GetBucketCORSOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketCORS == nil {
-		opGetBucketCORS = &aws.Operation{
-			Name:       "GetBucketCors",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?cors",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketCORS,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?cors",
 	}
 
 	if input == nil {
 		input = &GetBucketCORSInput{}
 	}
 
-	req = c.newRequest(opGetBucketCORS, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetBucketCORSOutput{}
 	req.Data = output
 	return
@@ -536,26 +456,21 @@ func (c *S3) GetBucketCORS(input *GetBucketCORSInput) (*GetBucketCORSOutput, err
 	return out, err
 }
 
-var opGetBucketCORS *aws.Operation
+const opGetBucketLifecycle = "GetBucketLifecycle"
 
 // GetBucketLifecycleRequest generates a request for the GetBucketLifecycle operation.
 func (c *S3) GetBucketLifecycleRequest(input *GetBucketLifecycleInput) (req *aws.Request, output *GetBucketLifecycleOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketLifecycle == nil {
-		opGetBucketLifecycle = &aws.Operation{
-			Name:       "GetBucketLifecycle",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?lifecycle",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketLifecycle,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?lifecycle",
 	}
 
 	if input == nil {
 		input = &GetBucketLifecycleInput{}
 	}
 
-	req = c.newRequest(opGetBucketLifecycle, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetBucketLifecycleOutput{}
 	req.Data = output
 	return
@@ -568,26 +483,21 @@ func (c *S3) GetBucketLifecycle(input *GetBucketLifecycleInput) (*GetBucketLifec
 	return out, err
 }
 
-var opGetBucketLifecycle *aws.Operation
+const opGetBucketLocation = "GetBucketLocation"
 
 // GetBucketLocationRequest generates a request for the GetBucketLocation operation.
 func (c *S3) GetBucketLocationRequest(input *GetBucketLocationInput) (req *aws.Request, output *GetBucketLocationOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketLocation == nil {
-		opGetBucketLocation = &aws.Operation{
-			Name:       "GetBucketLocation",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?location",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketLocation,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?location",
 	}
 
 	if input == nil {
 		input = &GetBucketLocationInput{}
 	}
 
-	req = c.newRequest(opGetBucketLocation, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetBucketLocationOutput{}
 	req.Data = output
 	return
@@ -600,26 +510,21 @@ func (c *S3) GetBucketLocation(input *GetBucketLocationInput) (*GetBucketLocatio
 	return out, err
 }
 
-var opGetBucketLocation *aws.Operation
+const opGetBucketLogging = "GetBucketLogging"
 
 // GetBucketLoggingRequest generates a request for the GetBucketLogging operation.
 func (c *S3) GetBucketLoggingRequest(input *GetBucketLoggingInput) (req *aws.Request, output *GetBucketLoggingOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketLogging == nil {
-		opGetBucketLogging = &aws.Operation{
-			Name:       "GetBucketLogging",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?logging",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketLogging,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?logging",
 	}
 
 	if input == nil {
 		input = &GetBucketLoggingInput{}
 	}
 
-	req = c.newRequest(opGetBucketLogging, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetBucketLoggingOutput{}
 	req.Data = output
 	return
@@ -633,26 +538,21 @@ func (c *S3) GetBucketLogging(input *GetBucketLoggingInput) (*GetBucketLoggingOu
 	return out, err
 }
 
-var opGetBucketLogging *aws.Operation
+const opGetBucketNotification = "GetBucketNotification"
 
 // GetBucketNotificationRequest generates a request for the GetBucketNotification operation.
 func (c *S3) GetBucketNotificationRequest(input *GetBucketNotificationConfigurationRequest) (req *aws.Request, output *NotificationConfigurationDeprecated) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketNotification == nil {
-		opGetBucketNotification = &aws.Operation{
-			Name:       "GetBucketNotification",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?notification",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketNotification,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?notification",
 	}
 
 	if input == nil {
 		input = &GetBucketNotificationConfigurationRequest{}
 	}
 
-	req = c.newRequest(opGetBucketNotification, input, output)
+	req = c.newRequest(op, input, output)
 	output = &NotificationConfigurationDeprecated{}
 	req.Data = output
 	return
@@ -665,26 +565,21 @@ func (c *S3) GetBucketNotification(input *GetBucketNotificationConfigurationRequ
 	return out, err
 }
 
-var opGetBucketNotification *aws.Operation
+const opGetBucketNotificationConfiguration = "GetBucketNotificationConfiguration"
 
 // GetBucketNotificationConfigurationRequest generates a request for the GetBucketNotificationConfiguration operation.
 func (c *S3) GetBucketNotificationConfigurationRequest(input *GetBucketNotificationConfigurationRequest) (req *aws.Request, output *NotificationConfiguration) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketNotificationConfiguration == nil {
-		opGetBucketNotificationConfiguration = &aws.Operation{
-			Name:       "GetBucketNotificationConfiguration",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?notification",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketNotificationConfiguration,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?notification",
 	}
 
 	if input == nil {
 		input = &GetBucketNotificationConfigurationRequest{}
 	}
 
-	req = c.newRequest(opGetBucketNotificationConfiguration, input, output)
+	req = c.newRequest(op, input, output)
 	output = &NotificationConfiguration{}
 	req.Data = output
 	return
@@ -697,26 +592,21 @@ func (c *S3) GetBucketNotificationConfiguration(input *GetBucketNotificationConf
 	return out, err
 }
 
-var opGetBucketNotificationConfiguration *aws.Operation
+const opGetBucketPolicy = "GetBucketPolicy"
 
 // GetBucketPolicyRequest generates a request for the GetBucketPolicy operation.
 func (c *S3) GetBucketPolicyRequest(input *GetBucketPolicyInput) (req *aws.Request, output *GetBucketPolicyOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketPolicy == nil {
-		opGetBucketPolicy = &aws.Operation{
-			Name:       "GetBucketPolicy",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?policy",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketPolicy,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?policy",
 	}
 
 	if input == nil {
 		input = &GetBucketPolicyInput{}
 	}
 
-	req = c.newRequest(opGetBucketPolicy, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetBucketPolicyOutput{}
 	req.Data = output
 	return
@@ -729,26 +619,21 @@ func (c *S3) GetBucketPolicy(input *GetBucketPolicyInput) (*GetBucketPolicyOutpu
 	return out, err
 }
 
-var opGetBucketPolicy *aws.Operation
+const opGetBucketReplication = "GetBucketReplication"
 
 // GetBucketReplicationRequest generates a request for the GetBucketReplication operation.
 func (c *S3) GetBucketReplicationRequest(input *GetBucketReplicationInput) (req *aws.Request, output *GetBucketReplicationOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketReplication == nil {
-		opGetBucketReplication = &aws.Operation{
-			Name:       "GetBucketReplication",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?replication",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketReplication,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?replication",
 	}
 
 	if input == nil {
 		input = &GetBucketReplicationInput{}
 	}
 
-	req = c.newRequest(opGetBucketReplication, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetBucketReplicationOutput{}
 	req.Data = output
 	return
@@ -760,26 +645,21 @@ func (c *S3) GetBucketReplication(input *GetBucketReplicationInput) (*GetBucketR
 	return out, err
 }
 
-var opGetBucketReplication *aws.Operation
+const opGetBucketRequestPayment = "GetBucketRequestPayment"
 
 // GetBucketRequestPaymentRequest generates a request for the GetBucketRequestPayment operation.
 func (c *S3) GetBucketRequestPaymentRequest(input *GetBucketRequestPaymentInput) (req *aws.Request, output *GetBucketRequestPaymentOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketRequestPayment == nil {
-		opGetBucketRequestPayment = &aws.Operation{
-			Name:       "GetBucketRequestPayment",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?requestPayment",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketRequestPayment,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?requestPayment",
 	}
 
 	if input == nil {
 		input = &GetBucketRequestPaymentInput{}
 	}
 
-	req = c.newRequest(opGetBucketRequestPayment, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetBucketRequestPaymentOutput{}
 	req.Data = output
 	return
@@ -792,26 +672,21 @@ func (c *S3) GetBucketRequestPayment(input *GetBucketRequestPaymentInput) (*GetB
 	return out, err
 }
 
-var opGetBucketRequestPayment *aws.Operation
+const opGetBucketTagging = "GetBucketTagging"
 
 // GetBucketTaggingRequest generates a request for the GetBucketTagging operation.
 func (c *S3) GetBucketTaggingRequest(input *GetBucketTaggingInput) (req *aws.Request, output *GetBucketTaggingOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketTagging == nil {
-		opGetBucketTagging = &aws.Operation{
-			Name:       "GetBucketTagging",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?tagging",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketTagging,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?tagging",
 	}
 
 	if input == nil {
 		input = &GetBucketTaggingInput{}
 	}
 
-	req = c.newRequest(opGetBucketTagging, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetBucketTaggingOutput{}
 	req.Data = output
 	return
@@ -824,26 +699,21 @@ func (c *S3) GetBucketTagging(input *GetBucketTaggingInput) (*GetBucketTaggingOu
 	return out, err
 }
 
-var opGetBucketTagging *aws.Operation
+const opGetBucketVersioning = "GetBucketVersioning"
 
 // GetBucketVersioningRequest generates a request for the GetBucketVersioning operation.
 func (c *S3) GetBucketVersioningRequest(input *GetBucketVersioningInput) (req *aws.Request, output *GetBucketVersioningOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketVersioning == nil {
-		opGetBucketVersioning = &aws.Operation{
-			Name:       "GetBucketVersioning",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?versioning",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketVersioning,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?versioning",
 	}
 
 	if input == nil {
 		input = &GetBucketVersioningInput{}
 	}
 
-	req = c.newRequest(opGetBucketVersioning, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetBucketVersioningOutput{}
 	req.Data = output
 	return
@@ -856,26 +726,21 @@ func (c *S3) GetBucketVersioning(input *GetBucketVersioningInput) (*GetBucketVer
 	return out, err
 }
 
-var opGetBucketVersioning *aws.Operation
+const opGetBucketWebsite = "GetBucketWebsite"
 
 // GetBucketWebsiteRequest generates a request for the GetBucketWebsite operation.
 func (c *S3) GetBucketWebsiteRequest(input *GetBucketWebsiteInput) (req *aws.Request, output *GetBucketWebsiteOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetBucketWebsite == nil {
-		opGetBucketWebsite = &aws.Operation{
-			Name:       "GetBucketWebsite",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?website",
-		}
+	op := &aws.Operation{
+		Name:       opGetBucketWebsite,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?website",
 	}
 
 	if input == nil {
 		input = &GetBucketWebsiteInput{}
 	}
 
-	req = c.newRequest(opGetBucketWebsite, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetBucketWebsiteOutput{}
 	req.Data = output
 	return
@@ -888,26 +753,21 @@ func (c *S3) GetBucketWebsite(input *GetBucketWebsiteInput) (*GetBucketWebsiteOu
 	return out, err
 }
 
-var opGetBucketWebsite *aws.Operation
+const opGetObject = "GetObject"
 
 // GetObjectRequest generates a request for the GetObject operation.
 func (c *S3) GetObjectRequest(input *GetObjectInput) (req *aws.Request, output *GetObjectOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetObject == nil {
-		opGetObject = &aws.Operation{
-			Name:       "GetObject",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}/{Key+}",
-		}
+	op := &aws.Operation{
+		Name:       opGetObject,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}/{Key+}",
 	}
 
 	if input == nil {
 		input = &GetObjectInput{}
 	}
 
-	req = c.newRequest(opGetObject, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetObjectOutput{}
 	req.Data = output
 	return
@@ -920,26 +780,21 @@ func (c *S3) GetObject(input *GetObjectInput) (*GetObjectOutput, error) {
 	return out, err
 }
 
-var opGetObject *aws.Operation
+const opGetObjectACL = "GetObjectAcl"
 
 // GetObjectACLRequest generates a request for the GetObjectACL operation.
 func (c *S3) GetObjectACLRequest(input *GetObjectACLInput) (req *aws.Request, output *GetObjectACLOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetObjectACL == nil {
-		opGetObjectACL = &aws.Operation{
-			Name:       "GetObjectAcl",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}/{Key+}?acl",
-		}
+	op := &aws.Operation{
+		Name:       opGetObjectACL,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}/{Key+}?acl",
 	}
 
 	if input == nil {
 		input = &GetObjectACLInput{}
 	}
 
-	req = c.newRequest(opGetObjectACL, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetObjectACLOutput{}
 	req.Data = output
 	return
@@ -952,26 +807,21 @@ func (c *S3) GetObjectACL(input *GetObjectACLInput) (*GetObjectACLOutput, error)
 	return out, err
 }
 
-var opGetObjectACL *aws.Operation
+const opGetObjectTorrent = "GetObjectTorrent"
 
 // GetObjectTorrentRequest generates a request for the GetObjectTorrent operation.
 func (c *S3) GetObjectTorrentRequest(input *GetObjectTorrentInput) (req *aws.Request, output *GetObjectTorrentOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opGetObjectTorrent == nil {
-		opGetObjectTorrent = &aws.Operation{
-			Name:       "GetObjectTorrent",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}/{Key+}?torrent",
-		}
+	op := &aws.Operation{
+		Name:       opGetObjectTorrent,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}/{Key+}?torrent",
 	}
 
 	if input == nil {
 		input = &GetObjectTorrentInput{}
 	}
 
-	req = c.newRequest(opGetObjectTorrent, input, output)
+	req = c.newRequest(op, input, output)
 	output = &GetObjectTorrentOutput{}
 	req.Data = output
 	return
@@ -984,26 +834,21 @@ func (c *S3) GetObjectTorrent(input *GetObjectTorrentInput) (*GetObjectTorrentOu
 	return out, err
 }
 
-var opGetObjectTorrent *aws.Operation
+const opHeadBucket = "HeadBucket"
 
 // HeadBucketRequest generates a request for the HeadBucket operation.
 func (c *S3) HeadBucketRequest(input *HeadBucketInput) (req *aws.Request, output *HeadBucketOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opHeadBucket == nil {
-		opHeadBucket = &aws.Operation{
-			Name:       "HeadBucket",
-			HTTPMethod: "HEAD",
-			HTTPPath:   "/{Bucket}",
-		}
+	op := &aws.Operation{
+		Name:       opHeadBucket,
+		HTTPMethod: "HEAD",
+		HTTPPath:   "/{Bucket}",
 	}
 
 	if input == nil {
 		input = &HeadBucketInput{}
 	}
 
-	req = c.newRequest(opHeadBucket, input, output)
+	req = c.newRequest(op, input, output)
 	output = &HeadBucketOutput{}
 	req.Data = output
 	return
@@ -1017,26 +862,21 @@ func (c *S3) HeadBucket(input *HeadBucketInput) (*HeadBucketOutput, error) {
 	return out, err
 }
 
-var opHeadBucket *aws.Operation
+const opHeadObject = "HeadObject"
 
 // HeadObjectRequest generates a request for the HeadObject operation.
 func (c *S3) HeadObjectRequest(input *HeadObjectInput) (req *aws.Request, output *HeadObjectOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opHeadObject == nil {
-		opHeadObject = &aws.Operation{
-			Name:       "HeadObject",
-			HTTPMethod: "HEAD",
-			HTTPPath:   "/{Bucket}/{Key+}",
-		}
+	op := &aws.Operation{
+		Name:       opHeadObject,
+		HTTPMethod: "HEAD",
+		HTTPPath:   "/{Bucket}/{Key+}",
 	}
 
 	if input == nil {
 		input = &HeadObjectInput{}
 	}
 
-	req = c.newRequest(opHeadObject, input, output)
+	req = c.newRequest(op, input, output)
 	output = &HeadObjectOutput{}
 	req.Data = output
 	return
@@ -1051,26 +891,21 @@ func (c *S3) HeadObject(input *HeadObjectInput) (*HeadObjectOutput, error) {
 	return out, err
 }
 
-var opHeadObject *aws.Operation
+const opListBuckets = "ListBuckets"
 
 // ListBucketsRequest generates a request for the ListBuckets operation.
 func (c *S3) ListBucketsRequest(input *ListBucketsInput) (req *aws.Request, output *ListBucketsOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opListBuckets == nil {
-		opListBuckets = &aws.Operation{
-			Name:       "ListBuckets",
-			HTTPMethod: "GET",
-			HTTPPath:   "/",
-		}
+	op := &aws.Operation{
+		Name:       opListBuckets,
+		HTTPMethod: "GET",
+		HTTPPath:   "/",
 	}
 
 	if input == nil {
 		input = &ListBucketsInput{}
 	}
 
-	req = c.newRequest(opListBuckets, input, output)
+	req = c.newRequest(op, input, output)
 	output = &ListBucketsOutput{}
 	req.Data = output
 	return
@@ -1083,32 +918,27 @@ func (c *S3) ListBuckets(input *ListBucketsInput) (*ListBucketsOutput, error) {
 	return out, err
 }
 
-var opListBuckets *aws.Operation
+const opListMultipartUploads = "ListMultipartUploads"
 
 // ListMultipartUploadsRequest generates a request for the ListMultipartUploads operation.
 func (c *S3) ListMultipartUploadsRequest(input *ListMultipartUploadsInput) (req *aws.Request, output *ListMultipartUploadsOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opListMultipartUploads == nil {
-		opListMultipartUploads = &aws.Operation{
-			Name:       "ListMultipartUploads",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?uploads",
-			Paginator: &aws.Paginator{
-				InputTokens:     []string{"KeyMarker", "UploadIdMarker"},
-				OutputTokens:    []string{"NextKeyMarker", "NextUploadIdMarker"},
-				LimitToken:      "MaxUploads",
-				TruncationToken: "IsTruncated",
-			},
-		}
+	op := &aws.Operation{
+		Name:       opListMultipartUploads,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?uploads",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"KeyMarker", "UploadIdMarker"},
+			OutputTokens:    []string{"NextKeyMarker", "NextUploadIdMarker"},
+			LimitToken:      "MaxUploads",
+			TruncationToken: "IsTruncated",
+		},
 	}
 
 	if input == nil {
 		input = &ListMultipartUploadsInput{}
 	}
 
-	req = c.newRequest(opListMultipartUploads, input, output)
+	req = c.newRequest(op, input, output)
 	output = &ListMultipartUploadsOutput{}
 	req.Data = output
 	return
@@ -1128,32 +958,27 @@ func (c *S3) ListMultipartUploadsPages(input *ListMultipartUploadsInput, fn func
 	})
 }
 
-var opListMultipartUploads *aws.Operation
+const opListObjectVersions = "ListObjectVersions"
 
 // ListObjectVersionsRequest generates a request for the ListObjectVersions operation.
 func (c *S3) ListObjectVersionsRequest(input *ListObjectVersionsInput) (req *aws.Request, output *ListObjectVersionsOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opListObjectVersions == nil {
-		opListObjectVersions = &aws.Operation{
-			Name:       "ListObjectVersions",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}?versions",
-			Paginator: &aws.Paginator{
-				InputTokens:     []string{"KeyMarker", "VersionIdMarker"},
-				OutputTokens:    []string{"NextKeyMarker", "NextVersionIdMarker"},
-				LimitToken:      "MaxKeys",
-				TruncationToken: "IsTruncated",
-			},
-		}
+	op := &aws.Operation{
+		Name:       opListObjectVersions,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}?versions",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"KeyMarker", "VersionIdMarker"},
+			OutputTokens:    []string{"NextKeyMarker", "NextVersionIdMarker"},
+			LimitToken:      "MaxKeys",
+			TruncationToken: "IsTruncated",
+		},
 	}
 
 	if input == nil {
 		input = &ListObjectVersionsInput{}
 	}
 
-	req = c.newRequest(opListObjectVersions, input, output)
+	req = c.newRequest(op, input, output)
 	output = &ListObjectVersionsOutput{}
 	req.Data = output
 	return
@@ -1173,32 +998,27 @@ func (c *S3) ListObjectVersionsPages(input *ListObjectVersionsInput, fn func(p *
 	})
 }
 
-var opListObjectVersions *aws.Operation
+const opListObjects = "ListObjects"
 
 // ListObjectsRequest generates a request for the ListObjects operation.
 func (c *S3) ListObjectsRequest(input *ListObjectsInput) (req *aws.Request, output *ListObjectsOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opListObjects == nil {
-		opListObjects = &aws.Operation{
-			Name:       "ListObjects",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}",
-			Paginator: &aws.Paginator{
-				InputTokens:     []string{"Marker"},
-				OutputTokens:    []string{"NextMarker || Contents[-1].Key"},
-				LimitToken:      "MaxKeys",
-				TruncationToken: "IsTruncated",
-			},
-		}
+	op := &aws.Operation{
+		Name:       opListObjects,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"NextMarker || Contents[-1].Key"},
+			LimitToken:      "MaxKeys",
+			TruncationToken: "IsTruncated",
+		},
 	}
 
 	if input == nil {
 		input = &ListObjectsInput{}
 	}
 
-	req = c.newRequest(opListObjects, input, output)
+	req = c.newRequest(op, input, output)
 	output = &ListObjectsOutput{}
 	req.Data = output
 	return
@@ -1220,32 +1040,27 @@ func (c *S3) ListObjectsPages(input *ListObjectsInput, fn func(p *ListObjectsOut
 	})
 }
 
-var opListObjects *aws.Operation
+const opListParts = "ListParts"
 
 // ListPartsRequest generates a request for the ListParts operation.
 func (c *S3) ListPartsRequest(input *ListPartsInput) (req *aws.Request, output *ListPartsOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opListParts == nil {
-		opListParts = &aws.Operation{
-			Name:       "ListParts",
-			HTTPMethod: "GET",
-			HTTPPath:   "/{Bucket}/{Key+}",
-			Paginator: &aws.Paginator{
-				InputTokens:     []string{"PartNumberMarker"},
-				OutputTokens:    []string{"NextPartNumberMarker"},
-				LimitToken:      "MaxParts",
-				TruncationToken: "IsTruncated",
-			},
-		}
+	op := &aws.Operation{
+		Name:       opListParts,
+		HTTPMethod: "GET",
+		HTTPPath:   "/{Bucket}/{Key+}",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"PartNumberMarker"},
+			OutputTokens:    []string{"NextPartNumberMarker"},
+			LimitToken:      "MaxParts",
+			TruncationToken: "IsTruncated",
+		},
 	}
 
 	if input == nil {
 		input = &ListPartsInput{}
 	}
 
-	req = c.newRequest(opListParts, input, output)
+	req = c.newRequest(op, input, output)
 	output = &ListPartsOutput{}
 	req.Data = output
 	return
@@ -1265,26 +1080,21 @@ func (c *S3) ListPartsPages(input *ListPartsInput, fn func(p *ListPartsOutput, l
 	})
 }
 
-var opListParts *aws.Operation
+const opPutBucketACL = "PutBucketAcl"
 
 // PutBucketACLRequest generates a request for the PutBucketACL operation.
 func (c *S3) PutBucketACLRequest(input *PutBucketACLInput) (req *aws.Request, output *PutBucketACLOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutBucketACL == nil {
-		opPutBucketACL = &aws.Operation{
-			Name:       "PutBucketAcl",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}?acl",
-		}
+	op := &aws.Operation{
+		Name:       opPutBucketACL,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}?acl",
 	}
 
 	if input == nil {
 		input = &PutBucketACLInput{}
 	}
 
-	req = c.newRequest(opPutBucketACL, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutBucketACLOutput{}
 	req.Data = output
 	return
@@ -1297,26 +1107,21 @@ func (c *S3) PutBucketACL(input *PutBucketACLInput) (*PutBucketACLOutput, error)
 	return out, err
 }
 
-var opPutBucketACL *aws.Operation
+const opPutBucketCORS = "PutBucketCors"
 
 // PutBucketCORSRequest generates a request for the PutBucketCORS operation.
 func (c *S3) PutBucketCORSRequest(input *PutBucketCORSInput) (req *aws.Request, output *PutBucketCORSOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutBucketCORS == nil {
-		opPutBucketCORS = &aws.Operation{
-			Name:       "PutBucketCors",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}?cors",
-		}
+	op := &aws.Operation{
+		Name:       opPutBucketCORS,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}?cors",
 	}
 
 	if input == nil {
 		input = &PutBucketCORSInput{}
 	}
 
-	req = c.newRequest(opPutBucketCORS, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutBucketCORSOutput{}
 	req.Data = output
 	return
@@ -1329,26 +1134,21 @@ func (c *S3) PutBucketCORS(input *PutBucketCORSInput) (*PutBucketCORSOutput, err
 	return out, err
 }
 
-var opPutBucketCORS *aws.Operation
+const opPutBucketLifecycle = "PutBucketLifecycle"
 
 // PutBucketLifecycleRequest generates a request for the PutBucketLifecycle operation.
 func (c *S3) PutBucketLifecycleRequest(input *PutBucketLifecycleInput) (req *aws.Request, output *PutBucketLifecycleOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutBucketLifecycle == nil {
-		opPutBucketLifecycle = &aws.Operation{
-			Name:       "PutBucketLifecycle",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}?lifecycle",
-		}
+	op := &aws.Operation{
+		Name:       opPutBucketLifecycle,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}?lifecycle",
 	}
 
 	if input == nil {
 		input = &PutBucketLifecycleInput{}
 	}
 
-	req = c.newRequest(opPutBucketLifecycle, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutBucketLifecycleOutput{}
 	req.Data = output
 	return
@@ -1362,26 +1162,21 @@ func (c *S3) PutBucketLifecycle(input *PutBucketLifecycleInput) (*PutBucketLifec
 	return out, err
 }
 
-var opPutBucketLifecycle *aws.Operation
+const opPutBucketLogging = "PutBucketLogging"
 
 // PutBucketLoggingRequest generates a request for the PutBucketLogging operation.
 func (c *S3) PutBucketLoggingRequest(input *PutBucketLoggingInput) (req *aws.Request, output *PutBucketLoggingOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutBucketLogging == nil {
-		opPutBucketLogging = &aws.Operation{
-			Name:       "PutBucketLogging",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}?logging",
-		}
+	op := &aws.Operation{
+		Name:       opPutBucketLogging,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}?logging",
 	}
 
 	if input == nil {
 		input = &PutBucketLoggingInput{}
 	}
 
-	req = c.newRequest(opPutBucketLogging, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutBucketLoggingOutput{}
 	req.Data = output
 	return
@@ -1396,26 +1191,21 @@ func (c *S3) PutBucketLogging(input *PutBucketLoggingInput) (*PutBucketLoggingOu
 	return out, err
 }
 
-var opPutBucketLogging *aws.Operation
+const opPutBucketNotification = "PutBucketNotification"
 
 // PutBucketNotificationRequest generates a request for the PutBucketNotification operation.
 func (c *S3) PutBucketNotificationRequest(input *PutBucketNotificationInput) (req *aws.Request, output *PutBucketNotificationOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutBucketNotification == nil {
-		opPutBucketNotification = &aws.Operation{
-			Name:       "PutBucketNotification",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}?notification",
-		}
+	op := &aws.Operation{
+		Name:       opPutBucketNotification,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}?notification",
 	}
 
 	if input == nil {
 		input = &PutBucketNotificationInput{}
 	}
 
-	req = c.newRequest(opPutBucketNotification, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutBucketNotificationOutput{}
 	req.Data = output
 	return
@@ -1428,26 +1218,21 @@ func (c *S3) PutBucketNotification(input *PutBucketNotificationInput) (*PutBucke
 	return out, err
 }
 
-var opPutBucketNotification *aws.Operation
+const opPutBucketNotificationConfiguration = "PutBucketNotificationConfiguration"
 
 // PutBucketNotificationConfigurationRequest generates a request for the PutBucketNotificationConfiguration operation.
 func (c *S3) PutBucketNotificationConfigurationRequest(input *PutBucketNotificationConfigurationInput) (req *aws.Request, output *PutBucketNotificationConfigurationOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutBucketNotificationConfiguration == nil {
-		opPutBucketNotificationConfiguration = &aws.Operation{
-			Name:       "PutBucketNotificationConfiguration",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}?notification",
-		}
+	op := &aws.Operation{
+		Name:       opPutBucketNotificationConfiguration,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}?notification",
 	}
 
 	if input == nil {
 		input = &PutBucketNotificationConfigurationInput{}
 	}
 
-	req = c.newRequest(opPutBucketNotificationConfiguration, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutBucketNotificationConfigurationOutput{}
 	req.Data = output
 	return
@@ -1460,26 +1245,21 @@ func (c *S3) PutBucketNotificationConfiguration(input *PutBucketNotificationConf
 	return out, err
 }
 
-var opPutBucketNotificationConfiguration *aws.Operation
+const opPutBucketPolicy = "PutBucketPolicy"
 
 // PutBucketPolicyRequest generates a request for the PutBucketPolicy operation.
 func (c *S3) PutBucketPolicyRequest(input *PutBucketPolicyInput) (req *aws.Request, output *PutBucketPolicyOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutBucketPolicy == nil {
-		opPutBucketPolicy = &aws.Operation{
-			Name:       "PutBucketPolicy",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}?policy",
-		}
+	op := &aws.Operation{
+		Name:       opPutBucketPolicy,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}?policy",
 	}
 
 	if input == nil {
 		input = &PutBucketPolicyInput{}
 	}
 
-	req = c.newRequest(opPutBucketPolicy, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutBucketPolicyOutput{}
 	req.Data = output
 	return
@@ -1493,26 +1273,21 @@ func (c *S3) PutBucketPolicy(input *PutBucketPolicyInput) (*PutBucketPolicyOutpu
 	return out, err
 }
 
-var opPutBucketPolicy *aws.Operation
+const opPutBucketReplication = "PutBucketReplication"
 
 // PutBucketReplicationRequest generates a request for the PutBucketReplication operation.
 func (c *S3) PutBucketReplicationRequest(input *PutBucketReplicationInput) (req *aws.Request, output *PutBucketReplicationOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutBucketReplication == nil {
-		opPutBucketReplication = &aws.Operation{
-			Name:       "PutBucketReplication",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}?replication",
-		}
+	op := &aws.Operation{
+		Name:       opPutBucketReplication,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}?replication",
 	}
 
 	if input == nil {
 		input = &PutBucketReplicationInput{}
 	}
 
-	req = c.newRequest(opPutBucketReplication, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutBucketReplicationOutput{}
 	req.Data = output
 	return
@@ -1526,26 +1301,21 @@ func (c *S3) PutBucketReplication(input *PutBucketReplicationInput) (*PutBucketR
 	return out, err
 }
 
-var opPutBucketReplication *aws.Operation
+const opPutBucketRequestPayment = "PutBucketRequestPayment"
 
 // PutBucketRequestPaymentRequest generates a request for the PutBucketRequestPayment operation.
 func (c *S3) PutBucketRequestPaymentRequest(input *PutBucketRequestPaymentInput) (req *aws.Request, output *PutBucketRequestPaymentOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutBucketRequestPayment == nil {
-		opPutBucketRequestPayment = &aws.Operation{
-			Name:       "PutBucketRequestPayment",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}?requestPayment",
-		}
+	op := &aws.Operation{
+		Name:       opPutBucketRequestPayment,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}?requestPayment",
 	}
 
 	if input == nil {
 		input = &PutBucketRequestPaymentInput{}
 	}
 
-	req = c.newRequest(opPutBucketRequestPayment, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutBucketRequestPaymentOutput{}
 	req.Data = output
 	return
@@ -1562,26 +1332,21 @@ func (c *S3) PutBucketRequestPayment(input *PutBucketRequestPaymentInput) (*PutB
 	return out, err
 }
 
-var opPutBucketRequestPayment *aws.Operation
+const opPutBucketTagging = "PutBucketTagging"
 
 // PutBucketTaggingRequest generates a request for the PutBucketTagging operation.
 func (c *S3) PutBucketTaggingRequest(input *PutBucketTaggingInput) (req *aws.Request, output *PutBucketTaggingOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutBucketTagging == nil {
-		opPutBucketTagging = &aws.Operation{
-			Name:       "PutBucketTagging",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}?tagging",
-		}
+	op := &aws.Operation{
+		Name:       opPutBucketTagging,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}?tagging",
 	}
 
 	if input == nil {
 		input = &PutBucketTaggingInput{}
 	}
 
-	req = c.newRequest(opPutBucketTagging, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutBucketTaggingOutput{}
 	req.Data = output
 	return
@@ -1594,26 +1359,21 @@ func (c *S3) PutBucketTagging(input *PutBucketTaggingInput) (*PutBucketTaggingOu
 	return out, err
 }
 
-var opPutBucketTagging *aws.Operation
+const opPutBucketVersioning = "PutBucketVersioning"
 
 // PutBucketVersioningRequest generates a request for the PutBucketVersioning operation.
 func (c *S3) PutBucketVersioningRequest(input *PutBucketVersioningInput) (req *aws.Request, output *PutBucketVersioningOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutBucketVersioning == nil {
-		opPutBucketVersioning = &aws.Operation{
-			Name:       "PutBucketVersioning",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}?versioning",
-		}
+	op := &aws.Operation{
+		Name:       opPutBucketVersioning,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}?versioning",
 	}
 
 	if input == nil {
 		input = &PutBucketVersioningInput{}
 	}
 
-	req = c.newRequest(opPutBucketVersioning, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutBucketVersioningOutput{}
 	req.Data = output
 	return
@@ -1627,26 +1387,21 @@ func (c *S3) PutBucketVersioning(input *PutBucketVersioningInput) (*PutBucketVer
 	return out, err
 }
 
-var opPutBucketVersioning *aws.Operation
+const opPutBucketWebsite = "PutBucketWebsite"
 
 // PutBucketWebsiteRequest generates a request for the PutBucketWebsite operation.
 func (c *S3) PutBucketWebsiteRequest(input *PutBucketWebsiteInput) (req *aws.Request, output *PutBucketWebsiteOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutBucketWebsite == nil {
-		opPutBucketWebsite = &aws.Operation{
-			Name:       "PutBucketWebsite",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}?website",
-		}
+	op := &aws.Operation{
+		Name:       opPutBucketWebsite,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}?website",
 	}
 
 	if input == nil {
 		input = &PutBucketWebsiteInput{}
 	}
 
-	req = c.newRequest(opPutBucketWebsite, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutBucketWebsiteOutput{}
 	req.Data = output
 	return
@@ -1659,26 +1414,21 @@ func (c *S3) PutBucketWebsite(input *PutBucketWebsiteInput) (*PutBucketWebsiteOu
 	return out, err
 }
 
-var opPutBucketWebsite *aws.Operation
+const opPutObject = "PutObject"
 
 // PutObjectRequest generates a request for the PutObject operation.
 func (c *S3) PutObjectRequest(input *PutObjectInput) (req *aws.Request, output *PutObjectOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutObject == nil {
-		opPutObject = &aws.Operation{
-			Name:       "PutObject",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}/{Key+}",
-		}
+	op := &aws.Operation{
+		Name:       opPutObject,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}/{Key+}",
 	}
 
 	if input == nil {
 		input = &PutObjectInput{}
 	}
 
-	req = c.newRequest(opPutObject, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutObjectOutput{}
 	req.Data = output
 	return
@@ -1691,26 +1441,21 @@ func (c *S3) PutObject(input *PutObjectInput) (*PutObjectOutput, error) {
 	return out, err
 }
 
-var opPutObject *aws.Operation
+const opPutObjectACL = "PutObjectAcl"
 
 // PutObjectACLRequest generates a request for the PutObjectACL operation.
 func (c *S3) PutObjectACLRequest(input *PutObjectACLInput) (req *aws.Request, output *PutObjectACLOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opPutObjectACL == nil {
-		opPutObjectACL = &aws.Operation{
-			Name:       "PutObjectAcl",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}/{Key+}?acl",
-		}
+	op := &aws.Operation{
+		Name:       opPutObjectACL,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}/{Key+}?acl",
 	}
 
 	if input == nil {
 		input = &PutObjectACLInput{}
 	}
 
-	req = c.newRequest(opPutObjectACL, input, output)
+	req = c.newRequest(op, input, output)
 	output = &PutObjectACLOutput{}
 	req.Data = output
 	return
@@ -1724,26 +1469,21 @@ func (c *S3) PutObjectACL(input *PutObjectACLInput) (*PutObjectACLOutput, error)
 	return out, err
 }
 
-var opPutObjectACL *aws.Operation
+const opRestoreObject = "RestoreObject"
 
 // RestoreObjectRequest generates a request for the RestoreObject operation.
 func (c *S3) RestoreObjectRequest(input *RestoreObjectInput) (req *aws.Request, output *RestoreObjectOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opRestoreObject == nil {
-		opRestoreObject = &aws.Operation{
-			Name:       "RestoreObject",
-			HTTPMethod: "POST",
-			HTTPPath:   "/{Bucket}/{Key+}?restore",
-		}
+	op := &aws.Operation{
+		Name:       opRestoreObject,
+		HTTPMethod: "POST",
+		HTTPPath:   "/{Bucket}/{Key+}?restore",
 	}
 
 	if input == nil {
 		input = &RestoreObjectInput{}
 	}
 
-	req = c.newRequest(opRestoreObject, input, output)
+	req = c.newRequest(op, input, output)
 	output = &RestoreObjectOutput{}
 	req.Data = output
 	return
@@ -1756,26 +1496,21 @@ func (c *S3) RestoreObject(input *RestoreObjectInput) (*RestoreObjectOutput, err
 	return out, err
 }
 
-var opRestoreObject *aws.Operation
+const opUploadPart = "UploadPart"
 
 // UploadPartRequest generates a request for the UploadPart operation.
 func (c *S3) UploadPartRequest(input *UploadPartInput) (req *aws.Request, output *UploadPartOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opUploadPart == nil {
-		opUploadPart = &aws.Operation{
-			Name:       "UploadPart",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}/{Key+}",
-		}
+	op := &aws.Operation{
+		Name:       opUploadPart,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}/{Key+}",
 	}
 
 	if input == nil {
 		input = &UploadPartInput{}
 	}
 
-	req = c.newRequest(opUploadPart, input, output)
+	req = c.newRequest(op, input, output)
 	output = &UploadPartOutput{}
 	req.Data = output
 	return
@@ -1794,26 +1529,21 @@ func (c *S3) UploadPart(input *UploadPartInput) (*UploadPartOutput, error) {
 	return out, err
 }
 
-var opUploadPart *aws.Operation
+const opUploadPartCopy = "UploadPartCopy"
 
 // UploadPartCopyRequest generates a request for the UploadPartCopy operation.
 func (c *S3) UploadPartCopyRequest(input *UploadPartCopyInput) (req *aws.Request, output *UploadPartCopyOutput) {
-	oprw.Lock()
-	defer oprw.Unlock()
-
-	if opUploadPartCopy == nil {
-		opUploadPartCopy = &aws.Operation{
-			Name:       "UploadPartCopy",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}/{Key+}",
-		}
+	op := &aws.Operation{
+		Name:       opUploadPartCopy,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/{Bucket}/{Key+}",
 	}
 
 	if input == nil {
 		input = &UploadPartCopyInput{}
 	}
 
-	req = c.newRequest(opUploadPartCopy, input, output)
+	req = c.newRequest(op, input, output)
 	output = &UploadPartCopyOutput{}
 	req.Data = output
 	return
@@ -1825,8 +1555,6 @@ func (c *S3) UploadPartCopy(input *UploadPartCopyInput) (*UploadPartCopyOutput, 
 	err := req.Send()
 	return out, err
 }
-
-var opUploadPartCopy *aws.Operation
 
 type AbortMultipartUploadInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
@@ -1848,6 +1576,16 @@ type metadataAbortMultipartUploadInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s AbortMultipartUploadInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s AbortMultipartUploadInput) GoString() string {
+	return s.String()
+}
+
 type AbortMultipartUploadOutput struct {
 	// If present, indicates that the requester was successfully charged for the
 	// request.
@@ -1858,6 +1596,16 @@ type AbortMultipartUploadOutput struct {
 
 type metadataAbortMultipartUploadOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s AbortMultipartUploadOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s AbortMultipartUploadOutput) GoString() string {
+	return s.String()
 }
 
 type AccessControlPolicy struct {
@@ -1871,6 +1619,16 @@ type AccessControlPolicy struct {
 
 type metadataAccessControlPolicy struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s AccessControlPolicy) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s AccessControlPolicy) GoString() string {
+	return s.String()
 }
 
 type Bucket struct {
@@ -1887,6 +1645,16 @@ type metadataBucket struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s Bucket) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Bucket) GoString() string {
+	return s.String()
+}
+
 type BucketLoggingStatus struct {
 	LoggingEnabled *LoggingEnabled `type:"structure"`
 
@@ -1897,6 +1665,16 @@ type metadataBucketLoggingStatus struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s BucketLoggingStatus) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s BucketLoggingStatus) GoString() string {
+	return s.String()
+}
+
 type CORSConfiguration struct {
 	CORSRules []*CORSRule `locationName:"CORSRule" type:"list" flattened:"true"`
 
@@ -1905,6 +1683,16 @@ type CORSConfiguration struct {
 
 type metadataCORSConfiguration struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s CORSConfiguration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CORSConfiguration) GoString() string {
+	return s.String()
 }
 
 type CORSRule struct {
@@ -1934,6 +1722,16 @@ type metadataCORSRule struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s CORSRule) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CORSRule) GoString() string {
+	return s.String()
+}
+
 type CloudFunctionConfiguration struct {
 	CloudFunction *string `type:"string"`
 
@@ -1955,6 +1753,16 @@ type metadataCloudFunctionConfiguration struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s CloudFunctionConfiguration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CloudFunctionConfiguration) GoString() string {
+	return s.String()
+}
+
 type CommonPrefix struct {
 	Prefix *string `type:"string"`
 
@@ -1963,6 +1771,16 @@ type CommonPrefix struct {
 
 type metadataCommonPrefix struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s CommonPrefix) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CommonPrefix) GoString() string {
+	return s.String()
 }
 
 type CompleteMultipartUploadInput struct {
@@ -1985,6 +1803,16 @@ type CompleteMultipartUploadInput struct {
 
 type metadataCompleteMultipartUploadInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"MultipartUpload"`
+}
+
+// String returns the string representation
+func (s CompleteMultipartUploadInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CompleteMultipartUploadInput) GoString() string {
+	return s.String()
 }
 
 type CompleteMultipartUploadOutput struct {
@@ -2023,6 +1851,16 @@ type metadataCompleteMultipartUploadOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s CompleteMultipartUploadOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CompleteMultipartUploadOutput) GoString() string {
+	return s.String()
+}
+
 type CompletedMultipartUpload struct {
 	Parts []*CompletedPart `locationName:"Part" type:"list" flattened:"true"`
 
@@ -2033,11 +1871,22 @@ type metadataCompletedMultipartUpload struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s CompletedMultipartUpload) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CompletedMultipartUpload) GoString() string {
+	return s.String()
+}
+
 type CompletedPart struct {
 	// Entity tag returned when the part was uploaded.
 	ETag *string `type:"string"`
 
-	// Part number that identifies the part.
+	// Part number that identifies the part. This is a positive integer between
+	// 1 and 10,000.
 	PartNumber *int64 `type:"integer"`
 
 	metadataCompletedPart `json:"-" xml:"-"`
@@ -2045,6 +1894,16 @@ type CompletedPart struct {
 
 type metadataCompletedPart struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s CompletedPart) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CompletedPart) GoString() string {
+	return s.String()
 }
 
 type Condition struct {
@@ -2069,6 +1928,16 @@ type Condition struct {
 
 type metadataCondition struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s Condition) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Condition) GoString() string {
+	return s.String()
 }
 
 type CopyObjectInput struct {
@@ -2154,8 +2023,7 @@ type CopyObjectInput struct {
 	// at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html
 	RequestPayer *string `location:"header" locationName:"x-amz-request-payer" type:"string"`
 
-	// Specifies the algorithm to use to when encrypting the object (e.g., AES256,
-	// aws:kms).
+	// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
 	SSECustomerAlgorithm *string `location:"header" locationName:"x-amz-server-side-encryption-customer-algorithm" type:"string"`
 
 	// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting
@@ -2195,6 +2063,16 @@ type metadataCopyObjectInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s CopyObjectInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CopyObjectInput) GoString() string {
+	return s.String()
+}
+
 type CopyObjectOutput struct {
 	CopyObjectResult *CopyObjectResult `type:"structure"`
 
@@ -2232,6 +2110,16 @@ type metadataCopyObjectOutput struct {
 	SDKShapeTraits bool `type:"structure" payload:"CopyObjectResult"`
 }
 
+// String returns the string representation
+func (s CopyObjectOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CopyObjectOutput) GoString() string {
+	return s.String()
+}
+
 type CopyObjectResult struct {
 	ETag *string `type:"string"`
 
@@ -2242,6 +2130,16 @@ type CopyObjectResult struct {
 
 type metadataCopyObjectResult struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s CopyObjectResult) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CopyObjectResult) GoString() string {
+	return s.String()
 }
 
 type CopyPartResult struct {
@@ -2258,6 +2156,16 @@ type metadataCopyPartResult struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s CopyPartResult) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CopyPartResult) GoString() string {
+	return s.String()
+}
+
 type CreateBucketConfiguration struct {
 	// Specifies the region where the bucket will be created. If you don't specify
 	// a region, the bucket will be created in US Standard.
@@ -2268,6 +2176,16 @@ type CreateBucketConfiguration struct {
 
 type metadataCreateBucketConfiguration struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateBucketConfiguration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CreateBucketConfiguration) GoString() string {
+	return s.String()
 }
 
 type CreateBucketInput struct {
@@ -2301,6 +2219,16 @@ type metadataCreateBucketInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"CreateBucketConfiguration"`
 }
 
+// String returns the string representation
+func (s CreateBucketInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CreateBucketInput) GoString() string {
+	return s.String()
+}
+
 type CreateBucketOutput struct {
 	Location *string `location:"header" locationName:"Location" type:"string"`
 
@@ -2309,6 +2237,16 @@ type CreateBucketOutput struct {
 
 type metadataCreateBucketOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateBucketOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CreateBucketOutput) GoString() string {
+	return s.String()
 }
 
 type CreateMultipartUploadInput struct {
@@ -2360,8 +2298,7 @@ type CreateMultipartUploadInput struct {
 	// at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html
 	RequestPayer *string `location:"header" locationName:"x-amz-request-payer" type:"string"`
 
-	// Specifies the algorithm to use to when encrypting the object (e.g., AES256,
-	// aws:kms).
+	// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
 	SSECustomerAlgorithm *string `location:"header" locationName:"x-amz-server-side-encryption-customer-algorithm" type:"string"`
 
 	// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting
@@ -2399,6 +2336,16 @@ type CreateMultipartUploadInput struct {
 
 type metadataCreateMultipartUploadInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateMultipartUploadInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CreateMultipartUploadInput) GoString() string {
+	return s.String()
 }
 
 type CreateMultipartUploadOutput struct {
@@ -2440,6 +2387,16 @@ type metadataCreateMultipartUploadOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s CreateMultipartUploadOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s CreateMultipartUploadOutput) GoString() string {
+	return s.String()
+}
+
 type Delete struct {
 	Objects []*ObjectIdentifier `locationName:"Object" type:"list" flattened:"true" required:"true"`
 
@@ -2454,6 +2411,16 @@ type metadataDelete struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s Delete) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Delete) GoString() string {
+	return s.String()
+}
+
 type DeleteBucketCORSInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2464,12 +2431,32 @@ type metadataDeleteBucketCORSInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DeleteBucketCORSInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketCORSInput) GoString() string {
+	return s.String()
+}
+
 type DeleteBucketCORSOutput struct {
 	metadataDeleteBucketCORSOutput `json:"-" xml:"-"`
 }
 
 type metadataDeleteBucketCORSOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteBucketCORSOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketCORSOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteBucketInput struct {
@@ -2482,6 +2469,16 @@ type metadataDeleteBucketInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DeleteBucketInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketInput) GoString() string {
+	return s.String()
+}
+
 type DeleteBucketLifecycleInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2492,6 +2489,16 @@ type metadataDeleteBucketLifecycleInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DeleteBucketLifecycleInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketLifecycleInput) GoString() string {
+	return s.String()
+}
+
 type DeleteBucketLifecycleOutput struct {
 	metadataDeleteBucketLifecycleOutput `json:"-" xml:"-"`
 }
@@ -2500,12 +2507,32 @@ type metadataDeleteBucketLifecycleOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DeleteBucketLifecycleOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketLifecycleOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteBucketOutput struct {
 	metadataDeleteBucketOutput `json:"-" xml:"-"`
 }
 
 type metadataDeleteBucketOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteBucketOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteBucketPolicyInput struct {
@@ -2518,12 +2545,32 @@ type metadataDeleteBucketPolicyInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DeleteBucketPolicyInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketPolicyInput) GoString() string {
+	return s.String()
+}
+
 type DeleteBucketPolicyOutput struct {
 	metadataDeleteBucketPolicyOutput `json:"-" xml:"-"`
 }
 
 type metadataDeleteBucketPolicyOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteBucketPolicyOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketPolicyOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteBucketReplicationInput struct {
@@ -2536,12 +2583,32 @@ type metadataDeleteBucketReplicationInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DeleteBucketReplicationInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketReplicationInput) GoString() string {
+	return s.String()
+}
+
 type DeleteBucketReplicationOutput struct {
 	metadataDeleteBucketReplicationOutput `json:"-" xml:"-"`
 }
 
 type metadataDeleteBucketReplicationOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteBucketReplicationOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketReplicationOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteBucketTaggingInput struct {
@@ -2554,12 +2621,32 @@ type metadataDeleteBucketTaggingInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DeleteBucketTaggingInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketTaggingInput) GoString() string {
+	return s.String()
+}
+
 type DeleteBucketTaggingOutput struct {
 	metadataDeleteBucketTaggingOutput `json:"-" xml:"-"`
 }
 
 type metadataDeleteBucketTaggingOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteBucketTaggingOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketTaggingOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteBucketWebsiteInput struct {
@@ -2572,12 +2659,32 @@ type metadataDeleteBucketWebsiteInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DeleteBucketWebsiteInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketWebsiteInput) GoString() string {
+	return s.String()
+}
+
 type DeleteBucketWebsiteOutput struct {
 	metadataDeleteBucketWebsiteOutput `json:"-" xml:"-"`
 }
 
 type metadataDeleteBucketWebsiteOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteBucketWebsiteOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBucketWebsiteOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteMarkerEntry struct {
@@ -2601,6 +2708,16 @@ type DeleteMarkerEntry struct {
 
 type metadataDeleteMarkerEntry struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteMarkerEntry) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteMarkerEntry) GoString() string {
+	return s.String()
 }
 
 type DeleteObjectInput struct {
@@ -2628,6 +2745,16 @@ type metadataDeleteObjectInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DeleteObjectInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteObjectInput) GoString() string {
+	return s.String()
+}
+
 type DeleteObjectOutput struct {
 	// Specifies whether the versioned object that was permanently deleted was (true)
 	// or was not (false) a delete marker.
@@ -2646,6 +2773,16 @@ type DeleteObjectOutput struct {
 
 type metadataDeleteObjectOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteObjectOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteObjectOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteObjectsInput struct {
@@ -2670,6 +2807,16 @@ type metadataDeleteObjectsInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"Delete"`
 }
 
+// String returns the string representation
+func (s DeleteObjectsInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteObjectsInput) GoString() string {
+	return s.String()
+}
+
 type DeleteObjectsOutput struct {
 	Deleted []*DeletedObject `type:"list" flattened:"true"`
 
@@ -2684,6 +2831,16 @@ type DeleteObjectsOutput struct {
 
 type metadataDeleteObjectsOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteObjectsOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeleteObjectsOutput) GoString() string {
+	return s.String()
 }
 
 type DeletedObject struct {
@@ -2702,6 +2859,16 @@ type metadataDeletedObject struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s DeletedObject) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s DeletedObject) GoString() string {
+	return s.String()
+}
+
 type Destination struct {
 	// Amazon resource name (ARN) of the bucket where you want Amazon S3 to store
 	// replicas of the object identified by the rule.
@@ -2712,6 +2879,16 @@ type Destination struct {
 
 type metadataDestination struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s Destination) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Destination) GoString() string {
+	return s.String()
 }
 
 type Error struct {
@@ -2730,6 +2907,16 @@ type metadataError struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s Error) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Error) GoString() string {
+	return s.String()
+}
+
 type ErrorDocument struct {
 	// The object key name to use when a 4XX class error occurs.
 	Key *string `type:"string" required:"true"`
@@ -2741,6 +2928,16 @@ type metadataErrorDocument struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s ErrorDocument) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ErrorDocument) GoString() string {
+	return s.String()
+}
+
 type GetBucketACLInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2749,6 +2946,16 @@ type GetBucketACLInput struct {
 
 type metadataGetBucketACLInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetBucketACLInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketACLInput) GoString() string {
+	return s.String()
 }
 
 type GetBucketACLOutput struct {
@@ -2764,6 +2971,16 @@ type metadataGetBucketACLOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetBucketACLOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketACLOutput) GoString() string {
+	return s.String()
+}
+
 type GetBucketCORSInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2772,6 +2989,16 @@ type GetBucketCORSInput struct {
 
 type metadataGetBucketCORSInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetBucketCORSInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketCORSInput) GoString() string {
+	return s.String()
 }
 
 type GetBucketCORSOutput struct {
@@ -2784,6 +3011,16 @@ type metadataGetBucketCORSOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetBucketCORSOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketCORSOutput) GoString() string {
+	return s.String()
+}
+
 type GetBucketLifecycleInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2792,6 +3029,16 @@ type GetBucketLifecycleInput struct {
 
 type metadataGetBucketLifecycleInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetBucketLifecycleInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketLifecycleInput) GoString() string {
+	return s.String()
 }
 
 type GetBucketLifecycleOutput struct {
@@ -2804,6 +3051,16 @@ type metadataGetBucketLifecycleOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetBucketLifecycleOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketLifecycleOutput) GoString() string {
+	return s.String()
+}
+
 type GetBucketLocationInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2812,6 +3069,16 @@ type GetBucketLocationInput struct {
 
 type metadataGetBucketLocationInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetBucketLocationInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketLocationInput) GoString() string {
+	return s.String()
 }
 
 type GetBucketLocationOutput struct {
@@ -2824,6 +3091,16 @@ type metadataGetBucketLocationOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetBucketLocationOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketLocationOutput) GoString() string {
+	return s.String()
+}
+
 type GetBucketLoggingInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2834,6 +3111,16 @@ type metadataGetBucketLoggingInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetBucketLoggingInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketLoggingInput) GoString() string {
+	return s.String()
+}
+
 type GetBucketLoggingOutput struct {
 	LoggingEnabled *LoggingEnabled `type:"structure"`
 
@@ -2842,6 +3129,16 @@ type GetBucketLoggingOutput struct {
 
 type metadataGetBucketLoggingOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetBucketLoggingOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketLoggingOutput) GoString() string {
+	return s.String()
 }
 
 type GetBucketNotificationConfigurationRequest struct {
@@ -2855,6 +3152,16 @@ type metadataGetBucketNotificationConfigurationRequest struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetBucketNotificationConfigurationRequest) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketNotificationConfigurationRequest) GoString() string {
+	return s.String()
+}
+
 type GetBucketPolicyInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2863,6 +3170,16 @@ type GetBucketPolicyInput struct {
 
 type metadataGetBucketPolicyInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetBucketPolicyInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketPolicyInput) GoString() string {
+	return s.String()
 }
 
 type GetBucketPolicyOutput struct {
@@ -2876,6 +3193,16 @@ type metadataGetBucketPolicyOutput struct {
 	SDKShapeTraits bool `type:"structure" payload:"Policy"`
 }
 
+// String returns the string representation
+func (s GetBucketPolicyOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketPolicyOutput) GoString() string {
+	return s.String()
+}
+
 type GetBucketReplicationInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2884,6 +3211,16 @@ type GetBucketReplicationInput struct {
 
 type metadataGetBucketReplicationInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetBucketReplicationInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketReplicationInput) GoString() string {
+	return s.String()
 }
 
 type GetBucketReplicationOutput struct {
@@ -2898,6 +3235,16 @@ type metadataGetBucketReplicationOutput struct {
 	SDKShapeTraits bool `type:"structure" payload:"ReplicationConfiguration"`
 }
 
+// String returns the string representation
+func (s GetBucketReplicationOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketReplicationOutput) GoString() string {
+	return s.String()
+}
+
 type GetBucketRequestPaymentInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2906,6 +3253,16 @@ type GetBucketRequestPaymentInput struct {
 
 type metadataGetBucketRequestPaymentInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetBucketRequestPaymentInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketRequestPaymentInput) GoString() string {
+	return s.String()
 }
 
 type GetBucketRequestPaymentOutput struct {
@@ -2919,6 +3276,16 @@ type metadataGetBucketRequestPaymentOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetBucketRequestPaymentOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketRequestPaymentOutput) GoString() string {
+	return s.String()
+}
+
 type GetBucketTaggingInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2927,6 +3294,16 @@ type GetBucketTaggingInput struct {
 
 type metadataGetBucketTaggingInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetBucketTaggingInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketTaggingInput) GoString() string {
+	return s.String()
 }
 
 type GetBucketTaggingOutput struct {
@@ -2939,6 +3316,16 @@ type metadataGetBucketTaggingOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetBucketTaggingOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketTaggingOutput) GoString() string {
+	return s.String()
+}
+
 type GetBucketVersioningInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2947,6 +3334,16 @@ type GetBucketVersioningInput struct {
 
 type metadataGetBucketVersioningInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetBucketVersioningInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketVersioningInput) GoString() string {
+	return s.String()
 }
 
 type GetBucketVersioningOutput struct {
@@ -2965,6 +3362,16 @@ type metadataGetBucketVersioningOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetBucketVersioningOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketVersioningOutput) GoString() string {
+	return s.String()
+}
+
 type GetBucketWebsiteInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -2973,6 +3380,16 @@ type GetBucketWebsiteInput struct {
 
 type metadataGetBucketWebsiteInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetBucketWebsiteInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketWebsiteInput) GoString() string {
+	return s.String()
 }
 
 type GetBucketWebsiteOutput struct {
@@ -2989,6 +3406,16 @@ type GetBucketWebsiteOutput struct {
 
 type metadataGetBucketWebsiteOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetBucketWebsiteOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetBucketWebsiteOutput) GoString() string {
+	return s.String()
 }
 
 type GetObjectACLInput struct {
@@ -3012,6 +3439,16 @@ type metadataGetObjectACLInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetObjectACLInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetObjectACLInput) GoString() string {
+	return s.String()
+}
+
 type GetObjectACLOutput struct {
 	// A list of grants.
 	Grants []*Grant `locationName:"AccessControlList" locationNameList:"Grant" type:"list"`
@@ -3027,6 +3464,16 @@ type GetObjectACLOutput struct {
 
 type metadataGetObjectACLOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetObjectACLOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetObjectACLOutput) GoString() string {
+	return s.String()
 }
 
 type GetObjectInput struct {
@@ -3078,8 +3525,7 @@ type GetObjectInput struct {
 	// Sets the Expires header of the response.
 	ResponseExpires *time.Time `location:"querystring" locationName:"response-expires" type:"timestamp" timestampFormat:"iso8601"`
 
-	// Specifies the algorithm to use to when encrypting the object (e.g., AES256,
-	// aws:kms).
+	// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
 	SSECustomerAlgorithm *string `location:"header" locationName:"x-amz-server-side-encryption-customer-algorithm" type:"string"`
 
 	// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting
@@ -3102,6 +3548,16 @@ type GetObjectInput struct {
 
 type metadataGetObjectInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetObjectInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetObjectInput) GoString() string {
+	return s.String()
 }
 
 type GetObjectOutput struct {
@@ -3205,6 +3661,16 @@ type metadataGetObjectOutput struct {
 	SDKShapeTraits bool `type:"structure" payload:"Body"`
 }
 
+// String returns the string representation
+func (s GetObjectOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetObjectOutput) GoString() string {
+	return s.String()
+}
+
 type GetObjectTorrentInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -3223,6 +3689,16 @@ type metadataGetObjectTorrentInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s GetObjectTorrentInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetObjectTorrentInput) GoString() string {
+	return s.String()
+}
+
 type GetObjectTorrentOutput struct {
 	Body io.ReadCloser `type:"blob"`
 
@@ -3237,6 +3713,16 @@ type metadataGetObjectTorrentOutput struct {
 	SDKShapeTraits bool `type:"structure" payload:"Body"`
 }
 
+// String returns the string representation
+func (s GetObjectTorrentOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s GetObjectTorrentOutput) GoString() string {
+	return s.String()
+}
+
 type Grant struct {
 	Grantee *Grantee `type:"structure"`
 
@@ -3248,6 +3734,16 @@ type Grant struct {
 
 type metadataGrant struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s Grant) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Grant) GoString() string {
+	return s.String()
 }
 
 type Grantee struct {
@@ -3273,6 +3769,16 @@ type metadataGrantee struct {
 	SDKShapeTraits bool `type:"structure" xmlPrefix:"xsi" xmlURI:"http://www.w3.org/2001/XMLSchema-instance"`
 }
 
+// String returns the string representation
+func (s Grantee) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Grantee) GoString() string {
+	return s.String()
+}
+
 type HeadBucketInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -3283,12 +3789,32 @@ type metadataHeadBucketInput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s HeadBucketInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s HeadBucketInput) GoString() string {
+	return s.String()
+}
+
 type HeadBucketOutput struct {
 	metadataHeadBucketOutput `json:"-" xml:"-"`
 }
 
 type metadataHeadBucketOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s HeadBucketOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s HeadBucketOutput) GoString() string {
+	return s.String()
 }
 
 type HeadObjectInput struct {
@@ -3322,8 +3848,7 @@ type HeadObjectInput struct {
 	// at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html
 	RequestPayer *string `location:"header" locationName:"x-amz-request-payer" type:"string"`
 
-	// Specifies the algorithm to use to when encrypting the object (e.g., AES256,
-	// aws:kms).
+	// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
 	SSECustomerAlgorithm *string `location:"header" locationName:"x-amz-server-side-encryption-customer-algorithm" type:"string"`
 
 	// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting
@@ -3346,6 +3871,16 @@ type HeadObjectInput struct {
 
 type metadataHeadObjectInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s HeadObjectInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s HeadObjectInput) GoString() string {
+	return s.String()
 }
 
 type HeadObjectOutput struct {
@@ -3443,6 +3978,16 @@ type metadataHeadObjectOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s HeadObjectOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s HeadObjectOutput) GoString() string {
+	return s.String()
+}
+
 type IndexDocument struct {
 	// A suffix that is appended to a request that is for a directory on the website
 	// endpoint (e.g. if the suffix is index.html and you make a request to samplebucket/images/
@@ -3455,6 +4000,16 @@ type IndexDocument struct {
 
 type metadataIndexDocument struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s IndexDocument) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s IndexDocument) GoString() string {
+	return s.String()
 }
 
 type Initiator struct {
@@ -3470,6 +4025,16 @@ type Initiator struct {
 
 type metadataInitiator struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s Initiator) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Initiator) GoString() string {
+	return s.String()
 }
 
 // Container for specifying the AWS Lambda notification configuration.
@@ -3491,6 +4056,16 @@ type metadataLambdaFunctionConfiguration struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s LambdaFunctionConfiguration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s LambdaFunctionConfiguration) GoString() string {
+	return s.String()
+}
+
 type LifecycleConfiguration struct {
 	Rules []*LifecycleRule `locationName:"Rule" type:"list" flattened:"true" required:"true"`
 
@@ -3499,6 +4074,16 @@ type LifecycleConfiguration struct {
 
 type metadataLifecycleConfiguration struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s LifecycleConfiguration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s LifecycleConfiguration) GoString() string {
+	return s.String()
 }
 
 type LifecycleExpiration struct {
@@ -3515,6 +4100,16 @@ type LifecycleExpiration struct {
 
 type metadataLifecycleExpiration struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s LifecycleExpiration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s LifecycleExpiration) GoString() string {
+	return s.String()
 }
 
 type LifecycleRule struct {
@@ -3553,12 +4148,32 @@ type metadataLifecycleRule struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s LifecycleRule) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s LifecycleRule) GoString() string {
+	return s.String()
+}
+
 type ListBucketsInput struct {
 	metadataListBucketsInput `json:"-" xml:"-"`
 }
 
 type metadataListBucketsInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListBucketsInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListBucketsInput) GoString() string {
+	return s.String()
 }
 
 type ListBucketsOutput struct {
@@ -3571,6 +4186,16 @@ type ListBucketsOutput struct {
 
 type metadataListBucketsOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListBucketsOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListBucketsOutput) GoString() string {
+	return s.String()
 }
 
 type ListMultipartUploadsInput struct {
@@ -3610,6 +4235,16 @@ type ListMultipartUploadsInput struct {
 
 type metadataListMultipartUploadsInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListMultipartUploadsInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListMultipartUploadsInput) GoString() string {
+	return s.String()
 }
 
 type ListMultipartUploadsOutput struct {
@@ -3660,6 +4295,16 @@ type metadataListMultipartUploadsOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s ListMultipartUploadsOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListMultipartUploadsOutput) GoString() string {
+	return s.String()
+}
+
 type ListObjectVersionsInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -3692,6 +4337,16 @@ type ListObjectVersionsInput struct {
 
 type metadataListObjectVersionsInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListObjectVersionsInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListObjectVersionsInput) GoString() string {
+	return s.String()
 }
 
 type ListObjectVersionsOutput struct {
@@ -3737,6 +4392,16 @@ type metadataListObjectVersionsOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s ListObjectVersionsOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListObjectVersionsOutput) GoString() string {
+	return s.String()
+}
+
 type ListObjectsInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -3766,6 +4431,16 @@ type ListObjectsInput struct {
 
 type metadataListObjectsInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListObjectsInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListObjectsInput) GoString() string {
+	return s.String()
 }
 
 type ListObjectsOutput struct {
@@ -3806,6 +4481,16 @@ type metadataListObjectsOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s ListObjectsOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListObjectsOutput) GoString() string {
+	return s.String()
+}
+
 type ListPartsInput struct {
 	Bucket *string `location:"uri" locationName:"Bucket" type:"string" required:"true"`
 
@@ -3832,6 +4517,16 @@ type ListPartsInput struct {
 
 type metadataListPartsInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListPartsInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListPartsInput) GoString() string {
+	return s.String()
 }
 
 type ListPartsOutput struct {
@@ -3879,6 +4574,16 @@ type metadataListPartsOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s ListPartsOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ListPartsOutput) GoString() string {
+	return s.String()
+}
+
 type LoggingEnabled struct {
 	// Specifies the bucket where you want Amazon S3 to store server access logs.
 	// You can have your logs delivered to any bucket that you own, including the
@@ -3899,6 +4604,16 @@ type LoggingEnabled struct {
 
 type metadataLoggingEnabled struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s LoggingEnabled) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s LoggingEnabled) GoString() string {
+	return s.String()
 }
 
 type MultipartUpload struct {
@@ -3926,6 +4641,16 @@ type metadataMultipartUpload struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s MultipartUpload) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s MultipartUpload) GoString() string {
+	return s.String()
+}
+
 // Specifies when noncurrent object versions expire. Upon expiration, Amazon
 // S3 permanently deletes the noncurrent object versions. You set this lifecycle
 // configuration action on a bucket that has versioning enabled (or suspended)
@@ -3944,6 +4669,16 @@ type NoncurrentVersionExpiration struct {
 
 type metadataNoncurrentVersionExpiration struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s NoncurrentVersionExpiration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s NoncurrentVersionExpiration) GoString() string {
+	return s.String()
 }
 
 // Container for the transition rule that describes when noncurrent objects
@@ -3969,6 +4704,16 @@ type metadataNoncurrentVersionTransition struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s NoncurrentVersionTransition) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s NoncurrentVersionTransition) GoString() string {
+	return s.String()
+}
+
 // Container for specifying the notification configuration of the bucket. If
 // this element is empty, notifications are turned off on the bucket.
 type NotificationConfiguration struct {
@@ -3985,6 +4730,16 @@ type metadataNotificationConfiguration struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s NotificationConfiguration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s NotificationConfiguration) GoString() string {
+	return s.String()
+}
+
 type NotificationConfigurationDeprecated struct {
 	CloudFunctionConfiguration *CloudFunctionConfiguration `type:"structure"`
 
@@ -3997,6 +4752,16 @@ type NotificationConfigurationDeprecated struct {
 
 type metadataNotificationConfigurationDeprecated struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s NotificationConfigurationDeprecated) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s NotificationConfigurationDeprecated) GoString() string {
+	return s.String()
 }
 
 type Object struct {
@@ -4020,6 +4785,16 @@ type metadataObject struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s Object) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Object) GoString() string {
+	return s.String()
+}
+
 type ObjectIdentifier struct {
 	// Key name of the object to delete.
 	Key *string `type:"string" required:"true"`
@@ -4032,6 +4807,16 @@ type ObjectIdentifier struct {
 
 type metadataObjectIdentifier struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ObjectIdentifier) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ObjectIdentifier) GoString() string {
+	return s.String()
 }
 
 type ObjectVersion struct {
@@ -4065,6 +4850,16 @@ type metadataObjectVersion struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s ObjectVersion) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ObjectVersion) GoString() string {
+	return s.String()
+}
+
 type Owner struct {
 	DisplayName *string `type:"string"`
 
@@ -4077,6 +4872,16 @@ type metadataOwner struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s Owner) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Owner) GoString() string {
+	return s.String()
+}
+
 type Part struct {
 	// Entity tag returned when the part was uploaded.
 	ETag *string `type:"string"`
@@ -4084,7 +4889,8 @@ type Part struct {
 	// Date and time at which the part was uploaded.
 	LastModified *time.Time `type:"timestamp" timestampFormat:"iso8601"`
 
-	// Part number identifying the part.
+	// Part number identifying the part. This is a positive integer between 1 and
+	// 10,000.
 	PartNumber *int64 `type:"integer"`
 
 	// Size of the uploaded part data.
@@ -4095,6 +4901,16 @@ type Part struct {
 
 type metadataPart struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s Part) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Part) GoString() string {
+	return s.String()
 }
 
 type PutBucketACLInput struct {
@@ -4128,12 +4944,32 @@ type metadataPutBucketACLInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"AccessControlPolicy"`
 }
 
+// String returns the string representation
+func (s PutBucketACLInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketACLInput) GoString() string {
+	return s.String()
+}
+
 type PutBucketACLOutput struct {
 	metadataPutBucketACLOutput `json:"-" xml:"-"`
 }
 
 type metadataPutBucketACLOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutBucketACLOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketACLOutput) GoString() string {
+	return s.String()
 }
 
 type PutBucketCORSInput struct {
@@ -4148,12 +4984,32 @@ type metadataPutBucketCORSInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"CORSConfiguration"`
 }
 
+// String returns the string representation
+func (s PutBucketCORSInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketCORSInput) GoString() string {
+	return s.String()
+}
+
 type PutBucketCORSOutput struct {
 	metadataPutBucketCORSOutput `json:"-" xml:"-"`
 }
 
 type metadataPutBucketCORSOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutBucketCORSOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketCORSOutput) GoString() string {
+	return s.String()
 }
 
 type PutBucketLifecycleInput struct {
@@ -4168,12 +5024,32 @@ type metadataPutBucketLifecycleInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"LifecycleConfiguration"`
 }
 
+// String returns the string representation
+func (s PutBucketLifecycleInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketLifecycleInput) GoString() string {
+	return s.String()
+}
+
 type PutBucketLifecycleOutput struct {
 	metadataPutBucketLifecycleOutput `json:"-" xml:"-"`
 }
 
 type metadataPutBucketLifecycleOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutBucketLifecycleOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketLifecycleOutput) GoString() string {
+	return s.String()
 }
 
 type PutBucketLoggingInput struct {
@@ -4188,12 +5064,32 @@ type metadataPutBucketLoggingInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"BucketLoggingStatus"`
 }
 
+// String returns the string representation
+func (s PutBucketLoggingInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketLoggingInput) GoString() string {
+	return s.String()
+}
+
 type PutBucketLoggingOutput struct {
 	metadataPutBucketLoggingOutput `json:"-" xml:"-"`
 }
 
 type metadataPutBucketLoggingOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutBucketLoggingOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketLoggingOutput) GoString() string {
+	return s.String()
 }
 
 type PutBucketNotificationConfigurationInput struct {
@@ -4210,12 +5106,32 @@ type metadataPutBucketNotificationConfigurationInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"NotificationConfiguration"`
 }
 
+// String returns the string representation
+func (s PutBucketNotificationConfigurationInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketNotificationConfigurationInput) GoString() string {
+	return s.String()
+}
+
 type PutBucketNotificationConfigurationOutput struct {
 	metadataPutBucketNotificationConfigurationOutput `json:"-" xml:"-"`
 }
 
 type metadataPutBucketNotificationConfigurationOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutBucketNotificationConfigurationOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketNotificationConfigurationOutput) GoString() string {
+	return s.String()
 }
 
 type PutBucketNotificationInput struct {
@@ -4230,12 +5146,32 @@ type metadataPutBucketNotificationInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"NotificationConfiguration"`
 }
 
+// String returns the string representation
+func (s PutBucketNotificationInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketNotificationInput) GoString() string {
+	return s.String()
+}
+
 type PutBucketNotificationOutput struct {
 	metadataPutBucketNotificationOutput `json:"-" xml:"-"`
 }
 
 type metadataPutBucketNotificationOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutBucketNotificationOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketNotificationOutput) GoString() string {
+	return s.String()
 }
 
 type PutBucketPolicyInput struct {
@@ -4251,12 +5187,32 @@ type metadataPutBucketPolicyInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"Policy"`
 }
 
+// String returns the string representation
+func (s PutBucketPolicyInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketPolicyInput) GoString() string {
+	return s.String()
+}
+
 type PutBucketPolicyOutput struct {
 	metadataPutBucketPolicyOutput `json:"-" xml:"-"`
 }
 
 type metadataPutBucketPolicyOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutBucketPolicyOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketPolicyOutput) GoString() string {
+	return s.String()
 }
 
 type PutBucketReplicationInput struct {
@@ -4273,12 +5229,32 @@ type metadataPutBucketReplicationInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"ReplicationConfiguration"`
 }
 
+// String returns the string representation
+func (s PutBucketReplicationInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketReplicationInput) GoString() string {
+	return s.String()
+}
+
 type PutBucketReplicationOutput struct {
 	metadataPutBucketReplicationOutput `json:"-" xml:"-"`
 }
 
 type metadataPutBucketReplicationOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutBucketReplicationOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketReplicationOutput) GoString() string {
+	return s.String()
 }
 
 type PutBucketRequestPaymentInput struct {
@@ -4293,12 +5269,32 @@ type metadataPutBucketRequestPaymentInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"RequestPaymentConfiguration"`
 }
 
+// String returns the string representation
+func (s PutBucketRequestPaymentInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketRequestPaymentInput) GoString() string {
+	return s.String()
+}
+
 type PutBucketRequestPaymentOutput struct {
 	metadataPutBucketRequestPaymentOutput `json:"-" xml:"-"`
 }
 
 type metadataPutBucketRequestPaymentOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutBucketRequestPaymentOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketRequestPaymentOutput) GoString() string {
+	return s.String()
 }
 
 type PutBucketTaggingInput struct {
@@ -4313,12 +5309,32 @@ type metadataPutBucketTaggingInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"Tagging"`
 }
 
+// String returns the string representation
+func (s PutBucketTaggingInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketTaggingInput) GoString() string {
+	return s.String()
+}
+
 type PutBucketTaggingOutput struct {
 	metadataPutBucketTaggingOutput `json:"-" xml:"-"`
 }
 
 type metadataPutBucketTaggingOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutBucketTaggingOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketTaggingOutput) GoString() string {
+	return s.String()
 }
 
 type PutBucketVersioningInput struct {
@@ -4337,12 +5353,32 @@ type metadataPutBucketVersioningInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"VersioningConfiguration"`
 }
 
+// String returns the string representation
+func (s PutBucketVersioningInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketVersioningInput) GoString() string {
+	return s.String()
+}
+
 type PutBucketVersioningOutput struct {
 	metadataPutBucketVersioningOutput `json:"-" xml:"-"`
 }
 
 type metadataPutBucketVersioningOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutBucketVersioningOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketVersioningOutput) GoString() string {
+	return s.String()
 }
 
 type PutBucketWebsiteInput struct {
@@ -4357,12 +5393,32 @@ type metadataPutBucketWebsiteInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"WebsiteConfiguration"`
 }
 
+// String returns the string representation
+func (s PutBucketWebsiteInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketWebsiteInput) GoString() string {
+	return s.String()
+}
+
 type PutBucketWebsiteOutput struct {
 	metadataPutBucketWebsiteOutput `json:"-" xml:"-"`
 }
 
 type metadataPutBucketWebsiteOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutBucketWebsiteOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutBucketWebsiteOutput) GoString() string {
+	return s.String()
 }
 
 type PutObjectACLInput struct {
@@ -4404,6 +5460,16 @@ type metadataPutObjectACLInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"AccessControlPolicy"`
 }
 
+// String returns the string representation
+func (s PutObjectACLInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutObjectACLInput) GoString() string {
+	return s.String()
+}
+
 type PutObjectACLOutput struct {
 	// If present, indicates that the requester was successfully charged for the
 	// request.
@@ -4414,6 +5480,16 @@ type PutObjectACLOutput struct {
 
 type metadataPutObjectACLOutput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutObjectACLOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutObjectACLOutput) GoString() string {
+	return s.String()
 }
 
 type PutObjectInput struct {
@@ -4472,8 +5548,7 @@ type PutObjectInput struct {
 	// at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html
 	RequestPayer *string `location:"header" locationName:"x-amz-request-payer" type:"string"`
 
-	// Specifies the algorithm to use to when encrypting the object (e.g., AES256,
-	// aws:kms).
+	// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
 	SSECustomerAlgorithm *string `location:"header" locationName:"x-amz-server-side-encryption-customer-algorithm" type:"string"`
 
 	// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting
@@ -4511,6 +5586,16 @@ type PutObjectInput struct {
 
 type metadataPutObjectInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"Body"`
+}
+
+// String returns the string representation
+func (s PutObjectInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutObjectInput) GoString() string {
+	return s.String()
 }
 
 type PutObjectOutput struct {
@@ -4553,6 +5638,16 @@ type metadataPutObjectOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s PutObjectOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s PutObjectOutput) GoString() string {
+	return s.String()
+}
+
 // Container for specifying an configuration when you want Amazon S3 to publish
 // events to an Amazon Simple Queue Service (Amazon SQS) queue.
 type QueueConfiguration struct {
@@ -4573,6 +5668,16 @@ type metadataQueueConfiguration struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s QueueConfiguration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s QueueConfiguration) GoString() string {
+	return s.String()
+}
+
 type QueueConfigurationDeprecated struct {
 	// Bucket event for which to send notifications.
 	Event *string `type:"string"`
@@ -4590,6 +5695,16 @@ type QueueConfigurationDeprecated struct {
 
 type metadataQueueConfigurationDeprecated struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s QueueConfigurationDeprecated) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s QueueConfigurationDeprecated) GoString() string {
+	return s.String()
 }
 
 type Redirect struct {
@@ -4624,6 +5739,16 @@ type metadataRedirect struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s Redirect) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Redirect) GoString() string {
+	return s.String()
+}
+
 type RedirectAllRequestsTo struct {
 	// Name of the host where requests will be redirected.
 	HostName *string `type:"string" required:"true"`
@@ -4637,6 +5762,16 @@ type RedirectAllRequestsTo struct {
 
 type metadataRedirectAllRequestsTo struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s RedirectAllRequestsTo) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s RedirectAllRequestsTo) GoString() string {
+	return s.String()
 }
 
 // Container for replication rules. You can add as many as 1,000 rules. Total
@@ -4655,6 +5790,16 @@ type ReplicationConfiguration struct {
 
 type metadataReplicationConfiguration struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s ReplicationConfiguration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ReplicationConfiguration) GoString() string {
+	return s.String()
 }
 
 type ReplicationRule struct {
@@ -4678,6 +5823,16 @@ type metadataReplicationRule struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s ReplicationRule) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s ReplicationRule) GoString() string {
+	return s.String()
+}
+
 type RequestPaymentConfiguration struct {
 	// Specifies who pays for the download and request fees.
 	Payer *string `type:"string" required:"true"`
@@ -4687,6 +5842,16 @@ type RequestPaymentConfiguration struct {
 
 type metadataRequestPaymentConfiguration struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s RequestPaymentConfiguration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s RequestPaymentConfiguration) GoString() string {
+	return s.String()
 }
 
 type RestoreObjectInput struct {
@@ -4711,6 +5876,16 @@ type metadataRestoreObjectInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"RestoreRequest"`
 }
 
+// String returns the string representation
+func (s RestoreObjectInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s RestoreObjectInput) GoString() string {
+	return s.String()
+}
+
 type RestoreObjectOutput struct {
 	// If present, indicates that the requester was successfully charged for the
 	// request.
@@ -4723,6 +5898,16 @@ type metadataRestoreObjectOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s RestoreObjectOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s RestoreObjectOutput) GoString() string {
+	return s.String()
+}
+
 type RestoreRequest struct {
 	// Lifetime of the active copy in days
 	Days *int64 `type:"integer" required:"true"`
@@ -4732,6 +5917,16 @@ type RestoreRequest struct {
 
 type metadataRestoreRequest struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s RestoreRequest) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s RestoreRequest) GoString() string {
+	return s.String()
 }
 
 type RoutingRule struct {
@@ -4753,6 +5948,16 @@ type metadataRoutingRule struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s RoutingRule) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s RoutingRule) GoString() string {
+	return s.String()
+}
+
 type Tag struct {
 	// Name of the tag.
 	Key *string `type:"string" required:"true"`
@@ -4767,6 +5972,16 @@ type metadataTag struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s Tag) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Tag) GoString() string {
+	return s.String()
+}
+
 type Tagging struct {
 	TagSet []*Tag `locationNameList:"Tag" type:"list" required:"true"`
 
@@ -4775,6 +5990,16 @@ type Tagging struct {
 
 type metadataTagging struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s Tagging) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Tagging) GoString() string {
+	return s.String()
 }
 
 type TargetGrant struct {
@@ -4788,6 +6013,16 @@ type TargetGrant struct {
 
 type metadataTargetGrant struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s TargetGrant) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s TargetGrant) GoString() string {
+	return s.String()
 }
 
 // Container for specifying the configuration when you want Amazon S3 to publish
@@ -4808,6 +6043,16 @@ type TopicConfiguration struct {
 
 type metadataTopicConfiguration struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s TopicConfiguration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s TopicConfiguration) GoString() string {
+	return s.String()
 }
 
 type TopicConfigurationDeprecated struct {
@@ -4831,6 +6076,16 @@ type metadataTopicConfigurationDeprecated struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s TopicConfigurationDeprecated) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s TopicConfigurationDeprecated) GoString() string {
+	return s.String()
+}
+
 type Transition struct {
 	// Indicates at what date the object is to be moved or deleted. Should be in
 	// GMT ISO 8601 Format.
@@ -4848,6 +6103,16 @@ type Transition struct {
 
 type metadataTransition struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s Transition) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s Transition) GoString() string {
+	return s.String()
 }
 
 type UploadPartCopyInput struct {
@@ -4892,7 +6157,8 @@ type UploadPartCopyInput struct {
 
 	Key *string `location:"uri" locationName:"Key" type:"string" required:"true"`
 
-	// Part number of part being copied.
+	// Part number of part being copied. This is a positive integer between 1 and
+	// 10,000.
 	PartNumber *int64 `location:"querystring" locationName:"partNumber" type:"integer" required:"true"`
 
 	// Confirms that the requester knows that she or he will be charged for the
@@ -4901,8 +6167,7 @@ type UploadPartCopyInput struct {
 	// at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html
 	RequestPayer *string `location:"header" locationName:"x-amz-request-payer" type:"string"`
 
-	// Specifies the algorithm to use to when encrypting the object (e.g., AES256,
-	// aws:kms).
+	// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
 	SSECustomerAlgorithm *string `location:"header" locationName:"x-amz-server-side-encryption-customer-algorithm" type:"string"`
 
 	// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting
@@ -4926,6 +6191,16 @@ type UploadPartCopyInput struct {
 
 type metadataUploadPartCopyInput struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s UploadPartCopyInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s UploadPartCopyInput) GoString() string {
+	return s.String()
 }
 
 type UploadPartCopyOutput struct {
@@ -4964,6 +6239,16 @@ type metadataUploadPartCopyOutput struct {
 	SDKShapeTraits bool `type:"structure" payload:"CopyPartResult"`
 }
 
+// String returns the string representation
+func (s UploadPartCopyOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s UploadPartCopyOutput) GoString() string {
+	return s.String()
+}
+
 type UploadPartInput struct {
 	Body io.ReadSeeker `type:"blob"`
 
@@ -4975,7 +6260,8 @@ type UploadPartInput struct {
 
 	Key *string `location:"uri" locationName:"Key" type:"string" required:"true"`
 
-	// Part number of part being uploaded.
+	// Part number of part being uploaded. This is a positive integer between 1
+	// and 10,000.
 	PartNumber *int64 `location:"querystring" locationName:"partNumber" type:"integer" required:"true"`
 
 	// Confirms that the requester knows that she or he will be charged for the
@@ -4984,8 +6270,7 @@ type UploadPartInput struct {
 	// at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html
 	RequestPayer *string `location:"header" locationName:"x-amz-request-payer" type:"string"`
 
-	// Specifies the algorithm to use to when encrypting the object (e.g., AES256,
-	// aws:kms).
+	// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
 	SSECustomerAlgorithm *string `location:"header" locationName:"x-amz-server-side-encryption-customer-algorithm" type:"string"`
 
 	// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting
@@ -5009,6 +6294,16 @@ type UploadPartInput struct {
 
 type metadataUploadPartInput struct {
 	SDKShapeTraits bool `type:"structure" payload:"Body"`
+}
+
+// String returns the string representation
+func (s UploadPartInput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s UploadPartInput) GoString() string {
+	return s.String()
 }
 
 type UploadPartOutput struct {
@@ -5044,6 +6339,16 @@ type metadataUploadPartOutput struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s UploadPartOutput) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s UploadPartOutput) GoString() string {
+	return s.String()
+}
+
 type VersioningConfiguration struct {
 	// Specifies whether MFA delete is enabled in the bucket versioning configuration.
 	// This element is only returned if the bucket has been configured with MFA
@@ -5060,6 +6365,16 @@ type metadataVersioningConfiguration struct {
 	SDKShapeTraits bool `type:"structure"`
 }
 
+// String returns the string representation
+func (s VersioningConfiguration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s VersioningConfiguration) GoString() string {
+	return s.String()
+}
+
 type WebsiteConfiguration struct {
 	ErrorDocument *ErrorDocument `type:"structure"`
 
@@ -5074,4 +6389,14 @@ type WebsiteConfiguration struct {
 
 type metadataWebsiteConfiguration struct {
 	SDKShapeTraits bool `type:"structure"`
+}
+
+// String returns the string representation
+func (s WebsiteConfiguration) String() string {
+	return awsutil.StringValue(s)
+}
+
+// GoString returns the string representation
+func (s WebsiteConfiguration) GoString() string {
+	return s.String()
 }
