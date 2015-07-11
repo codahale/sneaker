@@ -4,8 +4,9 @@ import (
 	"io/ioutil"
 	"regexp"
 
-	"github.com/awslabs/aws-sdk-go/aws"
-	"github.com/awslabs/aws-sdk-go/aws/awsutil"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awsutil"
+	"github.com/aws/aws-sdk-go/internal/apierr"
 )
 
 var reBucketLocation = regexp.MustCompile(`>([^<>]+)<\/Location`)
@@ -15,7 +16,7 @@ func buildGetBucketLocation(r *aws.Request) {
 		out := r.Data.(*GetBucketLocationOutput)
 		b, err := ioutil.ReadAll(r.HTTPResponse.Body)
 		if err != nil {
-			r.Error = err
+			r.Error = apierr.New("Unmarshal", "failed reading response body", err)
 			return
 		}
 

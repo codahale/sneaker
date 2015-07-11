@@ -100,13 +100,13 @@ func TestPackagingRoundTrip(t *testing.T) {
 	}
 }
 
-func fromAWS(m *map[string]*string) map[string]string {
+func fromAWS(m map[string]*string) map[string]string {
 	if m == nil {
 		return nil
 	}
 
-	res := make(map[string]string, len(*m))
-	for k, v := range *m {
+	res := make(map[string]string, len(m))
+	for k, v := range m {
 		res[k] = *v
 	}
 	return res

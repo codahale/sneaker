@@ -3,13 +3,17 @@ package s3_test
 import (
 	"testing"
 
-	"github.com/awslabs/aws-sdk-go/aws"
-	"github.com/awslabs/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/internal/test/unit"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/stretchr/testify/assert"
 )
 
+var _ = unit.Imported
+
 func TestSSECustomerKeyOverHTTPError(t *testing.T) {
-	s := s3.New(baseConfig.Merge(&aws.Config{DisableSSL: true}))
+	s := s3.New(&aws.Config{DisableSSL: true})
 	req, _ := s.CopyObjectRequest(&s3.CopyObjectInput{
 		Bucket:         aws.String("bucket"),
 		CopySource:     aws.String("bucket/source"),
@@ -19,13 +23,12 @@ func TestSSECustomerKeyOverHTTPError(t *testing.T) {
 	err := req.Build()
 
 	assert.Error(t, err)
-	aerr := aws.Error(err)
-	assert.Equal(t, "ConfigError", aerr.Code)
-	assert.Contains(t, aerr.Message, "cannot send SSE keys over HTTP")
+	assert.Equal(t, "ConfigError", err.(awserr.Error).Code())
+	assert.Contains(t, err.(awserr.Error).Message(), "cannot send SSE keys over HTTP")
 }
 
 func TestCopySourceSSECustomerKeyOverHTTPError(t *testing.T) {
-	s := s3.New(baseConfig.Merge(&aws.Config{DisableSSL: true}))
+	s := s3.New(&aws.Config{DisableSSL: true})
 	req, _ := s.CopyObjectRequest(&s3.CopyObjectInput{
 		Bucket:     aws.String("bucket"),
 		CopySource: aws.String("bucket/source"),
@@ -35,13 +38,12 @@ func TestCopySourceSSECustomerKeyOverHTTPError(t *testing.T) {
 	err := req.Build()
 
 	assert.Error(t, err)
-	aerr := aws.Error(err)
-	assert.Equal(t, "ConfigError", aerr.Code)
-	assert.Contains(t, aerr.Message, "cannot send SSE keys over HTTP")
+	assert.Equal(t, "ConfigError", err.(awserr.Error).Code())
+	assert.Contains(t, err.(awserr.Error).Message(), "cannot send SSE keys over HTTP")
 }
 
 func TestComputeSSEKeys(t *testing.T) {
-	s := s3.New(baseConfig)
+	s := s3.New(nil)
 	req, _ := s.CopyObjectRequest(&s3.CopyObjectInput{
 		Bucket:                   aws.String("bucket"),
 		CopySource:               aws.String("bucket/source"),
@@ -59,7 +61,7 @@ func TestComputeSSEKeys(t *testing.T) {
 }
 
 func TestComputeSSEKeysShortcircuit(t *testing.T) {
-	s := s3.New(baseConfig)
+	s := s3.New(nil)
 	req, _ := s.CopyObjectRequest(&s3.CopyObjectInput{
 		Bucket:                      aws.String("bucket"),
 		CopySource:                  aws.String("bucket/source"),
