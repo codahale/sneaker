@@ -1,15 +1,13 @@
 package credentials
 
 import (
-	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/internal/apierr"
 )
 
 var (
 	// ErrNoValidProvidersFoundInChain Is returned when there are no valid
 	// providers in the ChainProvider.
-	//
-	// @readonly
-	ErrNoValidProvidersFoundInChain = awserr.New("NoCredentialProviders", "no valid providers in chain", nil)
+	ErrNoValidProvidersFoundInChain = apierr.New("NoCredentialProviders", "no valid providers in chain", nil)
 )
 
 // A ChainProvider will search for a provider which returns credentials
@@ -38,9 +36,7 @@ var (
 //             &EnvProvider{},
 //             &EC2RoleProvider{},
 //         })
-//
-//     // Usage of ChainCredentials with aws.Config
-//     svc := ec2.New(&aws.Config{Credentials: creds})
+//     creds.Retrieve()
 //
 type ChainProvider struct {
 	Providers []Provider

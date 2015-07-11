@@ -10,6 +10,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
+	"github.com/aws/aws-sdk-go/internal/apierr"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
@@ -59,17 +60,13 @@ type MultiUploadFailure interface {
 	UploadID() string
 }
 
-// So that the Error interface type can be included as an anonymous field
-// in the multiUploadError struct and not conflict with the error.Error() method.
-type awsError awserr.Error
-
 // A multiUploadError wraps the upload ID of a failed s3 multipart upload.
 // Composed of BaseError for code, message, and original error
 //
 // Should be used for an error that occurred failing a S3 multipart upload,
 // and a upload ID is available. If an uploadID is not available a more relevant
 type multiUploadError struct {
-	awsError
+	*apierr.BaseError
 
 	// ID for multipart upload which failed.
 	uploadID string
@@ -80,19 +77,18 @@ type multiUploadError struct {
 // See apierr.BaseError ErrorWithExtra for output format
 //
 // Satisfies the error interface.
-func (m multiUploadError) Error() string {
-	extra := fmt.Sprintf("upload id: %s", m.uploadID)
-	return awserr.SprintError(m.Code(), m.Message(), extra, m.OrigErr())
+func (m *multiUploadError) Error() string {
+	return m.ErrorWithExtra(fmt.Sprintf("upload id: %s", m.uploadID))
 }
 
 // String returns the string representation of the error.
 // Alias for Error to satisfy the stringer interface.
-func (m multiUploadError) String() string {
+func (m *multiUploadError) String() string {
 	return m.Error()
 }
 
 // UploadID returns the id of the S3 upload which failed.
-func (m multiUploadError) UploadID() string {
+func (m *multiUploadError) UploadID() string {
 	return m.uploadID
 }
 
@@ -262,7 +258,7 @@ func (u *uploader) upload() (*UploadOutput, error) {
 
 	if u.opts.PartSize < MinUploadPartSize {
 		msg := fmt.Sprintf("part size must be at least %d bytes", MinUploadPartSize)
-		return nil, awserr.New("ConfigError", msg, nil)
+		return nil, apierr.New("ConfigError", msg, nil)
 	}
 
 	// Do one read to determine if we have more than one part
@@ -270,7 +266,7 @@ func (u *uploader) upload() (*UploadOutput, error) {
 	if err == io.EOF || err == io.ErrUnexpectedEOF { // single part
 		return u.singlePart(buf)
 	} else if err != nil {
-		return nil, awserr.New("ReadRequestBody", "read upload data failed", err)
+		return nil, apierr.New("ReadRequestBody", "read upload data failed", err)
 	}
 
 	mu := multiuploader{uploader: u}
@@ -422,7 +418,7 @@ func (u *multiuploader) upload(firstBuf io.ReadSeeker) (*UploadOutput, error) {
 		if num > int64(MaxUploadParts) {
 			msg := fmt.Sprintf("exceeded total allowed parts (%d). "+
 				"Adjust PartSize to fit in this limit", MaxUploadParts)
-			u.seterr(awserr.New("TotalPartsExceeded", msg, nil))
+			u.seterr(apierr.New("TotalPartsExceeded", msg, nil))
 			break
 		}
 
@@ -436,10 +432,7 @@ func (u *multiuploader) upload(firstBuf io.ReadSeeker) (*UploadOutput, error) {
 		ch <- chunk{buf: buf, num: num}
 
 		if err != nil && err != io.ErrUnexpectedEOF {
-			u.seterr(awserr.New(
-				"ReadRequestBody",
-				"read multipart upload data failed",
-				err))
+			u.seterr(apierr.New("ReadRequestBody", "read multipart upload data failed", err))
 			break
 		}
 	}
@@ -450,12 +443,16 @@ func (u *multiuploader) upload(firstBuf io.ReadSeeker) (*UploadOutput, error) {
 	complete := u.complete()
 
 	if err := u.geterr(); err != nil {
+		var berr *apierr.BaseError
+		switch t := err.(type) {
+		case *apierr.BaseError:
+			berr = t
+		default:
+			berr = apierr.New("MultipartUpload", "upload multipart failed", err)
+		}
 		return nil, &multiUploadError{
-			awsError: awserr.New(
-				"MultipartUpload",
-				"upload multipart failed",
-				err),
-			uploadID: u.uploadID,
+			BaseError: berr,
+			uploadID:  u.uploadID,
 		}
 	}
 	return &UploadOutput{

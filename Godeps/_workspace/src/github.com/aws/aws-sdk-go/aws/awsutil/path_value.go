@@ -81,12 +81,6 @@ func rValuesAtPath(v interface{}, path string, create bool, caseSensitive bool) 
 				value = reflect.Indirect(value)
 			}
 
-			if value.Kind() == reflect.Slice || value.Kind() == reflect.Map {
-				if !create && value.IsNil() {
-					value = reflect.ValueOf(nil)
-				}
-			}
-
 			if value.IsValid() {
 				nextvals = append(nextvals, value)
 			}
@@ -123,12 +117,6 @@ func rValuesAtPath(v interface{}, path string, create bool, caseSensitive bool) 
 					i = value.Len() + i
 				}
 				value = reflect.Indirect(value.Index(i))
-
-				if value.Kind() == reflect.Slice || value.Kind() == reflect.Map {
-					if !create && value.IsNil() {
-						value = reflect.ValueOf(nil)
-					}
-				}
 
 				if value.IsValid() {
 					nextvals = append(nextvals, value)

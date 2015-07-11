@@ -15,74 +15,74 @@ type endpointEntry struct {
 var endpointsMap = endpointStruct{
 	Version: 2,
 	Endpoints: map[string]endpointEntry{
-		"*/*": {
+		"*/*": endpointEntry{
 			Endpoint: "{service}.{region}.amazonaws.com",
 		},
-		"*/cloudfront": {
+		"*/cloudfront": endpointEntry{
 			Endpoint:      "cloudfront.amazonaws.com",
 			SigningRegion: "us-east-1",
 		},
-		"*/cloudsearchdomain": {
+		"*/cloudsearchdomain": endpointEntry{
 			Endpoint:      "",
 			SigningRegion: "us-east-1",
 		},
-		"*/iam": {
+		"*/iam": endpointEntry{
 			Endpoint:      "iam.amazonaws.com",
 			SigningRegion: "us-east-1",
 		},
-		"*/importexport": {
+		"*/importexport": endpointEntry{
 			Endpoint:      "importexport.amazonaws.com",
 			SigningRegion: "us-east-1",
 		},
-		"*/route53": {
+		"*/route53": endpointEntry{
 			Endpoint:      "route53.amazonaws.com",
 			SigningRegion: "us-east-1",
 		},
-		"*/sts": {
+		"*/sts": endpointEntry{
 			Endpoint:      "sts.amazonaws.com",
 			SigningRegion: "us-east-1",
 		},
-		"ap-northeast-1/s3": {
+		"ap-northeast-1/s3": endpointEntry{
 			Endpoint: "s3-{region}.amazonaws.com",
 		},
-		"ap-southeast-1/s3": {
+		"ap-southeast-1/s3": endpointEntry{
 			Endpoint: "s3-{region}.amazonaws.com",
 		},
-		"ap-southeast-2/s3": {
+		"ap-southeast-2/s3": endpointEntry{
 			Endpoint: "s3-{region}.amazonaws.com",
 		},
-		"cn-north-1/*": {
+		"cn-north-1/*": endpointEntry{
 			Endpoint: "{service}.{region}.amazonaws.com.cn",
 		},
-		"eu-central-1/s3": {
+		"eu-central-1/s3": endpointEntry{
 			Endpoint: "{service}.{region}.amazonaws.com",
 		},
-		"eu-west-1/s3": {
+		"eu-west-1/s3": endpointEntry{
 			Endpoint: "s3-{region}.amazonaws.com",
 		},
-		"sa-east-1/s3": {
+		"sa-east-1/s3": endpointEntry{
 			Endpoint: "s3-{region}.amazonaws.com",
 		},
-		"us-east-1/s3": {
+		"us-east-1/s3": endpointEntry{
 			Endpoint: "s3.amazonaws.com",
 		},
-		"us-east-1/sdb": {
+		"us-east-1/sdb": endpointEntry{
 			Endpoint:      "sdb.amazonaws.com",
 			SigningRegion: "us-east-1",
 		},
-		"us-gov-west-1/iam": {
+		"us-gov-west-1/iam": endpointEntry{
 			Endpoint: "iam.us-gov.amazonaws.com",
 		},
-		"us-gov-west-1/s3": {
+		"us-gov-west-1/s3": endpointEntry{
 			Endpoint: "s3-{region}.amazonaws.com",
 		},
-		"us-gov-west-1/sts": {
+		"us-gov-west-1/sts": endpointEntry{
 			Endpoint: "sts.us-gov-west-1.amazonaws.com",
 		},
-		"us-west-1/s3": {
+		"us-west-1/s3": endpointEntry{
 			Endpoint: "s3-{region}.amazonaws.com",
 		},
-		"us-west-2/s3": {
+		"us-west-2/s3": endpointEntry{
 			Endpoint: "s3-{region}.amazonaws.com",
 		},
 	},

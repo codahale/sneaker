@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/internal/apierr"
 )
 
 var sleepDelay = func(delay time.Duration) {
@@ -79,17 +80,8 @@ func SendHandler(r *Request) {
 				return
 			}
 		}
-		if r.HTTPRequest == nil {
-			// Add a dummy request response object to ensure the HTTPResponse
-			// value is consistent.
-			r.HTTPResponse = &http.Response{
-				StatusCode: int(0),
-				Status:     http.StatusText(int(0)),
-				Body:       ioutil.NopCloser(bytes.NewReader([]byte{})),
-			}
-		}
 		// Catch all other request errors.
-		r.Error = awserr.New("RequestError", "send request failed", err)
+		r.Error = apierr.New("RequestError", "send request failed", err)
 		r.Retryable.Set(true) // network errors are retryable
 	}
 }
@@ -98,7 +90,7 @@ func SendHandler(r *Request) {
 func ValidateResponseHandler(r *Request) {
 	if r.HTTPResponse.StatusCode == 0 || r.HTTPResponse.StatusCode >= 300 {
 		// this may be replaced by an UnmarshalError handler
-		r.Error = awserr.New("UnknownError", "unknown error", nil)
+		r.Error = apierr.New("UnknownError", "unknown error", nil)
 	}
 }
 
@@ -122,6 +114,8 @@ func AfterRetryHandler(r *Request) {
 			if err, ok := r.Error.(awserr.Error); ok {
 				if isCodeExpiredCreds(err.Code()) {
 					r.Config.Credentials.Expire()
+					// The credentials will need to be resigned with new credentials
+					r.signed = false
 				}
 			}
 		}
@@ -134,15 +128,11 @@ func AfterRetryHandler(r *Request) {
 var (
 	// ErrMissingRegion is an error that is returned if region configuration is
 	// not found.
-	//
-	// @readonly
-	ErrMissingRegion error = awserr.New("MissingRegion", "could not find region configuration", nil)
+	ErrMissingRegion error = apierr.New("MissingRegion", "could not find region configuration", nil)
 
 	// ErrMissingEndpoint is an error that is returned if an endpoint cannot be
 	// resolved for a service.
-	//
-	// @readonly
-	ErrMissingEndpoint error = awserr.New("MissingEndpoint", "'Endpoint' configuration is required for this service", nil)
+	ErrMissingEndpoint error = apierr.New("MissingEndpoint", "'Endpoint' configuration is required for this service", nil)
 )
 
 // ValidateEndpointHandler is a request handler to validate a request had the
