@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/awslabs/aws-sdk-go/aws"
-	"github.com/awslabs/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 func TestListPattern(t *testing.T) {
@@ -19,19 +19,19 @@ func TestListPattern(t *testing.T) {
 					{
 						Key:          aws.String("secrets/one"),
 						ETag:         aws.String(`"etag1"`),
-						Size:         aws.Long(1004 + 224),
+						Size:         aws.Int64(1004 + 224),
 						LastModified: aws.Time(time.Date(2006, 1, 2, 15, 4, 5, 0, utc1)),
 					},
 					{
 						Key:          aws.String("secrets/two"),
 						ETag:         aws.String(`"etag2"`),
-						Size:         aws.Long(1005 + 224),
+						Size:         aws.Int64(1005 + 224),
 						LastModified: aws.Time(time.Date(2007, 1, 2, 15, 4, 5, 0, utc1)),
 					},
 					{
 						Key:          aws.String("secrets/winkle"),
 						ETag:         aws.String(`"etag3"`),
-						Size:         aws.Long(1006 + 224),
+						Size:         aws.Int64(1006 + 224),
 						LastModified: aws.Time(time.Date(2008, 1, 2, 15, 4, 5, 0, utc1)),
 					},
 				},
@@ -90,19 +90,19 @@ func TestListNoPattern(t *testing.T) {
 					{
 						Key:          aws.String("secrets/one"),
 						ETag:         aws.String(`"etag1"`),
-						Size:         aws.Long(1004 + 224),
+						Size:         aws.Int64(1004 + 224),
 						LastModified: aws.Time(time.Date(2006, 1, 2, 15, 4, 5, 0, utc1)),
 					},
 					{
 						Key:          aws.String("secrets/two"),
 						ETag:         aws.String(`"etag2"`),
-						Size:         aws.Long(1005 + 224),
+						Size:         aws.Int64(1005 + 224),
 						LastModified: aws.Time(time.Date(2007, 1, 2, 15, 4, 5, 0, utc1)),
 					},
 					{
 						Key:          aws.String("secrets/winkle"),
 						ETag:         aws.String(`"etag3"`),
-						Size:         aws.Long(1006 + 224),
+						Size:         aws.Int64(1006 + 224),
 						LastModified: aws.Time(time.Date(2008, 1, 2, 15, 4, 5, 0, utc1)),
 					},
 				},

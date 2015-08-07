@@ -7,9 +7,9 @@ import (
 	"encoding/binary"
 	"fmt"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/awslabs/aws-sdk-go/aws"
-	"github.com/awslabs/aws-sdk-go/service/kms"
+	"github.com/aws/aws-sdk-go/service/kms"
 )
 
 // An Envelope encrypts and decrypts secrets with single-use KMS data keys using

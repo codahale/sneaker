@@ -1,6 +1,6 @@
 package sneaker
 
-import "github.com/awslabs/aws-sdk-go/service/s3"
+import "github.com/aws/aws-sdk-go/service/s3"
 
 type FakeS3 struct {
 	ListInputs  []s3.ListObjectsInput
