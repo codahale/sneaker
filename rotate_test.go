@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/awslabs/aws-sdk-go/aws"
-	"github.com/awslabs/aws-sdk-go/service/kms"
-	"github.com/awslabs/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/kms"
+	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 func TestRotate(t *testing.T) {
@@ -37,7 +37,7 @@ func TestRotate(t *testing.T) {
 					{
 						Key:          aws.String("secrets/weeble.txt"),
 						ETag:         aws.String(`"etag1"`),
-						Size:         aws.Long(1004),
+						Size:         aws.Int64(1004),
 						LastModified: aws.Time(time.Date(2006, 1, 2, 15, 4, 5, 0, time.UTC)),
 					},
 				},
