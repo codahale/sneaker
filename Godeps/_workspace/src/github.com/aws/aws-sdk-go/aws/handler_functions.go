@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/internal/apierr"
 )
 
 var sleepDelay = func(delay time.Duration) {
@@ -80,9 +79,18 @@ func SendHandler(r *Request) {
 				return
 			}
 		}
+		if r.HTTPRequest == nil {
+			// Add a dummy request response object to ensure the HTTPResponse
+			// value is consistent.
+			r.HTTPResponse = &http.Response{
+				StatusCode: int(0),
+				Status:     http.StatusText(int(0)),
+				Body:       ioutil.NopCloser(bytes.NewReader([]byte{})),
+			}
+		}
 		// Catch all other request errors.
-		r.Error = apierr.New("RequestError", "send request failed", err)
-		r.Retryable.Set(true) // network errors are retryable
+		r.Error = awserr.New("RequestError", "send request failed", err)
+		r.Retryable = Bool(true) // network errors are retryable
 	}
 }
 
@@ -90,7 +98,7 @@ func SendHandler(r *Request) {
 func ValidateResponseHandler(r *Request) {
 	if r.HTTPResponse.StatusCode == 0 || r.HTTPResponse.StatusCode >= 300 {
 		// this may be replaced by an UnmarshalError handler
-		r.Error = apierr.New("UnknownError", "unknown error", nil)
+		r.Error = awserr.New("UnknownError", "unknown error", nil)
 	}
 }
 
@@ -99,8 +107,8 @@ func ValidateResponseHandler(r *Request) {
 func AfterRetryHandler(r *Request) {
 	// If one of the other handlers already set the retry state
 	// we don't want to override it based on the service's state
-	if !r.Retryable.IsSet() {
-		r.Retryable.Set(r.Service.ShouldRetry(r))
+	if r.Retryable == nil {
+		r.Retryable = Bool(r.Service.ShouldRetry(r))
 	}
 
 	if r.WillRetry() {
@@ -114,8 +122,6 @@ func AfterRetryHandler(r *Request) {
 			if err, ok := r.Error.(awserr.Error); ok {
 				if isCodeExpiredCreds(err.Code()) {
 					r.Config.Credentials.Expire()
-					// The credentials will need to be resigned with new credentials
-					r.signed = false
 				}
 			}
 		}
@@ -128,18 +134,22 @@ func AfterRetryHandler(r *Request) {
 var (
 	// ErrMissingRegion is an error that is returned if region configuration is
 	// not found.
-	ErrMissingRegion error = apierr.New("MissingRegion", "could not find region configuration", nil)
+	//
+	// @readonly
+	ErrMissingRegion error = awserr.New("MissingRegion", "could not find region configuration", nil)
 
 	// ErrMissingEndpoint is an error that is returned if an endpoint cannot be
 	// resolved for a service.
-	ErrMissingEndpoint error = apierr.New("MissingEndpoint", "'Endpoint' configuration is required for this service", nil)
+	//
+	// @readonly
+	ErrMissingEndpoint error = awserr.New("MissingEndpoint", "'Endpoint' configuration is required for this service", nil)
 )
 
 // ValidateEndpointHandler is a request handler to validate a request had the
 // appropriate Region and Endpoint set. Will set r.Error if the endpoint or
 // region is not valid.
 func ValidateEndpointHandler(r *Request) {
-	if r.Service.SigningRegion == "" && r.Service.Config.Region == "" {
+	if r.Service.SigningRegion == "" && StringValue(r.Service.Config.Region) == "" {
 		r.Error = ErrMissingRegion
 	} else if r.Service.Endpoint == "" {
 		r.Error = ErrMissingEndpoint
