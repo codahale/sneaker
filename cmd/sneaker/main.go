@@ -22,6 +22,7 @@ const usage = `sneaker manages secrets.
 Usage:
   sneaker ls [<pattern>]
   sneaker upload <file> <path>
+  sneaker download <path> <file>
   sneaker rm <path>
   sneaker pack <pattern> <file> [--key=<id>] [--context=<k1=v2,k2=v2>]
   sneaker unpack <file> <path> [--context=<k1=v2,k2=v2>]
@@ -92,6 +93,20 @@ func main() {
 		if err := manager.Upload(path, f); err != nil {
 			log.Fatal(err)
 		}
+	} else if args["download"] == true {
+		file := args["<file>"].(string)
+		path := args["<path>"].(string)
+
+		log.Printf("downloading %s", file)
+
+		out := openPath(file, os.Create, os.Stdout)
+		defer out.Close()
+
+		actual, err := manager.Download([]string{path});
+		if err != nil {
+			log.Fatal(err)
+		}
+		out.Write(actual[path])
 	} else if args["rm"] == true {
 		path := args["<path>"].(string)
 

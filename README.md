@@ -126,6 +126,12 @@ display a table with the file in it.
 If your file is so sensitive it shouldn't be stored on disk, using `-`
 instead of a filename will make `sneaker` read the data from `STDIN`.
 
+You can download a single file:
+
+```shell
+sneaker download example/secret.txt secret.txt
+```
+
 Finally, you can delete the file:
 
 ```shell
