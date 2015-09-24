@@ -13,7 +13,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/codahale/sneaker"
+	"github.com/arohner/sneaker"
 	"github.com/docopt/docopt-go"
 )
 
