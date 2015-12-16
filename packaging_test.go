@@ -17,13 +17,13 @@ func TestPackagingRoundTrip(t *testing.T) {
 		GenerateOutputs: []kms.GenerateDataKeyOutput{
 			{
 				Plaintext:      make([]byte, 32),
-				KeyID:          aws.String("key1"),
+				KeyId:          aws.String("key1"),
 				CiphertextBlob: []byte("encrypted key"),
 			},
 		},
 		DecryptOutputs: []kms.DecryptOutput{
 			{
-				KeyID:     aws.String("key1"),
+				KeyId:     aws.String("key1"),
 				Plaintext: make([]byte, 32),
 			},
 		},
@@ -33,7 +33,7 @@ func TestPackagingRoundTrip(t *testing.T) {
 		Envelope: Envelope{
 			KMS: fakeKMS,
 		},
-		KeyID: "key1",
+		KeyId: "key1",
 	}
 
 	input := map[string][]byte{
@@ -77,7 +77,7 @@ func TestPackagingRoundTrip(t *testing.T) {
 	}
 
 	genReq := fakeKMS.GenerateInputs[0]
-	if v, want := *genReq.KeyID, "key1"; v != want {
+	if v, want := *genReq.KeyId, "key1"; v != want {
 		t.Errorf("Key ID was %q, but expected %q", v, want)
 	}
 

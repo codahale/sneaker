@@ -211,7 +211,7 @@ func loadManager() *sneaker.Manager {
 		Bucket:            u.Host,
 		Prefix:            u.Path,
 		EncryptionContext: ctxt,
-		KeyID:             os.Getenv("SNEAKER_MASTER_KEY"),
+		KeyId:             os.Getenv("SNEAKER_MASTER_KEY"),
 	}
 }
 

@@ -7,11 +7,11 @@ import (
 )
 
 var (
-	// ErrAccessKeyIDNotFound is returned when the AWS Access Key ID can't be
+	// ErrAccessKeyIdNotFound is returned when the AWS Access Key ID can't be
 	// found in the process's environment.
 	//
 	// @readonly
-	ErrAccessKeyIDNotFound = awserr.New("EnvAccessKeyNotFound", "AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY not found in environment", nil)
+	ErrAccessKeyIdNotFound = awserr.New("EnvAccessKeyNotFound", "AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY not found in environment", nil)
 
 	// ErrSecretAccessKeyNotFound is returned when the AWS Secret Access Key
 	// can't be found in the process's environment.
@@ -52,7 +52,7 @@ func (e *EnvProvider) Retrieve() (Value, error) {
 	}
 
 	if id == "" {
-		return Value{}, ErrAccessKeyIDNotFound
+		return Value{}, ErrAccessKeyIdNotFound
 	}
 
 	if secret == "" {
@@ -61,7 +61,7 @@ func (e *EnvProvider) Retrieve() (Value, error) {
 
 	e.retrieved = true
 	return Value{
-		AccessKeyID:     id,
+		AccessKeyId:     id,
 		SecretAccessKey: secret,
 		SessionToken:    os.Getenv("AWS_SESSION_TOKEN"),
 	}, nil

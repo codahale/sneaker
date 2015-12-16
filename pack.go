@@ -12,7 +12,7 @@ import (
 // data key with the context. The result is written into the given writer.
 func (m *Manager) Pack(secrets map[string][]byte, ctxt map[string]string, keyID string, w io.Writer) error {
 	if keyID == "" {
-		keyID = m.KeyID
+		keyID = m.KeyId
 	}
 
 	buf := bytes.NewBuffer(nil)

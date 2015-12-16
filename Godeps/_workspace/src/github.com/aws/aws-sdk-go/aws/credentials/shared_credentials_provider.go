@@ -95,7 +95,7 @@ func loadProfile(filename, profile string) (Value, error) {
 	token := iniProfile["aws_session_token"]
 
 	return Value{
-		AccessKeyID:     id,
+		AccessKeyId:     id,
 		SecretAccessKey: secret,
 		SessionToken:    token,
 	}, nil

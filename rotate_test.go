@@ -56,14 +56,14 @@ func TestRotate(t *testing.T) {
 	fakeKMS := &FakeKMS{
 		DecryptOutputs: []kms.DecryptOutput{
 			{
-				KeyID:     aws.String("key1"),
+				KeyId:     aws.String("key1"),
 				Plaintext: oldKey(),
 			},
 		},
 		GenerateOutputs: []kms.GenerateDataKeyOutput{
 			{
 				CiphertextBlob: []byte("encrypted new key"),
-				KeyID:          aws.String("key1"),
+				KeyId:          aws.String("key1"),
 				Plaintext:      newKey(),
 			},
 		},
@@ -74,7 +74,7 @@ func TestRotate(t *testing.T) {
 		Envelope: Envelope{
 			KMS: fakeKMS,
 		},
-		KeyID:  "key1",
+		KeyId:  "key1",
 		Bucket: "bucket",
 		Prefix: "secrets",
 	}
@@ -86,7 +86,7 @@ func TestRotate(t *testing.T) {
 	// KMS request
 
 	genReq := fakeKMS.GenerateInputs[0]
-	if v, want := *genReq.KeyID, "key1"; v != want {
+	if v, want := *genReq.KeyId, "key1"; v != want {
 		t.Errorf("Key ID was %q, but expected %q", v, want)
 	}
 

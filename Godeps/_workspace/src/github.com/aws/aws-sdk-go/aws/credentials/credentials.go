@@ -69,7 +69,7 @@ var AnonymousCredentials = NewStaticCredentials("", "", "")
 // A Value is the AWS credentials value for individual credential fields.
 type Value struct {
 	// AWS Access key ID
-	AccessKeyID string
+	AccessKeyId string
 
 	// AWS Secret Access Key
 	SecretAccessKey string

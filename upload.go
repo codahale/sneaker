@@ -17,7 +17,7 @@ func (m *Manager) Upload(path string, r io.Reader) error {
 		return err
 	}
 
-	ciphertext, err := m.Envelope.Seal(m.KeyID, m.context(path), plaintext)
+	ciphertext, err := m.Envelope.Seal(m.KeyId, m.context(path), plaintext)
 	if err != nil {
 		return err
 	}

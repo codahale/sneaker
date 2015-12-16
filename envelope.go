@@ -25,13 +25,13 @@ func (e *Envelope) Seal(keyID string, ctxt map[string]string, plaintext []byte) 
 	key, err := e.KMS.GenerateDataKey(&kms.GenerateDataKeyInput{
 		EncryptionContext: e.context(ctxt),
 		KeySpec:           aws.String("AES_256"),
-		KeyID:             &keyID,
+		KeyId:             &keyID,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	ciphertext, err := encrypt(key.Plaintext, plaintext, []byte(*key.KeyID))
+	ciphertext, err := encrypt(key.Plaintext, plaintext, []byte(*key.KeyId))
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func (e *Envelope) Open(ctxt map[string]string, ciphertext []byte) ([]byte, erro
 		return nil, err
 	}
 
-	return decrypt(d.Plaintext, ciphertext, []byte(*d.KeyID))
+	return decrypt(d.Plaintext, ciphertext, []byte(*d.KeyId))
 }
 
 func (e *Envelope) context(c map[string]string) map[string]*string {

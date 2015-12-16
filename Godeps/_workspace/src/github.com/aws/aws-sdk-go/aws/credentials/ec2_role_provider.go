@@ -101,7 +101,7 @@ func (m *EC2RoleProvider) Retrieve() (Value, error) {
 	m.SetExpiration(roleCreds.Expiration, m.ExpiryWindow)
 
 	return Value{
-		AccessKeyID:     roleCreds.AccessKeyID,
+		AccessKeyId:     roleCreds.AccessKeyId,
 		SecretAccessKey: roleCreds.SecretAccessKey,
 		SessionToken:    roleCreds.Token,
 	}, nil
@@ -111,7 +111,7 @@ func (m *EC2RoleProvider) Retrieve() (Value, error) {
 // request responses.
 type ec2RoleCredRespBody struct {
 	Expiration      time.Time
-	AccessKeyID     string
+	AccessKeyId     string
 	SecretAccessKey string
 	Token           string
 }

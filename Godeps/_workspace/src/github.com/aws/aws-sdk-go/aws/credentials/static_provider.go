@@ -21,7 +21,7 @@ type StaticProvider struct {
 // wrapping a static credentials value provider.
 func NewStaticCredentials(id, secret, token string) *Credentials {
 	return NewCredentials(&StaticProvider{Value: Value{
-		AccessKeyID:     id,
+		AccessKeyId:     id,
 		SecretAccessKey: secret,
 		SessionToken:    token,
 	}})
@@ -29,7 +29,7 @@ func NewStaticCredentials(id, secret, token string) *Credentials {
 
 // Retrieve returns the credentials or error if the credentials are invalid.
 func (s *StaticProvider) Retrieve() (Value, error) {
-	if s.AccessKeyID == "" || s.SecretAccessKey == "" {
+	if s.AccessKeyId == "" || s.SecretAccessKey == "" {
 		return Value{}, ErrStaticCredentialsEmpty
 	}
 
