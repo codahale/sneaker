@@ -13,13 +13,13 @@ func TestEnvelopeRoundTrip(t *testing.T) {
 		GenerateOutputs: []kms.GenerateDataKeyOutput{
 			{
 				CiphertextBlob: []byte("yay"),
-				KeyID:          aws.String("key1"),
+				KeyId:          aws.String("key1"),
 				Plaintext:      make([]byte, 32),
 			},
 		},
 		DecryptOutputs: []kms.DecryptOutput{
 			{
-				KeyID:     aws.String("key1"),
+				KeyId:     aws.String("key1"),
 				Plaintext: make([]byte, 32),
 			},
 		},

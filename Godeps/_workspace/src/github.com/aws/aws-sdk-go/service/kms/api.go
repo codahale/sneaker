@@ -886,7 +886,7 @@ type AliasListEntry struct {
 	AliasName *string `type:"string"`
 
 	// String that contains the key identifier pointed to by the alias.
-	TargetKeyID *string `locationName:"TargetKeyId" type:"string"`
+	TargetKeyId *string `locationName:"TargetKeyId" type:"string"`
 
 	metadataAliasListEntry `json:"-" xml:"-"`
 }
@@ -915,7 +915,7 @@ type CreateAliasInput struct {
 	// cannot be another alias but can be a globally unique identifier or a fully
 	// specified ARN to a key.  Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	TargetKeyID *string `locationName:"TargetKeyId" type:"string" required:"true"`
+	TargetKeyId *string `locationName:"TargetKeyId" type:"string" required:"true"`
 
 	metadataCreateAliasInput `json:"-" xml:"-"`
 }
@@ -968,7 +968,7 @@ type CreateGrantInput struct {
 	// unique identifier or the fully specified ARN to a key.  Key ARN Example -
 	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	// List of operations permitted by the grant. This can be any combination of
 	// one or more of the following values:  Decrypt Encrypt GenerateDataKey GenerateDataKeyWithoutPlaintext
@@ -1103,7 +1103,7 @@ func (s DecryptInput) GoString() string {
 type DecryptOutput struct {
 	// ARN of the key used to perform the decryption. This value is returned if
 	// no errors are encountered during the operation.
-	KeyID *string `locationName:"KeyId" type:"string"`
+	KeyId *string `locationName:"KeyId" type:"string"`
 
 	// Decrypted plaintext data. This value may not be returned if the customer
 	// master key is not available or if you didn't have permission to use it.
@@ -1173,7 +1173,7 @@ type DescribeKeyInput struct {
 	// Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012 Alias
 	// Name Example - alias/MyAliasName
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	metadataDescribeKeyInput `json:"-" xml:"-"`
 }
@@ -1218,7 +1218,7 @@ type DisableKeyInput struct {
 	// unique identifier or the fully specified ARN to a key.  Key ARN Example -
 	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	metadataDisableKeyInput `json:"-" xml:"-"`
 }
@@ -1260,7 +1260,7 @@ type DisableKeyRotationInput struct {
 	// unique identifier or the fully specified ARN to a key.  Key ARN Example -
 	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	metadataDisableKeyRotationInput `json:"-" xml:"-"`
 }
@@ -1302,7 +1302,7 @@ type EnableKeyInput struct {
 	// unique identifier or the fully specified ARN to a key.  Key ARN Example -
 	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	metadataEnableKeyInput `json:"-" xml:"-"`
 }
@@ -1344,7 +1344,7 @@ type EnableKeyRotationInput struct {
 	// unique identifier or the fully specified ARN to a key.  Key ARN Example -
 	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	metadataEnableKeyRotationInput `json:"-" xml:"-"`
 }
@@ -1397,7 +1397,7 @@ type EncryptInput struct {
 	// Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012 Alias
 	// Name Example - alias/MyAliasName
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	// Data to be encrypted.
 	Plaintext []byte `type:"blob" required:"true"`
@@ -1425,7 +1425,7 @@ type EncryptOutput struct {
 	CiphertextBlob []byte `type:"blob"`
 
 	// The ID of the key used during encryption.
-	KeyID *string `locationName:"KeyId" type:"string"`
+	KeyId *string `locationName:"KeyId" type:"string"`
 
 	metadataEncryptOutput `json:"-" xml:"-"`
 }
@@ -1459,7 +1459,7 @@ type GenerateDataKeyInput struct {
 	// Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012 Alias
 	// Name Example - alias/MyAliasName
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	// Value that identifies the encryption algorithm and key size to generate a
 	// data key for. Currently this can be AES_128 or AES_256.
@@ -1500,7 +1500,7 @@ type GenerateDataKeyOutput struct {
 
 	// System generated unique identifier of the key to be used to decrypt the encrypted
 	// copy of the data key.
-	KeyID *string `locationName:"KeyId" type:"string"`
+	KeyId *string `locationName:"KeyId" type:"string"`
 
 	// Plaintext that contains the data key. Use this for encryption and decryption
 	// and then remove it from memory as soon as possible.
@@ -1537,7 +1537,7 @@ type GenerateDataKeyWithoutPlaintextInput struct {
 	// Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012 Alias
 	// Name Example - alias/MyAliasName
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	// Value that identifies the encryption algorithm and key size. Currently this
 	// can be AES_128 or AES_256.
@@ -1575,7 +1575,7 @@ type GenerateDataKeyWithoutPlaintextOutput struct {
 
 	// System generated unique identifier of the key to be used to decrypt the encrypted
 	// copy of the data key.
-	KeyID *string `locationName:"KeyId" type:"string"`
+	KeyId *string `locationName:"KeyId" type:"string"`
 
 	metadataGenerateDataKeyWithoutPlaintextOutput `json:"-" xml:"-"`
 }
@@ -1642,7 +1642,7 @@ type GetKeyPolicyInput struct {
 	// unique identifier or the fully specified ARN to a key.  Key ARN Example -
 	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	// String that contains the name of the policy. Currently, this must be "default".
 	// Policy names can be discovered by calling ListKeyPolicies.
@@ -1691,7 +1691,7 @@ type GetKeyRotationStatusInput struct {
 	// unique identifier or the fully specified ARN to a key.  Key ARN Example -
 	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	metadataGetKeyRotationStatusInput `json:"-" xml:"-"`
 }
@@ -1803,7 +1803,7 @@ type KeyListEntry struct {
 	KeyARN *string `locationName:"KeyArn" type:"string"`
 
 	// Unique identifier of the key.
-	KeyID *string `locationName:"KeyId" type:"string"`
+	KeyId *string `locationName:"KeyId" type:"string"`
 
 	metadataKeyListEntry `json:"-" xml:"-"`
 }
@@ -1840,7 +1840,7 @@ type KeyMetadata struct {
 	Enabled *bool `type:"boolean"`
 
 	// Unique identifier for the key.
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	// A value that specifies what operation(s) the key can perform.
 	KeyUsage *string `type:"string" enum:"KeyUsageType"`
@@ -1925,7 +1925,7 @@ type ListGrantsInput struct {
 	// unique identifier or the fully specified ARN to a key.  Key ARN Example -
 	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	// Specify this parameter only when paginating results to indicate the maximum
 	// number of grants you want listed in the response. If there are additional
@@ -1992,7 +1992,7 @@ type ListKeyPoliciesInput struct {
 	// Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012 Alias
 	// Name Example - alias/MyAliasName
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	// Specify this parameter only when paginating results to indicate the maximum
 	// number of policies you want listed in the response. If there are additional
@@ -2117,7 +2117,7 @@ type PutKeyPolicyInput struct {
 	// unique identifier or the fully specified ARN to a key.  Key ARN Example -
 	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	// The policy, in JSON format, to be attached to the key.
 	Policy *string `type:"string" required:"true"`
@@ -2175,7 +2175,7 @@ type ReEncryptInput struct {
 	// Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012 Alias
 	// Name Example - alias/MyAliasName
-	DestinationKeyID *string `locationName:"DestinationKeyId" type:"string" required:"true"`
+	DestinationKeyId *string `locationName:"DestinationKeyId" type:"string" required:"true"`
 
 	// For more information, see Grant Tokens (http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token).
 	GrantTokens []*string `type:"list"`
@@ -2207,10 +2207,10 @@ type ReEncryptOutput struct {
 	CiphertextBlob []byte `type:"blob"`
 
 	// Unique identifier of the key used to re-encrypt the data.
-	KeyID *string `locationName:"KeyId" type:"string"`
+	KeyId *string `locationName:"KeyId" type:"string"`
 
 	// Unique identifier of the key used to originally encrypt the data.
-	SourceKeyID *string `locationName:"SourceKeyId" type:"string"`
+	SourceKeyId *string `locationName:"SourceKeyId" type:"string"`
 
 	metadataReEncryptOutput `json:"-" xml:"-"`
 }
@@ -2241,7 +2241,7 @@ type RetireGrantInput struct {
 	// This value can be a globally unique identifier or a fully specified ARN of
 	// the key.  Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	KeyID *string `locationName:"KeyId" type:"string"`
+	KeyId *string `locationName:"KeyId" type:"string"`
 
 	metadataRetireGrantInput `json:"-" xml:"-"`
 }
@@ -2286,7 +2286,7 @@ type RevokeGrantInput struct {
 	// This value can be a globally unique identifier or the fully specified ARN
 	// to a key.  Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	metadataRevokeGrantInput `json:"-" xml:"-"`
 }
@@ -2333,7 +2333,7 @@ type UpdateAliasInput struct {
 	// This value can be a globally unique identifier or the fully specified ARN
 	// of a key.  Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	TargetKeyID *string `locationName:"TargetKeyId" type:"string" required:"true"`
+	TargetKeyId *string `locationName:"TargetKeyId" type:"string" required:"true"`
 
 	metadataUpdateAliasInput `json:"-" xml:"-"`
 }
@@ -2378,7 +2378,7 @@ type UpdateKeyDescriptionInput struct {
 	// unique identifier or the fully specified ARN to a key.  Key ARN Example -
 	// arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
 	// Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012
-	KeyID *string `locationName:"KeyId" type:"string" required:"true"`
+	KeyId *string `locationName:"KeyId" type:"string" required:"true"`
 
 	metadataUpdateKeyDescriptionInput `json:"-" xml:"-"`
 }

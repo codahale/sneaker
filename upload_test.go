@@ -16,7 +16,7 @@ func TestUpload(t *testing.T) {
 		GenerateOutputs: []kms.GenerateDataKeyOutput{
 			{
 				CiphertextBlob: []byte("encrypted key"),
-				KeyID:          aws.String("key1"),
+				KeyId:          aws.String("key1"),
 				Plaintext:      make([]byte, 32),
 			},
 		},
@@ -34,7 +34,7 @@ func TestUpload(t *testing.T) {
 		Envelope: Envelope{
 			KMS: fakeKMS,
 		},
-		KeyID:             "key1",
+		KeyId:             "key1",
 		EncryptionContext: map[string]string{"A": "B"},
 		Bucket:            "bucket",
 		Prefix:            "secrets",

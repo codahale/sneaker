@@ -178,7 +178,7 @@ func (v4 *signer) build() {
 		v4.Request.URL.RawQuery += "&X-Amz-Signature=" + v4.signature
 	} else {
 		parts := []string{
-			authHeaderPrefix + " Credential=" + v4.CredValues.AccessKeyID + "/" + v4.credentialString,
+			authHeaderPrefix + " Credential=" + v4.CredValues.AccessKeyId + "/" + v4.credentialString,
 			"SignedHeaders=" + v4.signedHeaders,
 			"Signature=" + v4.signature,
 		}
@@ -208,7 +208,7 @@ func (v4 *signer) buildCredentialString() {
 	}, "/")
 
 	if v4.isPresign {
-		v4.Query.Set("X-Amz-Credential", v4.CredValues.AccessKeyID+"/"+v4.credentialString)
+		v4.Query.Set("X-Amz-Credential", v4.CredValues.AccessKeyId+"/"+v4.credentialString)
 	}
 }
 

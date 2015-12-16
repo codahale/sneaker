@@ -38,7 +38,7 @@ type File struct {
 type Manager struct {
 	Objects           ObjectStorage
 	Envelope          Envelope
-	KeyID             string
+	KeyId             string
 	EncryptionContext map[string]string
 	Bucket, Prefix    string
 }

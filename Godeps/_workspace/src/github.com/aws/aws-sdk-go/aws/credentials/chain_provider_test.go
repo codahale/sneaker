@@ -14,7 +14,7 @@ func TestChainProviderGet(t *testing.T) {
 			&stubProvider{err: awserr.New("SecondError", "second provider error", nil)},
 			&stubProvider{
 				creds: Value{
-					AccessKeyID:     "AKID",
+					AccessKeyId:     "AKID",
 					SecretAccessKey: "SECRET",
 					SessionToken:    "",
 				},
@@ -24,7 +24,7 @@ func TestChainProviderGet(t *testing.T) {
 
 	creds, err := p.Retrieve()
 	assert.Nil(t, err, "Expect no error")
-	assert.Equal(t, "AKID", creds.AccessKeyID, "Expect access key ID to match")
+	assert.Equal(t, "AKID", creds.AccessKeyId, "Expect access key ID to match")
 	assert.Equal(t, "SECRET", creds.SecretAccessKey, "Expect secret access key to match")
 	assert.Empty(t, creds.SessionToken, "Expect session token to be empty")
 }

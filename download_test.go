@@ -31,7 +31,7 @@ func TestDownload(t *testing.T) {
 	fakeKMS := &FakeKMS{
 		DecryptOutputs: []kms.DecryptOutput{
 			{
-				KeyID:     aws.String("key1"),
+				KeyId:     aws.String("key1"),
 				Plaintext: make([]byte, 32),
 			},
 		},

@@ -24,7 +24,7 @@ func (s *stubProvider) IsExpired() bool {
 func TestCredentialsGet(t *testing.T) {
 	c := NewCredentials(&stubProvider{
 		creds: Value{
-			AccessKeyID:     "AKID",
+			AccessKeyId:     "AKID",
 			SecretAccessKey: "SECRET",
 			SessionToken:    "",
 		},
@@ -33,7 +33,7 @@ func TestCredentialsGet(t *testing.T) {
 
 	creds, err := c.Get()
 	assert.Nil(t, err, "Expected no error")
-	assert.Equal(t, "AKID", creds.AccessKeyID, "Expect access key ID to match")
+	assert.Equal(t, "AKID", creds.AccessKeyId, "Expect access key ID to match")
 	assert.Equal(t, "SECRET", creds.SecretAccessKey, "Expect secret access key to match")
 	assert.Empty(t, creds.SessionToken, "Expect session token to be empty")
 }

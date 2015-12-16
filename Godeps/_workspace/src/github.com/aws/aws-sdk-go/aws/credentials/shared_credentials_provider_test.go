@@ -1,9 +1,10 @@
 package credentials
 
 import (
-	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSharedCredentialsProvider(t *testing.T) {
@@ -13,7 +14,7 @@ func TestSharedCredentialsProvider(t *testing.T) {
 	creds, err := p.Retrieve()
 	assert.Nil(t, err, "Expect no error")
 
-	assert.Equal(t, "accessKey", creds.AccessKeyID, "Expect access key ID to match")
+	assert.Equal(t, "accessKey", creds.AccessKeyId, "Expect access key ID to match")
 	assert.Equal(t, "secret", creds.SecretAccessKey, "Expect secret access key to match")
 	assert.Equal(t, "token", creds.SessionToken, "Expect session token to match")
 }
@@ -39,7 +40,7 @@ func TestSharedCredentialsProviderWithAWS_PROFILE(t *testing.T) {
 	creds, err := p.Retrieve()
 	assert.Nil(t, err, "Expect no error")
 
-	assert.Equal(t, "accessKey", creds.AccessKeyID, "Expect access key ID to match")
+	assert.Equal(t, "accessKey", creds.AccessKeyId, "Expect access key ID to match")
 	assert.Equal(t, "secret", creds.SecretAccessKey, "Expect secret access key to match")
 	assert.Empty(t, creds.SessionToken, "Expect no token")
 }
@@ -51,7 +52,7 @@ func TestSharedCredentialsProviderWithoutTokenFromProfile(t *testing.T) {
 	creds, err := p.Retrieve()
 	assert.Nil(t, err, "Expect no error")
 
-	assert.Equal(t, "accessKey", creds.AccessKeyID, "Expect access key ID to match")
+	assert.Equal(t, "accessKey", creds.AccessKeyId, "Expect access key ID to match")
 	assert.Equal(t, "secret", creds.SecretAccessKey, "Expect secret access key to match")
 	assert.Empty(t, creds.SessionToken, "Expect no token")
 }

@@ -2,11 +2,12 @@ package credentials
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func initTestServer(expireOn string) *httptest.Server {
@@ -35,7 +36,7 @@ func TestEC2RoleProvider(t *testing.T) {
 	creds, err := p.Retrieve()
 	assert.Nil(t, err, "Expect no error")
 
-	assert.Equal(t, "accessKey", creds.AccessKeyID, "Expect access key ID to match")
+	assert.Equal(t, "accessKey", creds.AccessKeyId, "Expect access key ID to match")
 	assert.Equal(t, "secret", creds.SecretAccessKey, "Expect secret access key to match")
 	assert.Equal(t, "token", creds.SessionToken, "Expect session token to match")
 }
