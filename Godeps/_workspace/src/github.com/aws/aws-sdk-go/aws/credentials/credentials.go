@@ -53,8 +53,8 @@ import (
 	"time"
 )
 
-// Create an empty Credential object that can be used as dummy placeholder
-// credentials for requests that do not need signed.
+// AnonymousCredentials is an empty Credential object that can be used as
+// dummy placeholder credentials for requests that do not need signed.
 //
 // This Credentials can be used to configure a service to not sign requests
 // when making service API calls. For example, when accessing public
@@ -69,13 +69,16 @@ var AnonymousCredentials = NewStaticCredentials("", "", "")
 // A Value is the AWS credentials value for individual credential fields.
 type Value struct {
 	// AWS Access key ID
-	AccessKeyId string
+	AccessKeyID string
 
 	// AWS Secret Access Key
 	SecretAccessKey string
 
 	// AWS Session Token
 	SessionToken string
+
+	// Provider used to get credentials
+	ProviderName string
 }
 
 // A Provider is the interface for any component which will provide credentials
