@@ -11,6 +11,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/codahale/sneaker"
@@ -102,7 +103,7 @@ func main() {
 		out := openPath(file, os.Create, os.Stdout)
 		defer out.Close()
 
-		actual, err := manager.Download([]string{path});
+		actual, err := manager.Download([]string{path})
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -219,9 +220,9 @@ func loadManager() *sneaker.Manager {
 	}
 
 	return &sneaker.Manager{
-		Objects: s3.New(nil),
+		Objects: s3.New(session.New()),
 		Envelope: sneaker.Envelope{
-			KMS: kms.New(nil),
+			KMS: kms.New(session.New()),
 		},
 		Bucket:            u.Host,
 		Prefix:            u.Path,
