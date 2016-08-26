@@ -6,26 +6,22 @@
 
 all: test install
 
-.PHONY: install test godep
+.PHONY: install test govendor
 
 # Build
 VERSION = '$(shell git describe --tags --always --dirty)'
 GOVERSION = '$(shell go version)'
 BUILDTIME = '$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")'
-install: godep
+install: govendor
 	touch cmd/sneaker/version.go
-	${GOPATH}/bin/godep go install $(GOBUILDFLAGS) -ldflags "-X main.version $(VERSION) -X main.goVersion $(GOVERSION) -X main.buildTime $(BUILDTIME)" ./...
+	${GOPATH}/bin/govendor install $(GOBUILDFLAGS) -ldflags "-X main.version $(VERSION) -X main.goVersion $(GOVERSION) -X main.buildTime $(BUILDTIME)" +local
 
 # run tests
-test: godep
-	${GOPATH}/bin/godep go test $(GOTESTFLAGS) ./...
+test: govendor
+	${GOPATH}/bin/govendor test $(GOTESTFLAGS) +local
 
-vendor: godep
-	rm -rf Godep
-	godep save ./...
-
-# Bootstrap godep
-godep: ${GOPATH}/bin/godep
-${GOPATH}/bin/godep:
-	go get -u github.com/tools/godep
-	go install github.com/tools/godep
+# Bootstrap govendor
+govendor: ${GOPATH}/bin/govendor
+${GOPATH}/bin/govendor:
+	go get -u github.com/kardianos/govendor
+	go install github.com/kardianos/govendor
