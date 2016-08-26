@@ -1,7 +1,7 @@
 language: go
 install:
-  - go get -u github.com/kardianos/govendor
-  - go install github.com/kardianos/govendor
+  - make govendor
   - govendor sync
-script: govendor test -v +local
+script:
+  - make test
 
