@@ -14,7 +14,8 @@ GOVERSION = '$(shell go version)'
 BUILDTIME = '$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")'
 install: govendor
 	touch cmd/sneaker/version.go
-	${GOPATH}/bin/govendor install $(GOBUILDFLAGS) -ldflags "-X main.version $(VERSION) -X main.goVersion $(GOVERSION) -X main.buildTime $(BUILDTIME)" +local
+	${GOPATH}/bin/govendor sync
+	${GOPATH}/bin/govendor install $(GOBUILDFLAGS) -ldflags "-X \"main.version=$(VERSION)\" -X \"main.goVersion=$(GOVERSION)\" -X \"main.buildTime=$(BUILDTIME)\"" +local
 
 # run tests
 test: govendor
